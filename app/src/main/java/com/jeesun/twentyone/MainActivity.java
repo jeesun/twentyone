@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     private GridAdapter adapter;
     private List<PictureInfo> pictureInfoList = new ArrayList<>();
 
+    //图片存储路径多了一层Pictures文件夹，方便MIUI的相册应用检测到。
     String dirPath = Environment.getExternalStorageDirectory().getPath() + "/TwentyOne/Pictures";
 
     @Override
