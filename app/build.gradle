@@ -18,6 +18,9 @@ android {
     }
 }
 
+//在Google IO 相关话题的中提到了一个建议，
+//就是依赖首先应该设置为implement的，如果没有错，那就用implement，
+//如果有错，那么使用api指令，这样会使编译速度有所增快。
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'com.android.support:appcompat-v7:26.1.0'
@@ -26,5 +29,11 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
 
-    compile 'com.github.yalantis:ucrop:2.2.1'
+    implementation 'com.android.support:design:26.1.0'
+    implementation 'com.android.support:support-vector-drawable:26.1.0'
+    implementation 'com.android.support:percent:26.1.0'
+    implementation 'com.android.support:recyclerview-v7:26.1.0'
+    implementation 'com.android.support:support-v4:26.1.0'
+
+    implementation 'com.github.yalantis:ucrop:2.2.1'
 }
