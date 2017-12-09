@@ -9,45 +9,50 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
+import com.jeesun.twentyone.adapter.GridAdapter;
+import com.jeesun.twentyone.model.PictureInfo;
 import com.yalantis.ucrop.UCrop;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.nio.channels.FileChannel;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
     public final static int REQUEST_IMAGE_CAPTURE = 1;
     public final static int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 2;
     public final static String IMAGE_TYPE = "image/*";
 
-    Button btnAlbum;
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private RecyclerView recyclerView;
+    private GridAdapter adapter;
+    private List<PictureInfo> pictureInfoList = new ArrayList<>();
+
+    String dirPath = Environment.getExternalStorageDirectory().getPath() + "/TwentyOne/Pictures";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        btnAlbum = findViewById(R.id.button4);
+        swipeRefreshLayout = findViewById(R.id.grid_swipe_refresh);
+        recyclerView = findViewById(R.id.grid_recycler);
 
-        btnAlbum.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                intent.addCategory(Intent.CATEGORY_OPENABLE);
-                intent.setType(IMAGE_TYPE);
-                startActivityForResult(intent,REQUEST_IMAGE_CAPTURE);
-            }
-        });
+        swipeRefreshLayout.setProgressBackgroundColorSchemeResource(android.R.color.white);
+        swipeRefreshLayout.setColorSchemeResources(R.color.colorAccent, R.color.colorPrimary, R.color.colorPrimaryDark);
+        swipeRefreshLayout.setOnRefreshListener(this);
 
         // 版本判断。当手机系统大于 23 时，才有必要去判断权限是否获取
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -72,7 +77,6 @@ public class MainActivity extends AppCompatActivity {
             }else{
                 //权限已获取
                 //创建文件夹用于保存裁剪的图片
-                String dirPath = Environment.getExternalStorageDirectory().getPath() + "/TwentyOne";
                 File file = new File(dirPath);
                 if(!file.exists()){
                     file.mkdirs();
@@ -81,12 +85,21 @@ public class MainActivity extends AppCompatActivity {
         }else{
             //android版本低于23，权限已获取
             //创建文件夹用于保存裁剪的图片
-            String dirPath = Environment.getExternalStorageDirectory().getPath() + "/TwentyOne";
             File file = new File(dirPath);
             if(!file.exists()){
                 file.mkdirs();
             }
         }
+
+        //读取sdcard下的TwentyOne文件夹下的图片
+        setData();
+
+        //设置recyclerview
+        recyclerView.setHasFixedSize(true);
+        StaggeredGridLayoutManager sglm = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        sglm.setReverseLayout(false);
+        recyclerView.setLayoutManager(sglm);
+        recyclerView.setAdapter(adapter = new GridAdapter(pictureInfoList, MainActivity.this));
 
     }
 
@@ -107,7 +120,6 @@ public class MainActivity extends AppCompatActivity {
                 Uri croppedFileUri = UCrop.getOutput(data);
                 //获取默认的下载目录
                 //String downloadsDirectoryPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath();
-                String dirPath = Environment.getExternalStorageDirectory().getPath() + "/TwentyOne";
                 String filename = String.format("%d_%s", Calendar.getInstance().getTimeInMillis(), croppedFileUri.getLastPathSegment());
                 Log.i("downloadsDirectoryPath", dirPath);
                 File saveFile = new File(dirPath, filename);
@@ -155,7 +167,6 @@ public class MainActivity extends AppCompatActivity {
                     // permission was granted, yay! Do the
                     // contacts-related task you need to do.
                     //创建文件夹用于保存裁剪的图片
-                    String dirPath = Environment.getExternalStorageDirectory().getPath() + "/TwentyOne";
                     File file = new File(dirPath);
                     if(!file.exists()){
                         file.mkdirs();
@@ -181,13 +192,20 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        Intent intent;
         switch (item.getItemId()){
             case R.id.about:
-                Intent intent = new Intent(MainActivity.this, AboutActivity.class);
+                intent = new Intent(MainActivity.this, AboutActivity.class);
                 startActivity(intent);
                 break;
-                default:
-                    break;
+            case R.id.pick:
+                intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.addCategory(Intent.CATEGORY_OPENABLE);
+                intent.setType(IMAGE_TYPE);
+                startActivityForResult(intent,REQUEST_IMAGE_CAPTURE);
+                break;
+            default:
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -195,7 +213,40 @@ public class MainActivity extends AppCompatActivity {
     private void startCrop(String imageUri) {
         Uri sourceUri = Uri.parse(imageUri);
         //裁剪后保存到文件中
-        Uri destinationUri = Uri.fromFile(new File(getCacheDir(), "TwentyOne.jpeg"));
+        Uri destinationUri = Uri.fromFile(new File(getCacheDir(), "TwentyOne.png"));
         UCrop.of(sourceUri, destinationUri).withAspectRatio(18, 9).withMaxResultSize(1440, 720).start(this);
+    }
+
+    @Override
+    public void onRefresh() {
+        updateData();
+        if(swipeRefreshLayout.isRefreshing()){
+            swipeRefreshLayout.setRefreshing(false);
+        }
+    }
+
+    /**
+     * 读取sdcard下的TwentyOne文件夹下的图片
+     */
+    public void setData(){
+        //读取sdcard下的TwentyOne文件夹
+        File  scannerDirectory = new File(dirPath);
+        if (scannerDirectory.isDirectory()) {
+            for (File file : scannerDirectory.listFiles()) {
+                String path = file.getAbsolutePath();
+                if (path.endsWith(".jpg") || path.endsWith(".jpeg") || path.endsWith(".png")) {
+                    pictureInfoList.add(new PictureInfo(path));
+                }
+            }
+        }
+    }
+
+    private void updateData() {
+        pictureInfoList.clear();
+
+        setData();
+
+        adapter.notifyDataSetChanged();
+
     }
 }
