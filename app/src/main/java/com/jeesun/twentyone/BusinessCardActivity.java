@@ -147,7 +147,7 @@ public class BusinessCardActivity extends AppCompatActivity {
                 textBitmap = ImageUtil.drawTextToRightBottom(BusinessCardActivity.this, textBitmap, etRightBottom.getText().toString(), fontSize, "fonts/方正魏碑简体.ttf", fontColor, padding, padding);
                 textBitmap = ImageUtil.drawTextToRightTop(BusinessCardActivity.this, textBitmap, etRightTop.getText().toString(), fontSize,"fonts/方正魏碑简体.ttf", fontColor, padding, padding);
                 textBitmap = ImageUtil.drawTextToLeftBottom(BusinessCardActivity.this, textBitmap, etLeftBottom.getText().toString(), fontSize, "fonts/方正魏碑简体.ttf", fontColor, padding, padding);
-                textBitmap = ImageUtil.drawTextToCenter(BusinessCardActivity.this, textBitmap, etCenter.getText().toString(), fontSize, "fonts/方正魏碑简体.ttf", fontColor);
+                textBitmap = ImageUtil.drawTextToCenterAndTextStartFromCenter(BusinessCardActivity.this, textBitmap, etCenter.getText().toString(), fontSize, "fonts/方正魏碑简体.ttf", fontColor);
 
                 mWartermarkImage.setImageBitmap(textBitmap);
 

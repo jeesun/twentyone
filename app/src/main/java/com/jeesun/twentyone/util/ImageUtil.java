@@ -11,6 +11,9 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Typeface;
+import android.text.Layout;
+import android.text.StaticLayout;
+import android.text.TextPaint;
 
 import static android.graphics.Bitmap.Config;
 import static android.graphics.Bitmap.createBitmap;
@@ -293,8 +296,23 @@ public class ImageUtil {
         paint.setTypeface(Typeface.createFromAsset(context.getAssets(), fontPath));
         Rect bounds = new Rect();
         paint.getTextBounds(text, 0, text.length(), bounds);
-        return drawTextToBitmap(context, bitmap, text, paint, bounds,
+        TextPaint textPaint = new TextPaint(paint);
+        return drawTextToBitmap(context, bitmap, text, textPaint, bounds,
                 (bitmap.getWidth() - bounds.width()) / 2,
+                (bitmap.getHeight() + bounds.height()) / 2);
+    }
+
+    public static Bitmap drawTextToCenterAndTextStartFromCenter(Context context, Bitmap bitmap, String text,
+                                          int size, String fontPath, int color) {
+        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        paint.setColor(color);
+        paint.setTextSize(dp2px(context, size));
+        paint.setTypeface(Typeface.createFromAsset(context.getAssets(), fontPath));
+        Rect bounds = new Rect();
+        paint.getTextBounds(text, 0, text.length(), bounds);
+        TextPaint textPaint = new TextPaint(paint);
+        return drawTextToBitmap(context, bitmap, text, textPaint, bounds,
+                (bitmap.getWidth()) / 2,
                 (bitmap.getHeight() + bounds.height()) / 2);
     }
 
@@ -311,20 +329,23 @@ public class ImageUtil {
         bitmap = bitmap.copy(bitmapConfig, true);
         Canvas canvas = new Canvas(bitmap);
 
-        canvas.drawText(text, paddingLeft, paddingTop, paint);
-        /*if(paint instanceof TextPaint){
+        //canvas.drawText(text, paddingLeft, paddingTop, paint);
+        if(paint instanceof TextPaint){
             TextPaint textPaint = new TextPaint(paint);
-            StaticLayout layout = new StaticLayout(text, textPaint, 300, Layout.Alignment.ALIGN_NORMAL, 1.0F, 0.0F, true);
+            //StaticLayout第三个参数指定内容超过多宽自动换行。
+            //因为只有中间内容需要换行，所以这里指定宽度是图片的一半。
+            StaticLayout layout = new StaticLayout(text, textPaint, bitmap.getWidth() / 2, Layout.Alignment.ALIGN_NORMAL, 1.0F, 0.0F, true);
             canvas.save();
             canvas.translate(paddingLeft, paddingTop);
             layout.draw(canvas);
             canvas.restore();
         }else{
             canvas.drawText(text, paddingLeft, paddingTop, paint);
-        }*/
+        }
 
         return bitmap;
     }
+
 
     /**
      * 缩放图片

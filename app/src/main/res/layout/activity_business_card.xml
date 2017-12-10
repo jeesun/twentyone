@@ -46,6 +46,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="number"
+            android:lines="1"
+            android:maxLines="1"
             android:hint="@string/hint_font_size"/>
 
         <Spinner
@@ -59,24 +61,32 @@
             android:id="@+id/left_top"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:lines="1"
+            android:maxLines="1"
             android:hint="@string/hint_left_top"/>
 
         <EditText
             android:id="@+id/left_bottom"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:lines="1"
+            android:maxLines="1"
             android:hint="@string/hint_left_bottom"/>
 
         <EditText
             android:id="@+id/right_top"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:lines="1"
+            android:maxLines="1"
             android:hint="@string/hint_right_top"/>
 
         <EditText
             android:id="@+id/right_bottom"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:lines="1"
+            android:maxLines="1"
             android:hint="@string/hint_right_bottom"/>
 
         <EditText
