@@ -1,24 +1,28 @@
 package com.jeesun.twentyone.adapter;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.jeesun.twentyone.R;
 import com.jeesun.twentyone.model.PictureInfo;
 
+import java.io.File;
 import java.util.List;
 
 /**
  * Created by simon on 2017/12/9.
  */
 
-public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ViewHolder> implements View.OnClickListener, View.OnLongClickListener {
+public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ViewHolder>{
     private List<PictureInfo> pictureInfoList;
     private static Context context;
 
@@ -48,16 +52,6 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ViewHolder> im
         return 0;
     }
 
-    @Override
-    public void onClick(View view) {
-
-    }
-
-    @Override
-    public boolean onLongClick(View view) {
-        return false;
-    }
-
     static class ViewHolder extends RecyclerView.ViewHolder{
         View itemView;
         ImageView imageView;
@@ -70,12 +64,46 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ViewHolder> im
             textView = itemView.findViewById(R.id.item_staggered_name);
         }
 
-        public void setData(PictureInfo pictureInfo){
+        public void setData(final PictureInfo pictureInfo){
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inSampleSize = 2;
             Bitmap bitmap = BitmapFactory.decodeFile(pictureInfo.getUri(), options);
             imageView.setImageBitmap(bitmap);
 
+            imageView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    final AlertDialog.Builder normalDialog =
+                            new AlertDialog.Builder(context);
+                    normalDialog.setTitle("提示");
+                    normalDialog.setMessage("确认删除该图片吗？");
+                    normalDialog.setPositiveButton("确定",
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    //...To-do
+                                    File picFile = new File(pictureInfo.getUri());
+                                    if(picFile.exists() && picFile.isFile()){
+                                        if(picFile.delete()){
+                                            Toast.makeText(context, "图片已被删除，请刷新确认", Toast.LENGTH_SHORT).show();
+                                        }else{
+                                            Toast.makeText(context, "图片删除失败", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                }
+                            });
+                    normalDialog.setNegativeButton("取消",
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    //...To-do
+                                }
+                            });
+                    // 显示
+                    normalDialog.show();
+                    return false;
+                }
+            });
         }
     }
 }
