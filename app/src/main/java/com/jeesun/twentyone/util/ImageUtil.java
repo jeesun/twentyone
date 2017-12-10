@@ -14,7 +14,6 @@ import android.graphics.Typeface;
 import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
-import android.widget.Toast;
 
 import static android.graphics.Bitmap.Config;
 import static android.graphics.Bitmap.createBitmap;
@@ -311,7 +310,7 @@ public class ImageUtil {
         paint.setTypeface(Typeface.createFromAsset(context.getAssets(), fontPath));
         Rect bounds = new Rect();
         paint.getTextBounds(text, 0, text.length(), bounds);
-        Toast.makeText(context, "长度为"+text.length(), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(context, "长度为"+text.length(), Toast.LENGTH_SHORT).show();
         //清除换行
         String textAfter = text.replaceAll("[/\\\\:*?<>|\\\"\\n\\t]", "");
         //计算行数
