@@ -27,6 +27,7 @@ public class BusinessCardActivity extends AppCompatActivity {
     private ImageView mWartermarkImage;
     private EditText etLeftTop, etLeftBottom, etRightTop, etRightBottom, etCenter;
     private Button btnMake, btnSave;
+    private static final int padding = 12;
 
 
     //图片存储路径多了一层Pictures文件夹，方便MIUI的相册应用检测到。
@@ -68,10 +69,10 @@ public class BusinessCardActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Bitmap sourBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.bg_business_card);
 
-                Bitmap textBitmap = ImageUtil.drawTextToLeftTop(BusinessCardActivity.this, sourBitmap, etLeftTop.getText().toString(), 36, "fonts/方正魏碑简体.ttf", Color.BLACK, 10, 10);
-                textBitmap = ImageUtil.drawTextToRightBottom(BusinessCardActivity.this, textBitmap, etRightBottom.getText().toString(), 36, "fonts/方正魏碑简体.ttf", Color.BLACK, 10, 10);
-                textBitmap = ImageUtil.drawTextToRightTop(BusinessCardActivity.this, textBitmap, etRightTop.getText().toString(), 36,"fonts/方正魏碑简体.ttf", Color.BLACK, 10, 10);
-                textBitmap = ImageUtil.drawTextToLeftBottom(BusinessCardActivity.this, textBitmap, etLeftBottom.getText().toString(), 36, "fonts/方正魏碑简体.ttf", Color.BLACK, 10, 10);
+                Bitmap textBitmap = ImageUtil.drawTextToLeftTop(BusinessCardActivity.this, sourBitmap, etLeftTop.getText().toString(), 36, "fonts/方正魏碑简体.ttf", Color.BLACK, padding, padding);
+                textBitmap = ImageUtil.drawTextToRightBottom(BusinessCardActivity.this, textBitmap, etRightBottom.getText().toString(), 36, "fonts/方正魏碑简体.ttf", Color.BLACK, padding, padding);
+                textBitmap = ImageUtil.drawTextToRightTop(BusinessCardActivity.this, textBitmap, etRightTop.getText().toString(), 36,"fonts/方正魏碑简体.ttf", Color.BLACK, padding, padding);
+                textBitmap = ImageUtil.drawTextToLeftBottom(BusinessCardActivity.this, textBitmap, etLeftBottom.getText().toString(), 36, "fonts/方正魏碑简体.ttf", Color.BLACK, padding, padding);
                 textBitmap = ImageUtil.drawTextToCenter(BusinessCardActivity.this, textBitmap, etCenter.getText().toString(), 36, "fonts/方正魏碑简体.ttf", Color.BLACK);
 
                 mWartermarkImage.setImageBitmap(textBitmap);
