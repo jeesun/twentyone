@@ -312,6 +312,17 @@ public class ImageUtil {
         Canvas canvas = new Canvas(bitmap);
 
         canvas.drawText(text, paddingLeft, paddingTop, paint);
+        /*if(paint instanceof TextPaint){
+            TextPaint textPaint = new TextPaint(paint);
+            StaticLayout layout = new StaticLayout(text, textPaint, 300, Layout.Alignment.ALIGN_NORMAL, 1.0F, 0.0F, true);
+            canvas.save();
+            canvas.translate(paddingLeft, paddingTop);
+            layout.draw(canvas);
+            canvas.restore();
+        }else{
+            canvas.drawText(text, paddingLeft, paddingTop, paint);
+        }*/
+
         return bitmap;
     }
 

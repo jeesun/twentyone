@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.util.Calendar;
 
 public class BusinessCardActivity extends AppCompatActivity {
+    public final static int REQUEST_IMAGE_CAPTURE = 1;
     private static final String TAG = BusinessCardActivity.class.getName();
     private ImageView mSourImage;
     private ImageView mWartermarkImage;
@@ -65,7 +66,7 @@ public class BusinessCardActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(Intent.ACTION_PICK, null);
                 intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
-                startActivityForResult(intent, 0x1);
+                startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
             }
         });
 
@@ -122,7 +123,7 @@ public class BusinessCardActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode == RESULT_OK){
-            if(requestCode == 0x1){
+            if(requestCode == REQUEST_IMAGE_CAPTURE){
                 if(null != data){
                     mSourImage.setImageURI(data.getData());
                 }
