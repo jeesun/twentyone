@@ -16,4 +16,17 @@
     <string name="preview">预览</string>
     <string name="save_preview">保存预览</string>
 
+    <string-array name="font_color">
+        <item>黑色</item>
+        <item>白色</item>
+        <item>灰色</item>
+        <item>深灰</item>
+        <item>亮灰</item>
+        <item>红色</item>
+        <item>黄色</item>
+        <item>绿色</item>
+        <item>青色</item>
+        <item>蓝色</item>
+        <item>紫红</item>
+    </string-array>
 </resources>

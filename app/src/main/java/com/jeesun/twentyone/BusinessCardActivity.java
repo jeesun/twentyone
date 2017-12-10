@@ -10,11 +10,14 @@ import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.jeesun.twentyone.util.ColorUtil;
 import com.jeesun.twentyone.util.ImageUtil;
 
 import java.io.File;
@@ -30,7 +33,9 @@ public class BusinessCardActivity extends AppCompatActivity {
     private ImageView mWartermarkImage;
     private EditText etFontSize, etLeftTop, etLeftBottom, etRightTop, etRightBottom, etCenter;
     private Button btnMake, btnSave;
+    private Spinner spFontColor;
     private static final int padding = 12;
+    private int fontColor = Color.BLACK;
 
 
     //图片存储路径多了一层Pictures文件夹，方便MIUI的相册应用检测到。
@@ -56,6 +61,7 @@ public class BusinessCardActivity extends AppCompatActivity {
         etCenter = findViewById(R.id.center);
         btnMake = findViewById(R.id.make);
         btnSave = findViewById(R.id.save);
+        spFontColor = findViewById(R.id.font_color);
 
         Bitmap sourBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.bg_business_card);
         mSourImage.setImageBitmap(sourBitmap);
@@ -70,6 +76,20 @@ public class BusinessCardActivity extends AppCompatActivity {
             }
         });
 
+
+        spFontColor.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                String[] fontColors = getResources().getStringArray(R.array.font_color);
+                //Toast.makeText(BusinessCardActivity.this, fontColors[i], Toast.LENGTH_SHORT).show();
+                fontColor = ColorUtil.getInstance().getColorCode(fontColors[i]);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
 
         //Bitmap waterBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.weixin);
 
@@ -97,11 +117,11 @@ public class BusinessCardActivity extends AppCompatActivity {
                 }
 
 
-                Bitmap textBitmap = ImageUtil.drawTextToLeftTop(BusinessCardActivity.this, sourBitmap, etLeftTop.getText().toString(), fontSize, "fonts/方正魏碑简体.ttf", Color.BLACK, padding, padding);
-                textBitmap = ImageUtil.drawTextToRightBottom(BusinessCardActivity.this, textBitmap, etRightBottom.getText().toString(), fontSize, "fonts/方正魏碑简体.ttf", Color.BLACK, padding, padding);
-                textBitmap = ImageUtil.drawTextToRightTop(BusinessCardActivity.this, textBitmap, etRightTop.getText().toString(), fontSize,"fonts/方正魏碑简体.ttf", Color.BLACK, padding, padding);
-                textBitmap = ImageUtil.drawTextToLeftBottom(BusinessCardActivity.this, textBitmap, etLeftBottom.getText().toString(), fontSize, "fonts/方正魏碑简体.ttf", Color.BLACK, padding, padding);
-                textBitmap = ImageUtil.drawTextToCenter(BusinessCardActivity.this, textBitmap, etCenter.getText().toString(), fontSize, "fonts/方正魏碑简体.ttf", Color.BLACK);
+                Bitmap textBitmap = ImageUtil.drawTextToLeftTop(BusinessCardActivity.this, sourBitmap, etLeftTop.getText().toString(), fontSize, "fonts/方正魏碑简体.ttf", fontColor, padding, padding);
+                textBitmap = ImageUtil.drawTextToRightBottom(BusinessCardActivity.this, textBitmap, etRightBottom.getText().toString(), fontSize, "fonts/方正魏碑简体.ttf", fontColor, padding, padding);
+                textBitmap = ImageUtil.drawTextToRightTop(BusinessCardActivity.this, textBitmap, etRightTop.getText().toString(), fontSize,"fonts/方正魏碑简体.ttf", fontColor, padding, padding);
+                textBitmap = ImageUtil.drawTextToLeftBottom(BusinessCardActivity.this, textBitmap, etLeftBottom.getText().toString(), fontSize, "fonts/方正魏碑简体.ttf", fontColor, padding, padding);
+                textBitmap = ImageUtil.drawTextToCenter(BusinessCardActivity.this, textBitmap, etCenter.getText().toString(), fontSize, "fonts/方正魏碑简体.ttf", fontColor);
 
                 mWartermarkImage.setImageBitmap(textBitmap);
             }

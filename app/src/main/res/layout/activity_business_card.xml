@@ -28,6 +28,13 @@
             android:inputType="number"
             android:hint="@string/hint_font_size"/>
 
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/font_color"
+            android:entries="@array/font_color"
+            />
+
         <EditText
             android:id="@+id/left_top"
             android:layout_width="match_parent"
