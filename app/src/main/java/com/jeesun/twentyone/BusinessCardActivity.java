@@ -41,9 +41,10 @@ public class BusinessCardActivity extends AppCompatActivity {
     private int fontColor = Color.BLACK;
     private Bitmap bmWhite, bmTransparent;
 
-
+    String downloadsDirectoryPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath();
     //图片存储路径多了一层Pictures文件夹，方便MIUI的相册应用检测到。
-    String dirPath = Environment.getExternalStorageDirectory().getPath() + "/TwentyOne/Pictures";
+    //String dirPath = Environment.getExternalStorageDirectory().getPath() + "/TwentyOne/Pictures";
+    String dirPath = downloadsDirectoryPath + "/Camera";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
