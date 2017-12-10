@@ -33,11 +33,13 @@ public class BusinessCardActivity extends AppCompatActivity {
     private static final String TAG = BusinessCardActivity.class.getName();
     private ImageView mSourImage;
     private ImageView mWartermarkImage;
+    private Button btnBuildInWhite, btnBuildInTransparent;
     private EditText etFontSize, etLeftTop, etLeftBottom, etRightTop, etRightBottom, etCenter;
     private Button btnMake, btnSave;
     private Spinner spFontColor;
     private static final int padding = 12;
     private int fontColor = Color.BLACK;
+    private Bitmap bmWhite, bmTransparent;
 
 
     //图片存储路径多了一层Pictures文件夹，方便MIUI的相册应用检测到。
@@ -64,10 +66,29 @@ public class BusinessCardActivity extends AppCompatActivity {
         btnMake = findViewById(R.id.make);
         btnSave = findViewById(R.id.save);
         spFontColor = findViewById(R.id.font_color);
+        btnBuildInWhite = findViewById(R.id.build_in_white);
+        btnBuildInTransparent = findViewById(R.id.build_in_transparent);
 
-        Bitmap sourBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.bg_business_card);
-        mSourImage.setImageBitmap(sourBitmap);
 
+        bmWhite = BitmapFactory.decodeResource(getResources(), R.drawable.bg_white);
+        bmTransparent = BitmapFactory.decodeResource(getResources(), R.drawable.bg_transparent);
+
+        //Bitmap sourBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.bg_business_card);
+        mSourImage.setImageBitmap(bmWhite);
+
+        btnBuildInWhite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mSourImage.setImageBitmap(bmWhite);
+            }
+        });
+
+        btnBuildInTransparent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mSourImage.setImageBitmap(bmTransparent);
+            }
+        });
 
         mSourImage.setOnClickListener(new View.OnClickListener() {
             @Override
