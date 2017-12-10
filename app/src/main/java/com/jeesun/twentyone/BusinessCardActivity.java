@@ -80,6 +80,7 @@ public class BusinessCardActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 mSourImage.setImageBitmap(bmWhite);
+                Toast.makeText(BusinessCardActivity.this, "已切换至白色背景", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -87,6 +88,7 @@ public class BusinessCardActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 mSourImage.setImageBitmap(bmTransparent);
+                Toast.makeText(BusinessCardActivity.this, "已切换至透明背景", Toast.LENGTH_SHORT).show();
             }
         });
 
