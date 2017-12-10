@@ -9,6 +9,12 @@
         android:title="@string/pick"/>
 
     <item
+        android:id="@+id/business_card"
+        android:orderInCategory="100"
+        app:showAsAction="always"
+        android:title="@string/business_card"/>
+
+    <item
         android:id="@+id/about"
         android:orderInCategory="100"
         app:showAsAction="ifRoom"

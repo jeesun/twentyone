@@ -205,6 +205,10 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
                 intent.setType(IMAGE_TYPE);
                 startActivityForResult(intent,REQUEST_IMAGE_CAPTURE);
                 break;
+            case R.id.business_card:
+                intent = new Intent(MainActivity.this, BusinessCardActivity.class);
+                startActivity(intent);
+                break;
             default:
                 break;
         }
