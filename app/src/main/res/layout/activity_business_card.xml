@@ -24,27 +24,32 @@
         <EditText
             android:id="@+id/left_top"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:hint="左上角内容"/>
 
         <EditText
             android:id="@+id/left_bottom"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:hint="左下角内容"/>
 
         <EditText
             android:id="@+id/right_top"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:hint="右上角内容"/>
 
         <EditText
             android:id="@+id/right_bottom"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:hint="右下角内容"/>
 
         <EditText
             android:id="@+id/center"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:hint="中间内容"/>
 
         <Button
             android:id="@+id/make"

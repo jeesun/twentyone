@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.jeesun.twentyone.util.ImageUtil;
 
@@ -101,12 +102,15 @@ public class BusinessCardActivity extends AppCompatActivity {
             out.flush();
             out.close();
             Log.i(TAG, "已经保存");
+            Toast.makeText(BusinessCardActivity.this, "已经保存，请回主页刷新确认", Toast.LENGTH_SHORT).show();
         } catch (FileNotFoundException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+            Toast.makeText(BusinessCardActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+            Toast.makeText(BusinessCardActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
 
     }
