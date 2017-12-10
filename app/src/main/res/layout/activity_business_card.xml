@@ -12,7 +12,7 @@
             android:id="@+id/sour_pic_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="原图" />
+            android:text="@string/hint_sour_pic_title" />
 
         <ImageView
             android:id="@+id/sour_pic"
@@ -22,46 +22,53 @@
             android:scaleType="fitXY"/>
 
         <EditText
+            android:id="@+id/font_size"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:hint="@string/hint_font_size"/>
+
+        <EditText
             android:id="@+id/left_top"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="左上角内容"/>
+            android:hint="@string/hint_left_top"/>
 
         <EditText
             android:id="@+id/left_bottom"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="左下角内容"/>
+            android:hint="@string/hint_left_bottom"/>
 
         <EditText
             android:id="@+id/right_top"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="右上角内容"/>
+            android:hint="@string/hint_right_top"/>
 
         <EditText
             android:id="@+id/right_bottom"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="右下角内容"/>
+            android:hint="@string/hint_right_bottom"/>
 
         <EditText
             android:id="@+id/center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="中间内容"/>
+            android:hint="@string/hint_center"/>
 
         <Button
             android:id="@+id/make"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="生成预览" />
+            android:text="@string/generate_preview" />
 
         <TextView
             android:id="@+id/watermark_pic_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="预览" />
+            android:text="@string/preview" />
 
         <ImageView
             android:id="@+id/wartermark_pic"
@@ -74,7 +81,7 @@
             android:id="@+id/save"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="保存预览" />
+            android:text="@string/save_preview" />
     </LinearLayout>
 
 </ScrollView>

@@ -4,4 +4,16 @@
     <string name="github">https://github.com/jeesun/TwentyOne</string>
     <string name="pick">选取</string>
     <string name="business_card">名片</string>
+
+    <string name="hint_sour_pic_title">原图（长按更换背景图）</string>
+    <string name="hint_font_size">设置字体大小：默认36sp</string>
+    <string name="hint_left_top">左上角内容</string>
+    <string name="hint_left_bottom">左下角内容</string>
+    <string name="hint_right_top">右上角内容</string>
+    <string name="hint_right_bottom">右下角内容</string>
+    <string name="hint_center">中间内容</string>
+    <string name="generate_preview">生成预览</string>
+    <string name="preview">预览</string>
+    <string name="save_preview">保存预览</string>
+
 </resources>
