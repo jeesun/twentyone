@@ -1,5 +1,6 @@
 package com.jeesun.twentyone;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -10,6 +11,7 @@ import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -124,6 +126,8 @@ public class BusinessCardActivity extends AppCompatActivity {
                 textBitmap = ImageUtil.drawTextToCenter(BusinessCardActivity.this, textBitmap, etCenter.getText().toString(), fontSize, "fonts/方正魏碑简体.ttf", fontColor);
 
                 mWartermarkImage.setImageBitmap(textBitmap);
+
+                hideKeyboard();
             }
         });
 
@@ -174,5 +178,14 @@ public class BusinessCardActivity extends AppCompatActivity {
             Toast.makeText(BusinessCardActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
 
+    }
+
+    private void hideKeyboard() {
+        InputMethodManager imm = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm.isActive()) {
+            if (null != this.getCurrentFocus().getWindowToken()) {
+                imm.hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+            }
+        }
     }
 }
