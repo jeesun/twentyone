@@ -4,11 +4,14 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -40,6 +43,9 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     //String dirPath = Environment.getExternalStorageDirectory().getPath() + "/TwentyOne/Pictures";
     String dirPath = downloadsDirectoryPath + "/Camera";
 
+    //定义一个变量，来标识是否退出应用
+    private static boolean isExit = false;
+    private static Handler mHandler;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,6 +69,13 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         recyclerView.setLayoutManager(sglm);
         recyclerView.setAdapter(adapter = new GridAdapter(pictureInfoList, MainActivity.this));
 
+        mHandler = new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                isExit = false;
+            }
+        };
     }
 
     @Override
@@ -146,6 +159,22 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(KeyEvent.KEYCODE_BACK == keyCode){
+            if(!isExit){
+                isExit = true;
+                Toast.makeText(this, "再按一次退出程序", Toast.LENGTH_SHORT).show();
+                mHandler.sendEmptyMessageDelayed(0, 2000);
+            }else{
+                finish();
+                System.exit(0);
+            }
+            return false;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
     private void startCrop(String imageUri) {
