@@ -19,6 +19,7 @@
     <string name="save_preview">保存预览</string>
 
     <string-array name="font_color">
+        <item>字体颜色（默认黑色）</item>
         <item>黑色</item>
         <item>白色</item>
         <item>灰色</item>

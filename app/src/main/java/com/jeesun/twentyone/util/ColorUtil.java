@@ -18,7 +18,9 @@ public class ColorUtil {
     }
 
     public int getColorCode(String colorName){
-        if("黑色".equals(colorName)){
+        if("字体颜色（默认黑色）".equals(colorName)){
+            return Color.BLACK;
+        }else if("黑色".equals(colorName)){
             return Color.BLACK;
         }else if("白色".equals(colorName)){
             return Color.WHITE;

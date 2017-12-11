@@ -53,10 +53,12 @@ public class BusinessCardActivity extends AppCompatActivity {
         setContentView(R.layout.activity_business_card);
         setTitle(R.string.business_card);
 
+        finView();
+
         initView();
     }
 
-    private void initView(){
+    private void finView() {
         mSourImage =  findViewById(R.id.sour_pic);
         mWartermarkImage =  findViewById(R.id.wartermark_pic);
         etFontSize = findViewById(R.id.font_size);
@@ -70,7 +72,9 @@ public class BusinessCardActivity extends AppCompatActivity {
         spFontColor = findViewById(R.id.font_color);
         btnBuildInWhite = findViewById(R.id.build_in_white);
         btnBuildInTransparent = findViewById(R.id.build_in_transparent);
+    }
 
+    private void initView(){
         bmDefault = BitmapFactory.decodeResource(getResources(), R.drawable.bg_default);
         bmWhite = BitmapFactory.decodeResource(getResources(), R.drawable.bg_white);
         bmTransparent = BitmapFactory.decodeResource(getResources(), R.drawable.bg_transparent);
