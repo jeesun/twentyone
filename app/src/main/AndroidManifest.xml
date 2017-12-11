@@ -27,7 +27,8 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity android:name=".AboutActivity" />
-        <activity android:name=".BusinessCardActivity" />
+        <activity android:name=".BusinessCardActivity"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden"/>
         <activity android:name=".MainActivity" />
     </application>
 
