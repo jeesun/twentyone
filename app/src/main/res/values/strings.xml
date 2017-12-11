@@ -12,10 +12,10 @@
     <string name="hint_font_size">设置字体大小：默认36sp</string>
     <string name="hint_font_size_corner">设置四角内容字体大小：默认36sp</string>
     <string name="hint_font_size_center">设置中间内容字体大小：默认36sp</string>
-    <string name="hint_left_top">左上角内容（单行文本）</string>
-    <string name="hint_left_bottom">左下角内容（单行文本）</string>
-    <string name="hint_right_top">右上角内容（单行文本）</string>
-    <string name="hint_right_bottom">右下角内容（单行文本）</string>
+    <string name="hint_left_top">左上角内容（可不填）</string>
+    <string name="hint_left_bottom">左下角内容（可不填）</string>
+    <string name="hint_right_top">右上角内容（可不填）</string>
+    <string name="hint_right_bottom">右下角内容（可不填）</string>
     <string name="hint_center">中间内容（可换行，按输入法换行键即可）</string>
     <string name="generate_preview">生成预览</string>
     <string name="preview">预览</string>
