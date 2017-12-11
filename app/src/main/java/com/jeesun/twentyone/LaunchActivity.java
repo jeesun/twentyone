@@ -28,6 +28,8 @@ public class LaunchActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_launch);
 
+        /*getSupportActionBar().hide();
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);*/
 
         // 版本判断。当手机系统大于 23 时，才有必要去判断权限是否获取
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -59,6 +61,7 @@ public class LaunchActivity extends AppCompatActivity {
                 }
                 Intent intent = new Intent(LaunchActivity.this, MainActivity.class);
                 startActivity(intent);
+                LaunchActivity.this.finish();
             }
         }else{
             //android版本低于23，权限已获取
@@ -70,6 +73,7 @@ public class LaunchActivity extends AppCompatActivity {
             }
             Intent intent = new Intent(LaunchActivity.this, MainActivity.class);
             startActivity(intent);
+            LaunchActivity.this.finish();
         }
     }
 
@@ -90,6 +94,7 @@ public class LaunchActivity extends AppCompatActivity {
                     }
                     Intent intent = new Intent(LaunchActivity.this, MainActivity.class);
                     startActivity(intent);
+                    LaunchActivity.this.finish();
                 } else {
                     Toast.makeText(LaunchActivity.this, "拒绝授予读写手机存储权限将无法获取相册图片，请重新授权", Toast.LENGTH_LONG).show();
                     // permission denied, boo! Disable the
