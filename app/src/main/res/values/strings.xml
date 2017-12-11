@@ -10,6 +10,8 @@
     <string name="build_in_white">内置白色</string>
     <string name="build_in_transparent">内置透明</string>
     <string name="hint_font_size">设置字体大小：默认36sp</string>
+    <string name="hint_font_size_corner">设置四角内容字体大小：默认36sp</string>
+    <string name="hint_font_size_center">设置中间内容字体大小：默认36sp</string>
     <string name="hint_left_top">左上角内容（单行文本）</string>
     <string name="hint_left_bottom">左下角内容（单行文本）</string>
     <string name="hint_right_top">右上角内容（单行文本）</string>

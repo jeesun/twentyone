@@ -35,7 +35,7 @@ public class BusinessCardActivity extends AppCompatActivity {
     private ImageView mSourImage;
     private ImageView mWartermarkImage;
     private Button btnBuildInWhite, btnBuildInTransparent;
-    private EditText etFontSize, etLeftTop, etLeftBottom, etRightTop, etRightBottom, etCenter;
+    private EditText etFontSizeCorner, etFontSizeCenter, etLeftTop, etLeftBottom, etRightTop, etRightBottom, etCenter;
     private Button btnMake, btnSave;
     private Spinner spFontColor;
     private static final int padding = 12;
@@ -61,7 +61,8 @@ public class BusinessCardActivity extends AppCompatActivity {
     private void finView() {
         mSourImage =  findViewById(R.id.sour_pic);
         mWartermarkImage =  findViewById(R.id.wartermark_pic);
-        etFontSize = findViewById(R.id.font_size);
+        etFontSizeCorner = findViewById(R.id.font_size_corner);
+        etFontSizeCenter = findViewById(R.id.font_size_center);
         etLeftTop = findViewById(R.id.left_top);
         etLeftBottom = findViewById(R.id.left_bottom);
         etRightTop = findViewById(R.id.right_top);
@@ -137,22 +138,30 @@ public class BusinessCardActivity extends AppCompatActivity {
                 //Bitmap sourBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.bg_business_card);
                 Bitmap sourBitmap = mSourImage.getDrawingCache();
 
-                Integer fontSize;
-                if(!"".equals(etFontSize.getText().toString())){
-                    fontSize = Integer.parseInt(etFontSize.getText().toString());
-                    if(fontSize <= 0){
-                        fontSize = 36;
+                Integer fontSizeCorner, fontSizeCenter;
+                if(!"".equals(etFontSizeCorner.getText().toString())){
+                    fontSizeCorner = Integer.parseInt(etFontSizeCorner.getText().toString());
+                    if(fontSizeCorner <= 0){
+                        fontSizeCorner = 36;
                     }
                 }else{
-                    fontSize = 36;
+                    fontSizeCorner = 36;
+                }
+                if(!"".equals(etFontSizeCenter.getText().toString())){
+                    fontSizeCenter = Integer.parseInt(etFontSizeCenter.getText().toString());
+                    if(fontSizeCenter <= 0){
+                        fontSizeCenter = 36;
+                    }
+                }else{
+                    fontSizeCenter = 36;
                 }
 
 
-                Bitmap textBitmap = ImageUtil.drawTextToLeftTop(BusinessCardActivity.this, sourBitmap, etLeftTop.getText().toString(), fontSize, "fonts/方正魏碑简体.ttf", fontColor, padding, padding);
-                textBitmap = ImageUtil.drawTextToRightBottom(BusinessCardActivity.this, textBitmap, etRightBottom.getText().toString(), fontSize, "fonts/方正魏碑简体.ttf", fontColor, padding, padding);
-                textBitmap = ImageUtil.drawTextToRightTop(BusinessCardActivity.this, textBitmap, etRightTop.getText().toString(), fontSize,"fonts/方正魏碑简体.ttf", fontColor, padding, padding);
-                textBitmap = ImageUtil.drawTextToLeftBottom(BusinessCardActivity.this, textBitmap, etLeftBottom.getText().toString(), fontSize, "fonts/方正魏碑简体.ttf", fontColor, padding, padding);
-                textBitmap = ImageUtil.drawTextToCenterAndTextStartFromCenter(BusinessCardActivity.this, textBitmap, etCenter.getText().toString(), fontSize, "fonts/方正魏碑简体.ttf", fontColor);
+                Bitmap textBitmap = ImageUtil.drawTextToLeftTop(BusinessCardActivity.this, sourBitmap, etLeftTop.getText().toString(), fontSizeCorner, "fonts/方正魏碑简体.ttf", fontColor, padding, padding);
+                textBitmap = ImageUtil.drawTextToRightBottom(BusinessCardActivity.this, textBitmap, etRightBottom.getText().toString(), fontSizeCorner, "fonts/方正魏碑简体.ttf", fontColor, padding, padding);
+                textBitmap = ImageUtil.drawTextToRightTop(BusinessCardActivity.this, textBitmap, etRightTop.getText().toString(), fontSizeCorner,"fonts/方正魏碑简体.ttf", fontColor, padding, padding);
+                textBitmap = ImageUtil.drawTextToLeftBottom(BusinessCardActivity.this, textBitmap, etLeftBottom.getText().toString(), fontSizeCorner, "fonts/方正魏碑简体.ttf", fontColor, padding, padding);
+                textBitmap = ImageUtil.drawTextToCenterAndTextStartFromCenter(BusinessCardActivity.this, textBitmap, etCenter.getText().toString(), fontSizeCenter, "fonts/方正魏碑简体.ttf", fontColor);
 
                 mWartermarkImage.setImageBitmap(textBitmap);
 

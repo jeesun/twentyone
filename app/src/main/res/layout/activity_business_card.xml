@@ -47,13 +47,22 @@
             android:scaleType="fitXY"/>
 
         <EditText
-            android:id="@+id/font_size"
+            android:id="@+id/font_size_corner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="number"
             android:lines="1"
             android:maxLines="1"
-            android:hint="@string/hint_font_size"/>
+            android:hint="@string/hint_font_size_corner"/>
+
+        <EditText
+            android:id="@+id/font_size_center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:lines="1"
+            android:maxLines="1"
+            android:hint="@string/hint_font_size_center"/>
 
         <Spinner
             android:layout_width="match_parent"
