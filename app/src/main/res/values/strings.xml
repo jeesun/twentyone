@@ -35,4 +35,11 @@
         <item>蓝色</item>
         <item>紫红</item>
     </string-array>
+
+    <string-array name="typeface">
+        <item>字体（默认方正魏碑简体）</item>
+        <item>方正魏碑简体</item>
+        <item>连笔签名字体</item>
+        <item>连笔英文签名字体</item>
+    </string-array>
 </resources>

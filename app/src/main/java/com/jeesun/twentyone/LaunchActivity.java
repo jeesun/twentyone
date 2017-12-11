@@ -6,7 +6,6 @@ import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -15,16 +14,15 @@ import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.jeesun.twentyone.util.ContextUtil;
+
 import java.io.File;
 
 public class LaunchActivity extends AppCompatActivity {
     private static final String TAG = LaunchActivity.class.getName();
     public final static int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 2;
 
-    String downloadsDirectoryPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath();
-    //图片存储路径多了一层Pictures文件夹，方便MIUI的相册应用检测到。
-    //String dirPath = Environment.getExternalStorageDirectory().getPath() + "/TwentyOne/Pictures";
-    String dirPath = downloadsDirectoryPath + "/Camera";
+    String dirPath = ContextUtil.picSavePath;
 
     private TextView tvLaunchInfo;
     @Override

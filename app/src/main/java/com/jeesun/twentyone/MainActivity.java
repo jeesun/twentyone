@@ -3,7 +3,6 @@ package com.jeesun.twentyone;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -18,6 +17,7 @@ import android.widget.Toast;
 
 import com.jeesun.twentyone.adapter.GridAdapter;
 import com.jeesun.twentyone.model.PictureInfo;
+import com.jeesun.twentyone.util.ContextUtil;
 import com.yalantis.ucrop.UCrop;
 
 import java.io.File;
@@ -38,10 +38,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     private GridAdapter adapter;
     private List<PictureInfo> pictureInfoList = new ArrayList<>();
 
-    String downloadsDirectoryPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath();
-    //图片存储路径多了一层Pictures文件夹，方便MIUI的相册应用检测到。
-    //String dirPath = Environment.getExternalStorageDirectory().getPath() + "/TwentyOne/Pictures";
-    String dirPath = downloadsDirectoryPath + "/Camera";
+    String dirPath = ContextUtil.picSavePath;
 
     //定义一个变量，来标识是否退出应用
     private static boolean isExit = false;

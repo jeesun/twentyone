@@ -47,6 +47,40 @@
             android:adjustViewBounds="true"
             android:scaleType="fitXY"/>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="四角字体"/>
+            <Spinner
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:id="@+id/typeface_corner"
+                android:entries="@array/typeface"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="中间字体"/>
+            <Spinner
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:id="@+id/typeface_center"
+                android:entries="@array/typeface"
+                />
+        </LinearLayout>
+
         <EditText
             android:id="@+id/font_size_corner"
             android:layout_width="match_parent"

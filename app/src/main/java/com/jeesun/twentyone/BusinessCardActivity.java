@@ -6,7 +6,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -22,7 +21,9 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.jeesun.twentyone.util.ColorUtil;
+import com.jeesun.twentyone.util.ContextUtil;
 import com.jeesun.twentyone.util.ImageUtil;
+import com.jeesun.twentyone.util.TypefaceUtil;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -38,16 +39,14 @@ public class BusinessCardActivity extends AppCompatActivity {
     private Button btnBuildInWhite, btnBuildInTransparent;
     private EditText etFontSizeCorner, etFontSizeCenter, etLeftTop, etLeftBottom, etRightTop, etRightBottom, etCenter;
     private Button btnMake, btnSave;
-    private Spinner spFontColor;
+    private Spinner spFontColor, spTypefaceCorner, spTypefaceCenter;
     private static final int padding = 12;
     private int fontColor = Color.BLACK;
     private Bitmap bmDefault, bmWhite, bmTransparent;
 
-    String downloadsDirectoryPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath();
-    //图片存储路径多了一层Pictures文件夹，方便MIUI的相册应用检测到。
-    //String dirPath = Environment.getExternalStorageDirectory().getPath() + "/TwentyOne/Pictures";
-    String dirPath = downloadsDirectoryPath + "/Camera";
+    String dirPath = ContextUtil.picSavePath;
 
+    private String typefaceCornerUri="方正魏碑简体", typefaceCenterUri="连笔签名字体";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,6 +77,8 @@ public class BusinessCardActivity extends AppCompatActivity {
         btnMake = findViewById(R.id.make);
         btnSave = findViewById(R.id.save);
         spFontColor = findViewById(R.id.font_color);
+        spTypefaceCorner = findViewById(R.id.typeface_corner);
+        spTypefaceCenter = findViewById(R.id.typeface_center);
         btnBuildInWhite = findViewById(R.id.build_in_white);
         btnBuildInTransparent = findViewById(R.id.build_in_transparent);
     }
@@ -130,6 +131,32 @@ public class BusinessCardActivity extends AppCompatActivity {
             }
         });
 
+        spTypefaceCorner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                String[] typefaces = getResources().getStringArray(R.array.typeface);
+                typefaceCornerUri = TypefaceUtil.getInstance().getTypefaceUri(typefaces[i]);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+        spTypefaceCenter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                String[] typefaces = getResources().getStringArray(R.array.typeface);
+                typefaceCenterUri = TypefaceUtil.getInstance().getTypefaceUri(typefaces[i]);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
         //Bitmap waterBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.weixin);
 
         //Bitmap watermarkBitmap = ImageUtil.createWaterMaskCenter(sourBitmap, waterBitmap);
@@ -164,12 +191,11 @@ public class BusinessCardActivity extends AppCompatActivity {
                     fontSizeCenter = 36;
                 }
 
-
-                Bitmap textBitmap = ImageUtil.drawTextToLeftTop(BusinessCardActivity.this, sourBitmap, etLeftTop.getText().toString(), fontSizeCorner, "fonts/方正魏碑简体.ttf", fontColor, padding, padding);
-                textBitmap = ImageUtil.drawTextToRightBottom(BusinessCardActivity.this, textBitmap, etRightBottom.getText().toString(), fontSizeCorner, "fonts/方正魏碑简体.ttf", fontColor, padding, padding);
-                textBitmap = ImageUtil.drawTextToRightTop(BusinessCardActivity.this, textBitmap, etRightTop.getText().toString(), fontSizeCorner,"fonts/方正魏碑简体.ttf", fontColor, padding, padding);
-                textBitmap = ImageUtil.drawTextToLeftBottom(BusinessCardActivity.this, textBitmap, etLeftBottom.getText().toString(), fontSizeCorner, "fonts/方正魏碑简体.ttf", fontColor, padding, padding);
-                textBitmap = ImageUtil.drawTextToCenterAndTextStartFromCenter(BusinessCardActivity.this, textBitmap, etCenter.getText().toString(), fontSizeCenter, "fonts/方正魏碑简体.ttf", fontColor);
+                Bitmap textBitmap = ImageUtil.drawTextToLeftTop(BusinessCardActivity.this, sourBitmap, etLeftTop.getText().toString(), fontSizeCorner, typefaceCornerUri, fontColor, padding, padding);
+                textBitmap = ImageUtil.drawTextToRightBottom(BusinessCardActivity.this, textBitmap, etRightBottom.getText().toString(), fontSizeCorner, typefaceCornerUri, fontColor, padding, padding);
+                textBitmap = ImageUtil.drawTextToRightTop(BusinessCardActivity.this, textBitmap, etRightTop.getText().toString(), fontSizeCorner,typefaceCornerUri, fontColor, padding, padding);
+                textBitmap = ImageUtil.drawTextToLeftBottom(BusinessCardActivity.this, textBitmap, etLeftBottom.getText().toString(), fontSizeCorner, typefaceCornerUri, fontColor, padding, padding);
+                textBitmap = ImageUtil.drawTextToCenterAndTextStartFromCenter(BusinessCardActivity.this, textBitmap, etCenter.getText().toString(), fontSizeCenter, typefaceCenterUri, fontColor);
 
                 mWartermarkImage.setImageBitmap(textBitmap);
 
