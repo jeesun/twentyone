@@ -5,6 +5,7 @@
     <string name="pick">选取</string>
     <string name="business_card">名片</string>
 
+    <string name="business_card_make">名片制作：在背景图的四角和中间位置添加文字内容。</string>
     <string name="hint_sour_pic_title">背景原图（长按更换背景图）</string>
     <string name="build_in_white">内置白色</string>
     <string name="build_in_transparent">内置透明</string>
