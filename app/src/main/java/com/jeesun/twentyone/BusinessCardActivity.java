@@ -10,6 +10,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -176,6 +177,16 @@ public class BusinessCardActivity extends AppCompatActivity {
                     mSourImage.setImageURI(data.getData());
                 }
             }
+        }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(keyCode == KeyEvent.KEYCODE_BACK){
+            BusinessCardActivity.this.finish();
+            return false;
+        }else{
+            return super.onKeyDown(keyCode, event);
         }
     }
 
