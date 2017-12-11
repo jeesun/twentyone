@@ -40,7 +40,7 @@ public class BusinessCardActivity extends AppCompatActivity {
     private Spinner spFontColor;
     private static final int padding = 12;
     private int fontColor = Color.BLACK;
-    private Bitmap bmWhite, bmTransparent;
+    private Bitmap bmDefault, bmWhite, bmTransparent;
 
     String downloadsDirectoryPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath();
     //图片存储路径多了一层Pictures文件夹，方便MIUI的相册应用检测到。
@@ -71,12 +71,12 @@ public class BusinessCardActivity extends AppCompatActivity {
         btnBuildInWhite = findViewById(R.id.build_in_white);
         btnBuildInTransparent = findViewById(R.id.build_in_transparent);
 
-
+        bmDefault = BitmapFactory.decodeResource(getResources(), R.drawable.bg_default);
         bmWhite = BitmapFactory.decodeResource(getResources(), R.drawable.bg_white);
         bmTransparent = BitmapFactory.decodeResource(getResources(), R.drawable.bg_transparent);
 
         //Bitmap sourBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.bg_business_card);
-        mSourImage.setImageBitmap(bmWhite);
+        mSourImage.setImageBitmap(bmDefault);
 
         btnBuildInWhite.setOnClickListener(new View.OnClickListener() {
             @Override
