@@ -3,6 +3,7 @@ package com.jeesun.twentyone;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -11,6 +12,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
@@ -24,6 +26,7 @@ public class LaunchActivity extends AppCompatActivity {
     //String dirPath = Environment.getExternalStorageDirectory().getPath() + "/TwentyOne/Pictures";
     String dirPath = downloadsDirectoryPath + "/Camera";
 
+    private TextView tvLaunchInfo;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,6 +34,11 @@ public class LaunchActivity extends AppCompatActivity {
 
         /*getSupportActionBar().hide();
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);*/
+
+        tvLaunchInfo = findViewById(R.id.launch_info);
+        Typeface typeface = Typeface.createFromAsset(getAssets(), "fonts/方正魏碑简体.ttf");
+        tvLaunchInfo.setTypeface(typeface);
+
 
         // 版本判断。当手机系统大于 23 时，才有必要去判断权限是否获取
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {

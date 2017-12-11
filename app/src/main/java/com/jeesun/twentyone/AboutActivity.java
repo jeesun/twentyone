@@ -1,6 +1,7 @@
 package com.jeesun.twentyone;
 
 import android.content.pm.PackageManager;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
@@ -26,6 +27,8 @@ public class AboutActivity extends AppCompatActivity {
         }
 
         tvGithub = findViewById(R.id.github);
+        Typeface typeface = Typeface.createFromAsset(getAssets(), "fonts/方正魏碑简体.ttf");
+        tvGithub.setTypeface(typeface);
 
         try {
             versionName = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
