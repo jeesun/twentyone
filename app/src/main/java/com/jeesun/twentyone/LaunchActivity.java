@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -59,9 +60,15 @@ public class LaunchActivity extends AppCompatActivity {
                 if(!file.exists()){
                     file.mkdirs();
                 }
-                Intent intent = new Intent(LaunchActivity.this, MainActivity.class);
-                startActivity(intent);
-                LaunchActivity.this.finish();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        Intent intent = new Intent(LaunchActivity.this, MainActivity.class);
+                        startActivity(intent);
+                        LaunchActivity.this.finish();
+                    }
+                }, 2000);
+
             }
         }else{
             //android版本低于23，权限已获取
@@ -71,9 +78,14 @@ public class LaunchActivity extends AppCompatActivity {
             if(!file.exists()){
                 file.mkdirs();
             }
-            Intent intent = new Intent(LaunchActivity.this, MainActivity.class);
-            startActivity(intent);
-            LaunchActivity.this.finish();
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    Intent intent = new Intent(LaunchActivity.this, MainActivity.class);
+                    startActivity(intent);
+                    LaunchActivity.this.finish();
+                }
+            }, 2000);
         }
     }
 
@@ -92,9 +104,14 @@ public class LaunchActivity extends AppCompatActivity {
                     if(!file.exists()){
                         file.mkdirs();
                     }
-                    Intent intent = new Intent(LaunchActivity.this, MainActivity.class);
-                    startActivity(intent);
-                    LaunchActivity.this.finish();
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            Intent intent = new Intent(LaunchActivity.this, MainActivity.class);
+                            startActivity(intent);
+                            LaunchActivity.this.finish();
+                        }
+                    }, 2000);
                 } else {
                     Toast.makeText(LaunchActivity.this, "拒绝授予读写手机存储权限将无法获取相册图片，请重新授权", Toast.LENGTH_LONG).show();
                     // permission denied, boo! Disable the
