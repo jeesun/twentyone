@@ -33,8 +33,10 @@
             android:windowSoftInputMode="adjustUnspecified|stateHidden" />
         <activity android:name=".MainActivity" />
         <activity android:name=".SpecificSymbolActivity" />
-        <activity android:name=".PicActivity"
-            android:theme="@style/dialogStyle"/>
+        <activity
+            android:name=".PicActivity"
+            android:theme="@style/dialogStyle" />
+        <activity android:name=".FontsActivity"></activity>
     </application>
 
 </manifest>

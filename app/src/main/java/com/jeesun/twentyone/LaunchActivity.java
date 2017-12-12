@@ -66,6 +66,10 @@ public class LaunchActivity extends AppCompatActivity {
                 if(!file.exists()){
                     file.mkdirs();
                 }
+                File fontPath = new File(ContextUtil.fontFullPath);
+                if(!fontPath.exists()){
+                    fontPath.mkdirs();
+                }
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -83,6 +87,10 @@ public class LaunchActivity extends AppCompatActivity {
             File file = new File(dirPath);
             if(!file.exists()){
                 file.mkdirs();
+            }
+            File fontPath = new File(ContextUtil.fontFullPath);
+            if(!fontPath.exists()){
+                fontPath.mkdirs();
             }
             new Handler().postDelayed(new Runnable() {
                 @Override
@@ -109,6 +117,10 @@ public class LaunchActivity extends AppCompatActivity {
                     File file = new File(dirPath);
                     if(!file.exists()){
                         file.mkdirs();
+                    }
+                    File fontPath = new File(ContextUtil.fontFullPath);
+                    if(!fontPath.exists()){
+                        fontPath.mkdirs();
                     }
                     new Handler().postDelayed(new Runnable() {
                         @Override
