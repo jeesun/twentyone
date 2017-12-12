@@ -10,6 +10,7 @@ import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -53,6 +54,7 @@ public class BusinessCardActivity extends AppCompatActivity {
         setContentView(R.layout.activity_business_card);
         setTitle(R.string.business_card);
 
+        //标题栏返回键
         android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         if(actionBar != null){
             actionBar.setHomeButtonEnabled(true);
@@ -249,8 +251,18 @@ public class BusinessCardActivity extends AppCompatActivity {
             case android.R.id.home:
                 this.finish();
                 break;
+            case R.id.specific_symbol:
+                Intent intent = new Intent(BusinessCardActivity.this, SpecificSymbolActivity.class);
+                startActivity(intent);
+                break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.business_card, menu);
+        return true;
     }
 
     public void saveBitmap(String dirPath, String picName, Bitmap bm) {
