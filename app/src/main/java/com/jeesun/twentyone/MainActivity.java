@@ -198,7 +198,8 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         if (scannerDirectory.isDirectory()) {
             for (File file : scannerDirectory.listFiles()) {
                 String path = file.getAbsolutePath();
-                if (path.endsWith("_TwentyOne.jpg") || path.endsWith("_TwentyOne.jpeg") || path.endsWith("_TwentyOne.png")) {
+                if (path.endsWith("_TwentyOne.jpg") || path.endsWith("_TwentyOne.jpeg") || path.endsWith("_TwentyOne.png") ||
+                        path.endsWith("_card.jpg") || path.endsWith("_card.jpeg") || path.endsWith("_card.png")) {
                     pictureInfoList.add(new PictureInfo(path));
                 }
             }

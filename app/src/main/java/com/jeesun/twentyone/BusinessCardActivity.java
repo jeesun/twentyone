@@ -201,7 +201,7 @@ public class BusinessCardActivity extends AppCompatActivity {
 
                 hideKeyboard();
 
-                //清空画图缓冲区，否则，下一次从ImageView对象iv_photo中获取的图像，还是原来的图像。
+                //清空画图缓冲区，否则，下一次从ImageView对象中获取的图像，还是原来的图像。
                 mSourImage.setDrawingCacheEnabled(false);
             }
         });
@@ -209,10 +209,13 @@ public class BusinessCardActivity extends AppCompatActivity {
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //没有下一行代码，无法从ImageView对象中获取图像；
                 mWartermarkImage.setDrawingCacheEnabled(true);
                 Bitmap textBitmap = Bitmap.createBitmap(mWartermarkImage.getDrawingCache());
                 String filename = String.format("%d_%s", Calendar.getInstance().getTimeInMillis(), "card.png");
                 saveBitmap(dirPath, filename, textBitmap);
+                //清空画图缓冲区，否则，下一次从ImageView对象中获取的图像，还是原来的图像。
+                mWartermarkImage.setDrawingCacheEnabled(false);
             }
         });
 

@@ -22,7 +22,7 @@ public class TypefaceUtil {
         }else{
             sb.append(name);
         }
-        if("连笔签名字体".equals(name)){
+        if("连笔中文签名字体".equals(name)){
             sb.append(".TTF");
         }else{
             sb.append(".ttf");
