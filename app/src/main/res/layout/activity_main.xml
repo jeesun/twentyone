@@ -9,19 +9,18 @@
     android:background="#ffffff"
     tools:context="com.jeesun.twentyone.MainActivity">
 
-    <!--下拉刷新控件-->
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/grid_swipe_refresh"
+    <android.support.v4.view.ViewPager
+        android:id="@+id/view_pager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        >
+        android:layout_height="match_parent">
 
-        <!--本文主角-->
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/grid_recycler"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            />
-    </android.support.v4.widget.SwipeRefreshLayout>
+        <android.support.v4.view.PagerTabStrip
+            android:id="@+id/view_pager_tab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            >
+
+        </android.support.v4.view.PagerTabStrip>
+    </android.support.v4.view.ViewPager>
 </android.support.design.widget.CoordinatorLayout>

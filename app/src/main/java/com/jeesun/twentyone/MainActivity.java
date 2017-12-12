@@ -5,18 +5,18 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.PagerTabStrip;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.jeesun.twentyone.adapter.GridAdapter;
-import com.jeesun.twentyone.model.PictureInfo;
+import com.jeesun.twentyone.adapter.ViewPagerAdapter;
 import com.jeesun.twentyone.util.ContextUtil;
 import com.yalantis.ucrop.UCrop;
 
@@ -28,43 +28,33 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
+public class MainActivity extends AppCompatActivity {
     public final static int REQUEST_IMAGE_CAPTURE = 1;
     public final static int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 2;
     public final static String IMAGE_TYPE = "image/*";
 
-    private SwipeRefreshLayout swipeRefreshLayout;
-    private RecyclerView recyclerView;
-    private GridAdapter adapter;
-    private List<PictureInfo> pictureInfoList = new ArrayList<>();
+    private ViewPager vpViewPager;
+    private PagerTabStrip pagerTabStrip;
+    private FragmentPagerAdapter pagerAdapter;
 
     String dirPath = ContextUtil.picSavePath;
 
     //定义一个变量，来标识是否退出应用
     private static boolean isExit = false;
     private static Handler mHandler;
+
+    private List<Fragment> fragmentList;
+    private List<String> titleList;
+
+    private LocalFragment localFragment;
+    private WebFragment webFragment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        swipeRefreshLayout = findViewById(R.id.grid_swipe_refresh);
-        recyclerView = findViewById(R.id.grid_recycler);
-
-        swipeRefreshLayout.setProgressBackgroundColorSchemeResource(android.R.color.white);
-        swipeRefreshLayout.setColorSchemeResources(R.color.colorAccent, R.color.colorPrimary, R.color.colorPrimaryDark);
-        swipeRefreshLayout.setOnRefreshListener(this);
-
-
-        //读取sdcard下的TwentyOne文件夹下的图片
-        setData();
-
-        //设置recyclerview
-        recyclerView.setHasFixedSize(true);
-        StaggeredGridLayoutManager sglm = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
-        sglm.setReverseLayout(false);
-        recyclerView.setLayoutManager(sglm);
-        recyclerView.setAdapter(adapter = new GridAdapter(pictureInfoList, MainActivity.this));
+        vpViewPager = findViewById(R.id.view_pager);
+        pagerTabStrip = findViewById(R.id.view_pager_tab);
 
         mHandler = new Handler(){
             @Override
@@ -73,6 +63,18 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
                 isExit = false;
             }
         };
+
+        fragmentList = new ArrayList<>();
+        titleList = new ArrayList<>();
+
+        localFragment = new LocalFragment();
+        webFragment = new WebFragment();
+        fragmentList.add(localFragment);
+        fragmentList.add(webFragment);
+        titleList.add("本地");
+        titleList.add("网络");
+        pagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), fragmentList, titleList);
+        vpViewPager.setAdapter(pagerAdapter);
     }
 
     @Override
@@ -108,11 +110,8 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
                     inChannel.transferTo(0, inChannel.size(), outChannel);
                     //Toast.makeText(this, "裁切后的图片保存在：" + saveFile.getAbsolutePath(), Toast.LENGTH_SHORT).show();
                     Toast.makeText(this, "图片已保存到相册的相机文件夹中，主页已自动刷新", Toast.LENGTH_SHORT).show();
-                    swipeRefreshLayout.setRefreshing(true);
-                    updateData();
-                    if(swipeRefreshLayout.isRefreshing()){
-                        swipeRefreshLayout.setRefreshing(false);
-                    }
+                    localFragment.refreshData();
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 } finally {
@@ -158,10 +157,10 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
                 intent = new Intent(MainActivity.this, BusinessCardActivity.class);
                 startActivity(intent);
                 break;
-            case R.id.fonts:
+            /*case R.id.fonts:
                 intent = new Intent(MainActivity.this, FontsActivity.class);
                 startActivity(intent);
-                break;
+                break;*/
             default:
                 break;
         }
@@ -191,37 +190,5 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         UCrop.of(sourceUri, destinationUri).withAspectRatio(18, 9).withMaxResultSize(1440, 720).start(this);
     }
 
-    @Override
-    public void onRefresh() {
-        updateData();
-        if(swipeRefreshLayout.isRefreshing()){
-            swipeRefreshLayout.setRefreshing(false);
-        }
-    }
 
-    /**
-     * 读取sdcard下的TwentyOne文件夹下的图片
-     */
-    public void setData(){
-        //读取sdcard下的TwentyOne文件夹
-        File  scannerDirectory = new File(dirPath);
-        if (scannerDirectory.isDirectory()) {
-            for (File file : scannerDirectory.listFiles()) {
-                String path = file.getAbsolutePath();
-                if (path.endsWith("_TwentyOne.jpg") || path.endsWith("_TwentyOne.jpeg") || path.endsWith("_TwentyOne.png") ||
-                        path.endsWith("_card.jpg") || path.endsWith("_card.jpeg") || path.endsWith("_card.png")) {
-                    pictureInfoList.add(new PictureInfo(path));
-                }
-            }
-        }
-    }
-
-    private void updateData() {
-        pictureInfoList.clear();
-
-        setData();
-
-        adapter.notifyDataSetChanged();
-
-    }
 }
