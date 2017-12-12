@@ -2,6 +2,7 @@ package com.jeesun.twentyone.adapter;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v7.app.AlertDialog;
@@ -12,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.jeesun.twentyone.PicActivity;
 import com.jeesun.twentyone.R;
 import com.jeesun.twentyone.model.PictureInfo;
 
@@ -69,6 +71,15 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ViewHolder>{
             options.inSampleSize = 2;
             Bitmap bitmap = BitmapFactory.decodeFile(pictureInfo.getUri(), options);
             imageView.setImageBitmap(bitmap);
+
+            imageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(context, PicActivity.class);
+                    intent.putExtra("picPath", pictureInfo.getUri());
+                    context.startActivity(intent);
+                }
+            });
 
             imageView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
