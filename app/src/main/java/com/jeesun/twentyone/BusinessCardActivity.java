@@ -265,7 +265,7 @@ public class BusinessCardActivity extends AppCompatActivity {
             out.flush();
             out.close();
             Log.i(TAG, "已经保存");
-            Toast.makeText(BusinessCardActivity.this, "已经保存，请回主页刷新确认", Toast.LENGTH_SHORT).show();
+            Toast.makeText(BusinessCardActivity.this, "图片已保存到相册的相机文件夹中，返回主页刷新", Toast.LENGTH_SHORT).show();
         } catch (FileNotFoundException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

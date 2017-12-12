@@ -106,7 +106,8 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
                     inChannel = inStream.getChannel();
                     outChannel = outStream.getChannel();
                     inChannel.transferTo(0, inChannel.size(), outChannel);
-                    Toast.makeText(this, "裁切后的图片保存在：" + saveFile.getAbsolutePath(), Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(this, "裁切后的图片保存在：" + saveFile.getAbsolutePath(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "图片已保存到相册的相机文件夹中，返回主页刷新", Toast.LENGTH_SHORT).show();
                 } catch (Exception e) {
                     e.printStackTrace();
                 } finally {
