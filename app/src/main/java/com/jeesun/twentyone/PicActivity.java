@@ -57,6 +57,14 @@ public class PicActivity extends AppCompatActivity {
                 PicActivity.this.finish();
             }
         });
+
+        ivPicture.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+
+                return true;
+            }
+        });
     }
 
     @Override

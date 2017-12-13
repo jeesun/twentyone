@@ -1,19 +1,26 @@
 package com.jeesun.twentyone;
 
 import android.content.Intent;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.PagerTabStrip;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.jeesun.twentyone.adapter.ViewPagerAdapter;
@@ -29,14 +36,15 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener, View.OnClickListener {
     public final static int REQUEST_IMAGE_CAPTURE = 1;
     public final static int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 2;
     public final static String IMAGE_TYPE = "image/*";
 
     private ViewPager vpViewPager;
-    private PagerTabStrip pagerTabStrip;
     private FragmentPagerAdapter pagerAdapter;
+    private ImageView ivCursor;
+    private TextView tvOne, tvTwo;
 
     String dirPath = ContextUtil.picSavePath;
 
@@ -49,6 +57,8 @@ public class MainActivity extends AppCompatActivity {
 
     private LocalFragment localFragment;
     private WebFragment webFragment;
+
+    private int mOffset, mOneDis, mCurrentIndex;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,7 +66,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         vpViewPager = findViewById(R.id.view_pager);
-        pagerTabStrip = findViewById(R.id.view_pager_tab);
+        ivCursor = findViewById(R.id.cursor);
+        tvOne = findViewById(R.id.viewpager_tv_one);
+        tvTwo = findViewById(R.id.viewpager_tv_two);
+
+        //初始化指示器位置
+        initCursorPosition();
 
         mHandler = new Handler(){
             @Override
@@ -77,6 +92,35 @@ public class MainActivity extends AppCompatActivity {
         titleList.add("网络");
         pagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), fragmentList, titleList);
         vpViewPager.setAdapter(pagerAdapter);
+
+        tvOne.setOnClickListener(this);
+        tvTwo.setOnClickListener(this);
+
+        //页面改变监听器
+        vpViewPager.addOnPageChangeListener(this);
+        //初始默认第一页
+        vpViewPager.setCurrentItem(0);
+    }
+
+    private void initCursorPosition() {
+        //获取指示器图片宽度
+        int cursorWidth = BitmapFactory.decodeResource(getResources(), R.drawable.line).getWidth();
+
+        //获取分辨率宽度
+        DisplayMetrics dm = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(dm);
+        int screenWidth = dm.widthPixels;
+
+        //计算偏移量
+        mOffset = (screenWidth / 2 - cursorWidth) /2;
+
+        //设置动画初始位置
+        Matrix matrix = new Matrix();
+        matrix.postTranslate(mOffset, 0);
+        ivCursor.setImageMatrix(matrix);
+
+        //计算指示器图片的偏移距离
+        mOneDis = screenWidth / 2; //页卡1 ——》页卡2 偏移量
     }
 
     @Override
@@ -193,4 +237,49 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.viewpager_tv_one:
+                vpViewPager.setCurrentItem(0);
+                break;
+            case R.id.viewpager_tv_two:
+                vpViewPager.setCurrentItem(1);
+                break;
+        }
+    }
+
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+        //指示器图片动画设置
+        Animation anim = null;
+        switch (position){
+            case 0:
+                if(1 == mCurrentIndex){
+                    anim = new TranslateAnimation(mOneDis, 0, 0, 0);
+                }
+                break;
+            case 1:
+                if(0 == mCurrentIndex){
+                    anim = new TranslateAnimation(mOffset, mOneDis, 0, 0);
+                }
+                break;
+            default:
+                break;
+        }
+        mCurrentIndex = position;
+        anim.setFillAfter(true); //Ture:图片停在动画结束位置
+        anim.setDuration(300);
+        ivCursor.startAnimation(anim);
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+
+    }
 }

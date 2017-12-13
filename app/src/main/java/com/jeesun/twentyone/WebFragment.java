@@ -49,7 +49,6 @@ public class WebFragment extends Fragment {
         //设置recyclerview
         recyclerView.setHasFixedSize(true);
         adapter = new WebGridAdapter(webPicInfoList, getActivity());
-        //adapter.setHasStableIds(true);
         StaggeredGridLayoutManager sglm = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         sglm.setReverseLayout(false);
         recyclerView.setLayoutManager(sglm);
