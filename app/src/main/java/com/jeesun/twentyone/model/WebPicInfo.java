@@ -196,4 +196,24 @@ public class WebPicInfo {
     public void setImg_1024_768(String img_1024_768) {
         this.img_1024_768 = img_1024_768;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+
+        WebPicInfo other = (WebPicInfo) obj;
+        if(id == null){
+            if(other.id != null){
+                return false;
+            }
+        }else if(!id.equals(other.getId())){
+            return false;
+        }
+        return true;
+    }
 }

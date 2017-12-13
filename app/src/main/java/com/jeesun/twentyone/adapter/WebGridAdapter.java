@@ -74,6 +74,9 @@ public class WebGridAdapter extends RecyclerView.Adapter<WebGridAdapter.ViewHold
         }
 
         public void setData(final WebPicInfo webPicInfo){
+            if(webPicInfo.getId() == imageView.getTag()){
+                return;
+            }
             imageView.setTag(webPicInfo.getId());
 
             Log.i(TAG, webPicInfo.getImg_1366_768());

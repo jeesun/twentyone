@@ -49,7 +49,7 @@ public class WebFragment extends Fragment {
         //设置recyclerview
         recyclerView.setHasFixedSize(true);
         adapter = new WebGridAdapter(webPicInfoList, getActivity());
-        adapter.setHasStableIds(true);
+        //adapter.setHasStableIds(true);
         StaggeredGridLayoutManager sglm = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         sglm.setReverseLayout(false);
         recyclerView.setLayoutManager(sglm);
@@ -91,7 +91,7 @@ public class WebFragment extends Fragment {
                 //webPicInfoList.clear();
                 webPicInfoList.addAll(JSON.parseArray(JSON.toJSONString(response.body().getData()), WebPicInfo.class));
                 Log.i(TAG, "webPicInfoList's size is "+webPicInfoList.size());
-                adapter.notifyDataSetChanged();
+                adapter.notifyItemRangeInserted(start, count);
             }
 
             @Override
@@ -117,8 +117,10 @@ public class WebFragment extends Fragment {
                     call2.enqueue(new Callback<ResultMsg>() {
                         @Override
                         public void onResponse(Call<ResultMsg> call, Response<ResultMsg> response) {
+                            Log.i(TAG, response.body().getData().toString());
                             //webPicInfoList.clear();
-                            webPicInfoList.addAll(JSON.parseArray(JSON.toJSONString(response.body().getData()), WebPicInfo.class));
+                            List<WebPicInfo> newData = JSON.parseArray(JSON.toJSONString(response.body().getData()), WebPicInfo.class);
+                            webPicInfoList.addAll(newData);
                             Log.i(TAG, "webPicInfoList's size is "+webPicInfoList.size());
                             adapter.notifyItemRangeInserted(start, count);
                         }
