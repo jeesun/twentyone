@@ -203,6 +203,10 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
                 intent = new Intent(MainActivity.this, BusinessCardActivity.class);
                 startActivity(intent);
                 break;
+            case R.id.tutorial:
+                intent = new Intent(MainActivity.this, TutorialActivity.class);
+                startActivity(intent);
+                break;
             /*case R.id.fonts:
                 intent = new Intent(MainActivity.this, FontsActivity.class);
                 startActivity(intent);

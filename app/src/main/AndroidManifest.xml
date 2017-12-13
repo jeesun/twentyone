@@ -36,7 +36,8 @@
         <activity
             android:name=".PicActivity"
             android:theme="@style/dialogStyle" />
-        <activity android:name=".FontsActivity"></activity>
+        <activity android:name=".FontsActivity" />
+        <activity android:name=".TutorialActivity"></activity>
     </application>
 
 </manifest>

@@ -14,6 +14,12 @@
         app:showAsAction="always"
         android:title="@string/business_card"/>
 
+    <item
+        android:id="@+id/tutorial"
+        android:orderInCategory="100"
+        app:showAsAction="ifRoom"
+        android:title="@string/tutorial"/>
+
     <!--<item
         android:id="@+id/fonts"
         android:orderInCategory="100"
