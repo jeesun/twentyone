@@ -8,7 +8,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,10 +25,6 @@ import com.jeesun.twentyone.util.ContextUtil;
 import com.jeesun.twentyone.util.ImageUtil;
 import com.jeesun.twentyone.util.TypefaceUtil;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.Calendar;
 
 public class BusinessCardActivity extends AppCompatActivity {
@@ -215,7 +210,7 @@ public class BusinessCardActivity extends AppCompatActivity {
                 mWartermarkImage.setDrawingCacheEnabled(true);
                 Bitmap textBitmap = Bitmap.createBitmap(mWartermarkImage.getDrawingCache());
                 String filename = String.format("%d_%s", Calendar.getInstance().getTimeInMillis(), "card.png");
-                saveBitmap(dirPath, filename, textBitmap);
+                ImageUtil.saveBitmap(BusinessCardActivity.this, TAG, dirPath, filename, textBitmap);
                 //清空画图缓冲区，否则，下一次从ImageView对象中获取的图像，还是原来的图像。
                 mWartermarkImage.setDrawingCacheEnabled(false);
             }
@@ -265,30 +260,6 @@ public class BusinessCardActivity extends AppCompatActivity {
         return true;
     }
 
-    public void saveBitmap(String dirPath, String picName, Bitmap bm) {
-        Log.e(TAG, "保存图片");
-        File f = new File(dirPath, picName);
-        if (f.exists()) {
-            f.delete();
-        }
-        try {
-            FileOutputStream out = new FileOutputStream(f);
-            bm.compress(Bitmap.CompressFormat.PNG, 90, out);
-            out.flush();
-            out.close();
-            Log.i(TAG, "已经保存");
-            Toast.makeText(BusinessCardActivity.this, "图片已保存到相册的相机文件夹中，返回主页刷新", Toast.LENGTH_SHORT).show();
-        } catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            Toast.makeText(BusinessCardActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            Toast.makeText(BusinessCardActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-        }
-
-    }
 
     private void hideKeyboard() {
         InputMethodManager imm = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);

@@ -13,4 +13,7 @@ public class ContextUtil {
 
     public static final String fontPath = "/TwentyOne/fonts";
     public static final String fontFullPath = Environment.getExternalStorageDirectory().getPath() + fontPath;
+
+    public static final int PIC_LOCAL = 0;
+    public static final int PIC_WEB = 1;
 }

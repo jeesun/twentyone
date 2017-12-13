@@ -11,6 +11,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.jeesun.twentyone.util.ContextUtil;
+import com.squareup.picasso.Picasso;
+
 public class PicActivity extends AppCompatActivity {
     private ImageView ivPicture;
     @Override
@@ -30,10 +33,23 @@ public class PicActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         String picPath = intent.getStringExtra("picPath");
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inSampleSize = 2;
-        Bitmap bitmap = BitmapFactory.decodeFile(picPath, options);
-        ivPicture.setImageBitmap(bitmap);
+
+        Integer picType = intent.getIntExtra("picType", -1);
+        if(-1 != picType){
+            if(ContextUtil.PIC_WEB == picType){
+                Picasso.with(this).load(picPath).placeholder(R.drawable.bg_default).into(ivPicture);
+            }else if(ContextUtil.PIC_LOCAL == picType){
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inSampleSize = 2;
+                Bitmap bitmap = BitmapFactory.decodeFile(picPath, options);
+                ivPicture.setImageBitmap(bitmap);
+            }
+        }else{
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inSampleSize = 2;
+            Bitmap bitmap = BitmapFactory.decodeFile(picPath, options);
+            ivPicture.setImageBitmap(bitmap);
+        }
 
         ivPicture.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.jeesun.twentyone.adapter.ViewPagerAdapter;
 import com.jeesun.twentyone.util.ContextUtil;
+import com.liulishuo.filedownloader.FileDownloader;
 import com.yalantis.ucrop.UCrop;
 
 import java.io.File;
@@ -51,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FileDownloader.setup(this);
         setContentView(R.layout.activity_main);
 
         vpViewPager = findViewById(R.id.view_pager);

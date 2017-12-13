@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="2dp"
+    android:orientation="vertical">
+    <!--android:scaleType="fitXY"：把原图按照指定的大小在View中显示，
+    拉伸显示图片，不保持原比例，填满ImageView.-->
+    <!--android:adjustViewBounds="true"：是否保持原图的长宽比-->
+    <ImageView
+        android:id="@+id/item_staggered_icon"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        />
+    <TextView
+        android:id="@+id/item_staggered_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:textStyle="bold"/>
+</LinearLayout>

@@ -3,8 +3,7 @@ package com.jeesun.twentyone.adapter;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -25,6 +24,7 @@ import java.util.List;
  */
 
 public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ViewHolder>{
+    private static final String TAG = GridAdapter.class.getName();
     private List<PictureInfo> pictureInfoList;
     private static Context context;
 
@@ -67,10 +67,11 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ViewHolder>{
         }
 
         public void setData(final PictureInfo pictureInfo){
-            BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inSampleSize = 2;
-            Bitmap bitmap = BitmapFactory.decodeFile(pictureInfo.getUri(), options);
-            imageView.setImageBitmap(bitmap);
+            /*BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inSampleSize = 2;
+                Bitmap bitmap = BitmapFactory.decodeFile(pictureInfo.getUri(), options);
+                imageView.setImageBitmap(bitmap);*/
+            imageView.setImageURI(Uri.fromFile(new File(pictureInfo.getUri())));
 
             imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
