@@ -4,7 +4,7 @@ android {
     compileSdkVersion 26
     defaultConfig {
         applicationId "com.jeesun.twentyone"
-        minSdkVersion 14
+        minSdkVersion 15
         targetSdkVersion 26
         versionCode 17
         versionName "1.1.0"
@@ -44,5 +44,8 @@ dependencies {
     //implementation 'org.ligboy.retrofit2:converter-fastjson-android:2.1.0'
     implementation 'com.squareup.picasso:picasso:2.5.2'
     implementation 'com.liulishuo.filedownloader:library:1.6.8'
+
+    //模糊库
+    implementation 'net.qiujuer.genius:blur:2.0.0'
 
 }

@@ -14,7 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.jeesun.twentyone.util.ContextUtil;
 import com.liulishuo.filedownloader.BaseDownloadTask;
@@ -27,6 +27,7 @@ import java.util.Calendar;
 public class PicActivity extends AppCompatActivity {
     private static final String TAG = PicActivity.class.getName();
     private ImageView ivPicture;
+    private TextView tvProgressHint;
     private ProgressBar pb;
 
     private String picPath;
@@ -45,6 +46,7 @@ public class PicActivity extends AppCompatActivity {
         }
 
         ivPicture = findViewById(R.id.picture);
+        tvProgressHint = findViewById(R.id.progress_hint);
         pb = findViewById(R.id.progress_bar);
 
         Intent intent = getIntent();
@@ -89,6 +91,7 @@ public class PicActivity extends AppCompatActivity {
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
+                                tvProgressHint.setVisibility(View.VISIBLE);
                                 pb.setVisibility(View.VISIBLE);
                                 String filename = String.format("%d_%s", Calendar.getInstance().getTimeInMillis(), "card.png");
 
@@ -113,11 +116,12 @@ public class PicActivity extends AppCompatActivity {
 
                                             @Override
                                             protected void completed(BaseDownloadTask task) {
-                                                Log.i(TAG, "下载完成");
+                                                Log.i(TAG, "下载完成\\(≥▽≤)/");
                                                 pb.setIndeterminate(false);
                                                 pb.setMax(task.getSmallFileTotalBytes());
                                                 pb.setProgress(task.getSmallFileSoFarBytes());
-                                                Toast.makeText(PicActivity.this, "下载完成", Toast.LENGTH_SHORT).show();
+                                                tvProgressHint.setText("下载完成\\(≥▽≤)/");
+                                                //Toast.makeText(PicActivity.this, "下载完成", Toast.LENGTH_SHORT).show();
                                             }
 
                                             @Override
