@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.jeesun.twentyone.MainActivity;
 import com.jeesun.twentyone.PicActivity;
 import com.jeesun.twentyone.R;
 import com.jeesun.twentyone.model.PictureInfo;
@@ -99,7 +100,10 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ViewHolder>{
                                     File picFile = new File(pictureInfo.getUri());
                                     if(picFile.exists() && picFile.isFile()){
                                         if(picFile.delete()){
-                                            Toast.makeText(context, "图片已被删除，请刷新确认", Toast.LENGTH_SHORT).show();
+                                            if(context instanceof MainActivity){
+                                                ((MainActivity)context).updateLocalData(pictureInfo);
+                                            }
+                                            //Toast.makeText(context, "图片已被删除，请刷新确认", Toast.LENGTH_SHORT).show();
                                         }else{
                                             Toast.makeText(context, "图片删除失败", Toast.LENGTH_SHORT).show();
                                         }

@@ -24,6 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.jeesun.twentyone.adapter.ViewPagerAdapter;
+import com.jeesun.twentyone.model.PictureInfo;
 import com.jeesun.twentyone.util.ContextUtil;
 import com.liulishuo.filedownloader.FileDownloader;
 import com.yalantis.ucrop.UCrop;
@@ -285,5 +286,9 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     @Override
     public void onPageScrollStateChanged(int state) {
 
+    }
+
+    public void updateLocalData(PictureInfo pictureInfo){
+        localFragment.updateData(pictureInfo);
     }
 }

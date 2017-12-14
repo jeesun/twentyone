@@ -80,13 +80,18 @@ public class LocalFragment extends Fragment implements SwipeRefreshLayout.OnRefr
         }
     }
 
-    private void updateData() {
+    public void updateData() {
         pictureInfoList.clear();
 
         setData();
 
         adapter.notifyDataSetChanged();
 
+    }
+
+    public void updateData(PictureInfo pictureInfo) {
+        pictureInfoList.remove(pictureInfo);
+        adapter.notifyDataSetChanged();
     }
 
     public void refreshData() {
