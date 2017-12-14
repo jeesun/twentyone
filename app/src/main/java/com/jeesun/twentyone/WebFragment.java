@@ -1,6 +1,7 @@
 package com.jeesun.twentyone;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -46,6 +47,19 @@ public class WebFragment extends Fragment implements SwipeRefreshLayout.OnRefres
     private List<WebPicInfo> webPicInfoList = new ArrayList<>();
     private int start = 0;
     private int count = 10;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if(srlGrid.isRefreshing()){
+                    srlGrid.setRefreshing(false);
+                }
+            }
+        }, 5000);
+    }
 
     @Nullable
     @Override
@@ -200,5 +214,13 @@ public class WebFragment extends Fragment implements SwipeRefreshLayout.OnRefres
 
             }
         });
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if(srlGrid.isRefreshing()){
+                    srlGrid.setRefreshing(false);
+                }
+            }
+        }, 5000);
     }
 }
