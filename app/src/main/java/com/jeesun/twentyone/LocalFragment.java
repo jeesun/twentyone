@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import com.jeesun.twentyone.adapter.GridAdapter;
 import com.jeesun.twentyone.model.PictureInfo;
 import com.jeesun.twentyone.util.ContextUtil;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -53,6 +54,18 @@ public class LocalFragment extends Fragment implements SwipeRefreshLayout.OnRefr
         sglm.setReverseLayout(false);
         recyclerView.setLayoutManager(sglm);
         recyclerView.setAdapter(adapter = new GridAdapter(pictureInfoList, getActivity()));
+
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if(newState == RecyclerView.SCROLL_STATE_IDLE){
+                    Picasso.with(getActivity()).resumeTag(ContextUtil.PICASSO_TAG_LOCAL);
+                }else{
+                    Picasso.with(getActivity()).pauseTag(ContextUtil.PICASSO_TAG_LOCAL);
+                }
+            }
+        });
 
         return rootView;
     }

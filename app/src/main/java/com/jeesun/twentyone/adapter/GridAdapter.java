@@ -18,6 +18,7 @@ import com.jeesun.twentyone.R;
 import com.jeesun.twentyone.model.PictureInfo;
 import com.jeesun.twentyone.util.ContextUtil;
 import com.jeesun.twentyone.util.ImageUtil;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.util.List;
@@ -70,8 +71,26 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ViewHolder>{
         }
 
         public void setData(final PictureInfo pictureInfo){
-            Bitmap bitmap = ImageUtil.decodeSampledBitmapFromFilePath(pictureInfo.getUri(), 540, 270);
-            imageView.setImageBitmap(bitmap);
+            if(null == pictureInfo){
+                return;
+            }
+            if(null == pictureInfo.getUri() || "".equals(pictureInfo.getUri())){
+                return;
+            }
+            if(pictureInfo.getUri().equals(imageView.getTag())){
+                return;
+            }
+            imageView.setTag(pictureInfo.getUri());
+
+            /*Bitmap bitmap = ImageUtil.decodeSampledBitmapFromFilePath(pictureInfo.getUri(), 540, 270);
+
+            imageView.setImageBitmap(bitmap);*/
+            Picasso.with(context).load(new File(pictureInfo.getUri()))
+                    .config(Bitmap.Config.RGB_565)
+                    .resize(ImageUtil.dp2px(context, 540), ImageUtil.dp2px(context, 270))
+                    .placeholder(R.drawable.bg_default)
+                    .tag(ContextUtil.PICASSO_TAG_LOCAL)
+                    .into(imageView);
 
             imageView.setOnClickListener(new View.OnClickListener() {
                 @Override

@@ -16,6 +16,7 @@ import com.jeesun.twentyone.PicActivity;
 import com.jeesun.twentyone.R;
 import com.jeesun.twentyone.model.WebPicInfo;
 import com.jeesun.twentyone.util.ContextUtil;
+import com.jeesun.twentyone.util.ImageUtil;
 import com.liulishuo.filedownloader.BaseDownloadTask;
 import com.liulishuo.filedownloader.FileDownloadListener;
 import com.liulishuo.filedownloader.FileDownloader;
@@ -77,11 +78,15 @@ public class WebGridAdapter extends RecyclerView.Adapter<WebGridAdapter.ViewHold
             if(webPicInfo.getId() == imageView.getTag()){
                 return;
             }
-            imageView.setTag(webPicInfo.getId());
 
             //Log.i(TAG, webPicInfo.getImg_1366_768());
 
-            Picasso.with(context).load(webPicInfo.getImg_1366_768()).placeholder(R.drawable.bg_default).into(imageView);
+            Picasso.with(context)
+                    .load(webPicInfo.getImg_1366_768())
+                    .resize(ImageUtil.dp2px(context, 540), ImageUtil.dp2px(context, 270))
+                    .placeholder(R.drawable.bg_default)
+                    .tag(ContextUtil.PICASSO_TAG_WEB)
+                    .into(imageView);
 
             imageView.setOnClickListener(new View.OnClickListener() {
                 @Override

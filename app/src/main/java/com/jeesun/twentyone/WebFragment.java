@@ -18,6 +18,8 @@ import com.jeesun.twentyone.adapter.WebGridAdapter;
 import com.jeesun.twentyone.interfaces.RequestServes;
 import com.jeesun.twentyone.model.ResultMsg;
 import com.jeesun.twentyone.model.WebPicInfo;
+import com.jeesun.twentyone.util.ContextUtil;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -83,39 +85,49 @@ public class WebFragment extends Fragment implements SwipeRefreshLayout.OnRefres
                 super.onScrollStateChanged(recyclerView, newState);
                 //判断是否滑动到底部
                 if(RecyclerView.SCROLL_STATE_IDLE == newState){
+
                     if(null == webPicInfoList){
                         return;
                     }
                     if(webPicInfoList.size() <= 0){
                        return;
                     }
-                    Retrofit retrofit2 = new Retrofit.Builder().baseUrl("http://cdn.apc.360.cn")
+                    //RecyclerView.canScrollVertically(1)的值表示是否能向上滚动，false表示已经滚动到底部
+                    //RecyclerView.canScrollVertically(-1)的值表示是否能向下滚动，false表示已经滚动到顶部
+                    if(recyclerView.canScrollVertically(1)){
+                        Picasso.with(getActivity()).resumeTag(ContextUtil.PICASSO_TAG_WEB);
+                    }else{
+                        Retrofit retrofit2 = new Retrofit.Builder().baseUrl("http://cdn.apc.360.cn")
 //retrofit已经把Json解析封装在内部了 你需要传入你想要的解析工具就行了 默认支持Gson解析
-                            .addConverterFactory(GsonConverterFactory.create())
-                            .client(new OkHttpClient()).build();
-                    RequestServes requestServes2 = retrofit2.create(RequestServes.class);
-                    start += count;
-                    Log.i(TAG, "start=" + start);
-                    Call<ResultMsg> call2 = requestServes2.getPicsByCategory(26, start, count);
-                    call2.enqueue(new Callback<ResultMsg>() {
-                        @Override
-                        public void onResponse(Call<ResultMsg> call, Response<ResultMsg> response) {
-                            Log.i(TAG, response.body().getData().toString());
-                            //webPicInfoList.clear();
-                            List<WebPicInfo> newData = JSON.parseArray(JSON.toJSONString(response.body().getData()), WebPicInfo.class);
-                            webPicInfoList.addAll(newData);
-                            Log.i(TAG, "webPicInfoList's size is "+webPicInfoList.size());
-                            adapter.notifyItemRangeInserted(start, count);
-                            if(srlGrid.isRefreshing()){
-                                srlGrid.setRefreshing(false);
+                                .addConverterFactory(GsonConverterFactory.create())
+                                .client(new OkHttpClient()).build();
+                        RequestServes requestServes2 = retrofit2.create(RequestServes.class);
+                        start += count;
+                        Log.i(TAG, "start=" + start);
+                        Call<ResultMsg> call2 = requestServes2.getPicsByCategory(26, start, count);
+                        call2.enqueue(new Callback<ResultMsg>() {
+                            @Override
+                            public void onResponse(Call<ResultMsg> call, Response<ResultMsg> response) {
+                                Log.i(TAG, response.body().getData().toString());
+                                //webPicInfoList.clear();
+                                List<WebPicInfo> newData = JSON.parseArray(JSON.toJSONString(response.body().getData()), WebPicInfo.class);
+                                webPicInfoList.addAll(newData);
+                                Log.i(TAG, "webPicInfoList's size is "+webPicInfoList.size());
+                                adapter.notifyItemRangeInserted(start, count);
+                                if(srlGrid.isRefreshing()){
+                                    srlGrid.setRefreshing(false);
+                                }
                             }
-                        }
 
-                        @Override
-                        public void onFailure(Call<ResultMsg> call, Throwable t) {
+                            @Override
+                            public void onFailure(Call<ResultMsg> call, Throwable t) {
 
-                        }
-                    });
+                            }
+                        });
+                    }
+
+                }else{
+                    Picasso.with(getActivity()).pauseTag(ContextUtil.PICASSO_TAG_WEB);
                 }
             }
         });

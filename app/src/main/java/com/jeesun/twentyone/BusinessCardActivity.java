@@ -154,13 +154,6 @@ public class BusinessCardActivity extends AppCompatActivity {
             }
         });
 
-        //Bitmap waterBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.weixin);
-
-        //Bitmap watermarkBitmap = ImageUtil.createWaterMaskCenter(sourBitmap, waterBitmap);
-        //watermarkBitmap = ImageUtil.createWaterMaskLeftBottom(this, watermarkBitmap, waterBitmap, 0, 0);
-        //watermarkBitmap = ImageUtil.createWaterMaskRightBottom(this, watermarkBitmap, waterBitmap, 0, 0);
-        //watermarkBitmap = ImageUtil.createWaterMaskLeftTop(this, watermarkBitmap, waterBitmap, 0, 0);
-        //watermarkBitmap = ImageUtil.createWaterMaskRightTop(this, watermarkBitmap, waterBitmap, 0, 0);
 
         btnMake.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -187,6 +180,9 @@ public class BusinessCardActivity extends AppCompatActivity {
                 }else{
                     fontSizeCenter = 36;
                 }
+
+                //高斯模糊
+                //sourBitmap = StackBlur.blurNativelyPixels(sourBitmap, seekBar.getProgress(), false);
 
                 Bitmap textBitmap = ImageUtil.drawTextToLeftTop(BusinessCardActivity.this, sourBitmap, etLeftTop.getText().toString(), fontSizeCorner, typefaceCornerUri, fontColor, padding, padding);
                 textBitmap = ImageUtil.drawTextToRightBottom(BusinessCardActivity.this, textBitmap, etRightBottom.getText().toString(), fontSizeCorner, typefaceCornerUri, fontColor, padding, padding);
