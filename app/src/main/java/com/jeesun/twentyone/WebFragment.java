@@ -58,7 +58,9 @@ public class WebFragment extends Fragment implements SwipeRefreshLayout.OnRefres
         srlGrid.setColorSchemeResources(R.color.colorAccent, R.color.colorPrimary, R.color.colorPrimaryDark);
         srlGrid.setOnRefreshListener(this);
 
-        //设置recyclerview
+        //当我们确定Item的改变不会影响RecyclerView的宽高的时候可以设置setHasFixedSize(true)，
+        //并通过Adapter的增删改插方法去刷新RecyclerView，而不是通过notifyDataSetChanged()。
+        //（其实可以直接设置为true，当需要改变宽高的时候就用notifyDataSetChanged()去整体刷新一下）
         recyclerView.setHasFixedSize(true);
         adapter = new WebGridAdapter(webPicInfoList, getActivity());
         StaggeredGridLayoutManager sglm = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
