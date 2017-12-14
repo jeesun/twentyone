@@ -13,6 +13,7 @@ import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 
 import com.jeesun.twentyone.util.ContextUtil;
 import com.liulishuo.filedownloader.BaseDownloadTask;
@@ -25,6 +26,7 @@ import java.util.Calendar;
 public class PicActivity extends AppCompatActivity {
     private static final String TAG = PicActivity.class.getName();
     private ImageView ivPicture;
+    private ProgressBar pb;
 
     private String picPath;
     private int picType;
@@ -42,6 +44,7 @@ public class PicActivity extends AppCompatActivity {
         }
 
         ivPicture = findViewById(R.id.picture);
+        pb = findViewById(R.id.progress_bar);
 
         Intent intent = getIntent();
         picPath = intent.getStringExtra("picPath");
@@ -97,12 +100,21 @@ public class PicActivity extends AppCompatActivity {
 
                                             @Override
                                             protected void progress(BaseDownloadTask task, int soFarBytes, int totalBytes) {
-
+                                                if (totalBytes == -1) {
+                                                    // chunked transfer encoding data
+                                                    pb.setIndeterminate(true);
+                                                } else {
+                                                    pb.setMax(totalBytes);
+                                                    pb.setProgress(soFarBytes);
+                                                }
                                             }
 
                                             @Override
                                             protected void completed(BaseDownloadTask task) {
                                                 Log.i(TAG, "下载完成");
+                                                pb.setIndeterminate(false);
+                                                pb.setMax(task.getSmallFileTotalBytes());
+                                                pb.setProgress(task.getSmallFileSoFarBytes());
                                             }
 
                                             @Override

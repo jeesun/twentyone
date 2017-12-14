@@ -26,7 +26,7 @@
     <style name="dialogStyle" parent="Theme.AppCompat.Light.Dialog">
         <item name="android:windowFullscreen">true</item>
         <!--设置dialog的背景-->
-        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowBackground">@android:color/white</item>
         <!--设置Dialog的windowFrame框为无-->
         <item name="android:windowFrame">@null</item>
         <!--设置无标题-->
