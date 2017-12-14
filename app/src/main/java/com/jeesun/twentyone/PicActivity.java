@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.jeesun.twentyone.util.ContextUtil;
 import com.liulishuo.filedownloader.BaseDownloadTask;
@@ -88,6 +89,7 @@ public class PicActivity extends AppCompatActivity {
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
+                                pb.setVisibility(View.VISIBLE);
                                 String filename = String.format("%d_%s", Calendar.getInstance().getTimeInMillis(), "card.png");
 
                                 FileDownloader.getImpl().create(picPath)
@@ -115,6 +117,7 @@ public class PicActivity extends AppCompatActivity {
                                                 pb.setIndeterminate(false);
                                                 pb.setMax(task.getSmallFileTotalBytes());
                                                 pb.setProgress(task.getSmallFileSoFarBytes());
+                                                Toast.makeText(PicActivity.this, "下载完成", Toast.LENGTH_SHORT).show();
                                             }
 
                                             @Override
