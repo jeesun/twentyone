@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.jeesun.twentyone.PicActivity;
 import com.jeesun.twentyone.R;
 import com.jeesun.twentyone.model.PictureInfo;
+import com.jeesun.twentyone.util.ContextUtil;
 
 import java.io.File;
 import java.util.List;
@@ -78,6 +79,7 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ViewHolder>{
                 public void onClick(View view) {
                     Intent intent = new Intent(context, PicActivity.class);
                     intent.putExtra("picPath", pictureInfo.getUri());
+                    intent.putExtra("picType", ContextUtil.PIC_LOCAL);
                     context.startActivity(intent);
                 }
             });

@@ -9,7 +9,7 @@
     <!--android:adjustViewBounds="true"：是否保持原图的长宽比-->
     <ImageView
         android:id="@+id/item_staggered_icon"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:adjustViewBounds="true"
         android:scaleType="fitXY"/>
