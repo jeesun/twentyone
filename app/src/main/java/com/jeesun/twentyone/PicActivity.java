@@ -36,6 +36,7 @@ public class PicActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pic);
+        FileDownloader.setup(this);
         //必须加这一行语句，否则Activity Dialog化后无法全屏。
         getWindow().setLayout(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.WRAP_CONTENT);//需要添加的语句
         //标题栏返回键
@@ -80,7 +81,9 @@ public class PicActivity extends AppCompatActivity {
         ivPicture.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
+                Log.i(TAG, "图片长按监听");
                 if(-1 == picType || ContextUtil.PIC_LOCAL == picType){
+                    Log.i(TAG, "本地图片长按无操作");
                     return true;
                 }
                 final AlertDialog.Builder normalDialog =
@@ -94,7 +97,7 @@ public class PicActivity extends AppCompatActivity {
                                 tvProgressHint.setVisibility(View.VISIBLE);
                                 pb.setVisibility(View.VISIBLE);
                                 String filename = String.format("%d_%s", Calendar.getInstance().getTimeInMillis(), "card.png");
-
+                                Log.i(TAG, "picPath="+picPath);
                                 FileDownloader.getImpl().create(picPath)
                                         .setPath(ContextUtil.picSavePath + "/" + filename)
                                         .setListener(new FileDownloadListener() {

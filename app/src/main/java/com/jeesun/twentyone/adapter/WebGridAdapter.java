@@ -110,7 +110,6 @@ public class WebGridAdapter extends RecyclerView.Adapter<WebGridAdapter.ViewHold
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     String filename = String.format("%d_%s", Calendar.getInstance().getTimeInMillis(), "card.png");
-
                                     FileDownloader.getImpl().create(webPicInfo.getImg_1366_768())
                                             .setPath(ContextUtil.picSavePath + "/" + filename)
                                             .setListener(new FileDownloadListener() {
@@ -155,7 +154,7 @@ public class WebGridAdapter extends RecyclerView.Adapter<WebGridAdapter.ViewHold
                             });
                     // 显示
                     normalDialog.show();
-                    return false;
+                    return true;
                 }
             });
         }
