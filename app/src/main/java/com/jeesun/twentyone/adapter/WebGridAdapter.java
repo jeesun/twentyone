@@ -79,7 +79,7 @@ public class WebGridAdapter extends RecyclerView.Adapter<WebGridAdapter.ViewHold
             }
             imageView.setTag(webPicInfo.getId());
 
-            Log.i(TAG, webPicInfo.getImg_1366_768());
+            //Log.i(TAG, webPicInfo.getImg_1366_768());
 
             Picasso.with(context).load(webPicInfo.getImg_1366_768()).placeholder(R.drawable.bg_default).into(imageView);
 
