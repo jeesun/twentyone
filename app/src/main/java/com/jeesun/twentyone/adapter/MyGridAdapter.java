@@ -20,48 +20,37 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 /**
- * Created by simon on 2017/12/13.
+ * Created by simon on 2017/12/16.
  */
 
-public class WebGridAdapter extends RecyclerView.Adapter<WebGridAdapter.ViewHolder>{
-    private static final String TAG = GridAdapter.class.getName();
-    private List<WebPicInfo> webPicInfoList;
-    private static Context context;
+public class MyGridAdapter extends BaseRecyclerAdapter<WebPicInfo> {
+    private Context context;
 
-    public WebGridAdapter(List<WebPicInfo> webPicInfoList, Context context) {
-        this.webPicInfoList = webPicInfoList;
-        WebGridAdapter.context = context;
+    public MyGridAdapter(List<WebPicInfo> mDatas, Context context) {
+        super(mDatas, context);
+        this.context = context;
+    }
+
+
+    @Override
+    public RecyclerView.ViewHolder onCreate(ViewGroup parent, int viewType) {
+        View layout = LayoutInflater.from(parent.getContext()).inflate(R.layout.web_list_item,parent,false);
+        return new MyHolder(layout);
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.web_list_item,parent,false);
-        ViewHolder holder = new ViewHolder(view);
-        /*View itemView = View.inflate(context, R.layout.web_list_item, null);
-        ViewHolder holder = new ViewHolder(itemView);*/
-        return holder;
-    }
-
-    @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        WebPicInfo webPicInfo = webPicInfoList.get(position);
-        holder.setData(webPicInfo);
-    }
-
-    @Override
-    public int getItemCount() {
-        if(null != webPicInfoList && webPicInfoList.size() > 0){
-            return webPicInfoList.size();
+    public void onBind(RecyclerView.ViewHolder viewHolder, int RealPosition, WebPicInfo data) {
+        if (viewHolder instanceof MyHolder){
+            ((MyHolder)viewHolder).setData(data);
         }
-        return 0;
     }
 
-    static class ViewHolder extends RecyclerView.ViewHolder{
+    class MyHolder extends BaseRecyclerAdapter.Holder{
         View itemView;
         ImageView imageView;
         TextView textView;
 
-        public ViewHolder(View itemView) {
+        public MyHolder(View itemView) {
             super(itemView);
             this.itemView = itemView;
             imageView = itemView.findViewById(R.id.item_staggered_icon);

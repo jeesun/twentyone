@@ -1,5 +1,8 @@
 package com.jeesun.twentyone;
 
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.StateListDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -8,15 +11,17 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
-import com.jeesun.twentyone.adapter.WebGridAdapter;
+import com.jeesun.twentyone.adapter.MyGridAdapter;
+import com.jeesun.twentyone.customui.FlowLayout;
 import com.jeesun.twentyone.interfaces.RequestServes;
+import com.jeesun.twentyone.model.PicCategory;
 import com.jeesun.twentyone.model.ResultMsg;
 import com.jeesun.twentyone.model.WebPicInfo;
 import com.jeesun.twentyone.util.ContextUtil;
@@ -24,6 +29,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import okhttp3.OkHttpClient;
 import retrofit2.Call;
@@ -39,14 +45,21 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class WebFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
     private static final String TAG = WebFragment.class.getName();
     private View rootView;
-    private FrameLayout flFrameWrapper;
-    private RelativeLayout rlLoading;
+    private FlowLayout flowLayout;
     private SwipeRefreshLayout srlGrid;
     private RecyclerView recyclerView;
-    private WebGridAdapter adapter;
+    //private WebGridAdapter adapter;
+    private MyGridAdapter adapter;
+    private List<PicCategory> categoryList = new ArrayList<>();
+    private List<String> categoryNameList = new ArrayList<>();
     private List<WebPicInfo> webPicInfoList = new ArrayList<>();
     private int start = 0;
     private int count = 10;
+
+    private String[] mDatas;
+    View header;
+
+    private int categoryId = 26;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -67,22 +80,55 @@ public class WebFragment extends Fragment implements SwipeRefreshLayout.OnRefres
         rootView = inflater.inflate(R.layout.fragment_web, container, false);
         srlGrid = rootView.findViewById(R.id.grid_swipe_refresh);
         recyclerView = rootView.findViewById(R.id.grid_recycler);
-        rlLoading = rootView.findViewById(R.id.loading);
-        flFrameWrapper = rootView.findViewById(R.id.frame_wrapper);
+        header = inflater.inflate(R.layout.header, container, false);
+        flowLayout = header.findViewById(R.id.flow_layout);
+
+        Retrofit retrofit = new Retrofit.Builder().baseUrl("http://cdn.apc.360.cn")
+        //retrofit已经把Json解析封装在内部了 你需要传入你想要的解析工具就行了 默认支持Gson解析
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(new OkHttpClient()).build();
+        RequestServes requestServes = retrofit.create(RequestServes.class);
+        Call<ResultMsg> call = requestServes.getCategory();
+        call.enqueue(new Callback<ResultMsg>() {
+            @Override
+            public void onResponse(Call<ResultMsg> call, Response<ResultMsg> response) {
+                Log.i(TAG, "data got from web");
+                categoryList = JSON.parseArray(JSON.toJSONString(response.body().getData()), PicCategory.class);
+                for (int i=0; i<categoryList.size(); i++){
+                    categoryNameList.add(categoryList.get(i).getName());
+                }
+                Log.i(TAG, categoryNameList.toString());
+                if(srlGrid.isRefreshing()){
+                    srlGrid.setRefreshing(false);
+                }
+                mDatas = categoryNameList.toArray(new String[categoryNameList.size()]);
+                setFlowData();
+            }
+
+            @Override
+            public void onFailure(Call<ResultMsg> call, Throwable t) {
+
+            }
+        });
+
 
         srlGrid.setProgressBackgroundColorSchemeResource(android.R.color.white);
         srlGrid.setColorSchemeResources(R.color.colorAccent, R.color.colorPrimary, R.color.colorPrimaryDark);
         srlGrid.setOnRefreshListener(this);
 
+        StaggeredGridLayoutManager sglm = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        sglm.setReverseLayout(false);
+        recyclerView.setLayoutManager(sglm);
+
+
         //当我们确定Item的改变不会影响RecyclerView的宽高的时候可以设置setHasFixedSize(true)，
         //并通过Adapter的增删改插方法去刷新RecyclerView，而不是通过notifyDataSetChanged()。
         //（其实可以直接设置为true，当需要改变宽高的时候就用notifyDataSetChanged()去整体刷新一下）
         recyclerView.setHasFixedSize(true);
-        adapter = new WebGridAdapter(webPicInfoList, getActivity());
-        StaggeredGridLayoutManager sglm = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
-        sglm.setReverseLayout(false);
-        recyclerView.setLayoutManager(sglm);
+        //adapter = new WebGridAdapter(webPicInfoList, getActivity());
+        adapter = new MyGridAdapter(webPicInfoList, getActivity());
         recyclerView.setAdapter(adapter);
+
 
         srlGrid.post(new Runnable() {
             @Override
@@ -118,7 +164,7 @@ public class WebFragment extends Fragment implements SwipeRefreshLayout.OnRefres
                         RequestServes requestServes2 = retrofit2.create(RequestServes.class);
                         start += count;
                         Log.i(TAG, "start=" + start);
-                        Call<ResultMsg> call2 = requestServes2.getPicsByCategory(26, start, count);
+                        Call<ResultMsg> call2 = requestServes2.getPicsByCategory(categoryId, start, count);
                         call2.enqueue(new Callback<ResultMsg>() {
                             @Override
                             public void onResponse(Call<ResultMsg> call, Response<ResultMsg> response) {
@@ -149,10 +195,7 @@ public class WebFragment extends Fragment implements SwipeRefreshLayout.OnRefres
         return rootView;
     }
 
-    @Override
-    public void onRefresh() {
-        updateData();
-    }
+
 
     private void updateData() {
         Log.i(TAG, "data is updating");
@@ -160,39 +203,12 @@ public class WebFragment extends Fragment implements SwipeRefreshLayout.OnRefres
         //恢复位置0
         start = 0;
 
-        /*Retrofit retrofit = new Retrofit.Builder().baseUrl("http://cdn.apc.360.cn")
-//retrofit已经把Json解析封装在内部了 你需要传入你想要的解析工具就行了 默认支持Gson解析
-                .addConverterFactory(GsonConverterFactory.create())
-                .client(new OkHttpClient()).build();
-        RequestServes requestServes = retrofit.create(RequestServes.class);
-        Call<ResultMsg> call = requestServes.getCategory();
-        call.enqueue(new Callback<ResultMsg>() {
-            @Override
-            public void onResponse(Call<ResultMsg> call, Response<ResultMsg> response) {
-                Log.i(TAG, "data got from web");
-                List<PicCategory> array = JSON.parseArray(JSON.toJSONString(response.body().getData()), PicCategory.class);
-                List<String> categoryNameList = new ArrayList<>();
-                for (int i=0; i<array.size(); i++){
-                    categoryNameList.add(array.get(i).getName());
-                }
-                Log.i(TAG, categoryNameList.toString());
-                if(srlGrid.isRefreshing()){
-                    srlGrid.setRefreshing(false);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ResultMsg> call, Throwable t) {
-
-            }
-        });*/
-
         Retrofit retrofit2 = new Retrofit.Builder().baseUrl("http://cdn.apc.360.cn")
 //retrofit已经把Json解析封装在内部了 你需要传入你想要的解析工具就行了 默认支持Gson解析
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(new OkHttpClient()).build();
         RequestServes requestServes2 = retrofit2.create(RequestServes.class);
-        Call<ResultMsg> call2 = requestServes2.getPicsByCategory(26, start, count);
+        Call<ResultMsg> call2 = requestServes2.getPicsByCategory(categoryId, start, count);
         call2.enqueue(new Callback<ResultMsg>() {
             @Override
             public void onResponse(Call<ResultMsg> call, Response<ResultMsg> response) {
@@ -204,6 +220,8 @@ public class WebFragment extends Fragment implements SwipeRefreshLayout.OnRefres
                 webPicInfoList.addAll(newData);
                 Log.i(TAG, "webPicInfoList's size is "+webPicInfoList.size());
                 adapter.notifyDataSetChanged();
+                //adapter.addDatas(webPicInfoList);
+                adapter.setHeaderView(header);
                 if(srlGrid.isRefreshing()){
                     srlGrid.setRefreshing(false);
                 }
@@ -222,5 +240,61 @@ public class WebFragment extends Fragment implements SwipeRefreshLayout.OnRefres
                 }
             }
         }, 5000);
+    }
+
+    @Override
+    public void onRefresh() {
+        Log.i(TAG, "刷新数据");
+        updateData();
+    }
+
+    private void setFlowData(){
+        Random random = new Random();
+
+        // 循环添加TextView到容器
+        for (int i = 0; i < mDatas.length; i++) {
+            final TextView view = new TextView(getActivity());
+            view.setText(mDatas[i]);
+            view.setTextColor(Color.WHITE);
+            view.setPadding(5, 5, 5, 5);
+            view.setGravity(Gravity.CENTER);
+            view.setTextSize(14);
+
+            final int iCopy = i;
+            // 设置点击事件
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //Toast.makeText(getActivity(), view.getText().toString(), Toast.LENGTH_SHORT).show();
+                    categoryId = categoryList.get(iCopy).getId();
+                    srlGrid.setRefreshing(true);
+                    onRefresh();
+                }
+            });
+
+            // 设置彩色背景
+            GradientDrawable normalDrawable = new GradientDrawable();
+            normalDrawable.setShape(GradientDrawable.RECTANGLE);
+            int a = 255;
+            int r = 50 + random.nextInt(150);
+            int g = 50 + random.nextInt(150);
+            int b = 50 + random.nextInt(150);
+            normalDrawable.setColor(Color.argb(a, r, g, b));
+
+            // 设置按下的灰色背景
+            GradientDrawable pressedDrawable = new GradientDrawable();
+            pressedDrawable.setShape(GradientDrawable.RECTANGLE);
+            pressedDrawable.setColor(Color.GRAY);
+
+            // 背景选择器
+            StateListDrawable stateDrawable = new StateListDrawable();
+            stateDrawable.addState(new int[]{android.R.attr.state_pressed}, pressedDrawable);
+            stateDrawable.addState(new int[]{}, normalDrawable);
+
+            // 设置背景选择器到TextView上
+            view.setBackground(stateDrawable);
+
+            flowLayout.addView(view);
+        }
     }
 }
