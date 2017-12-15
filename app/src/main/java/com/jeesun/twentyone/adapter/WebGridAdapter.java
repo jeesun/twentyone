@@ -1,11 +1,8 @@
 package com.jeesun.twentyone.adapter;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,15 +11,12 @@ import android.widget.TextView;
 
 import com.jeesun.twentyone.PicActivity;
 import com.jeesun.twentyone.R;
+import com.jeesun.twentyone.customui.SavePicDialog;
 import com.jeesun.twentyone.model.WebPicInfo;
 import com.jeesun.twentyone.util.ContextUtil;
 import com.jeesun.twentyone.util.ImageUtil;
-import com.liulishuo.filedownloader.BaseDownloadTask;
-import com.liulishuo.filedownloader.FileDownloadListener;
-import com.liulishuo.filedownloader.FileDownloader;
 import com.squareup.picasso.Picasso;
 
-import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -101,15 +95,21 @@ public class WebGridAdapter extends RecyclerView.Adapter<WebGridAdapter.ViewHold
             imageView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View view) {
-                    final AlertDialog.Builder normalDialog =
+                    SavePicDialog dialog = new SavePicDialog(context, R.style.dialogStyle);
+                    dialog.setIvPicture(webPicInfo.getImg_1366_768());
+                    dialog.show();
+                    /*final AlertDialog.Builder builder =
                             new AlertDialog.Builder(context);
-                    normalDialog.setTitle("提示");
+                    builder.setView(R.layout.activity_pic);
+                    AlertDialog dialog = builder.create();
+                    dialog.show();*/
+                    /*normalDialog.setTitle("提示");
                     normalDialog.setMessage("确认保存该图片吗？");
                     normalDialog.setPositiveButton("确定",
                             new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    String filename = String.format("%d_%s", Calendar.getInstance().getTimeInMillis(), "card.png");
+                                    *//*String filename = String.format("%d_%s", Calendar.getInstance().getTimeInMillis(), "card.png");
                                     FileDownloader.getImpl().create(webPicInfo.getImg_1366_768())
                                             .setPath(ContextUtil.picSavePath + "/" + filename)
                                             .setListener(new FileDownloadListener() {
@@ -142,7 +142,7 @@ public class WebGridAdapter extends RecyclerView.Adapter<WebGridAdapter.ViewHold
                                                 protected void warn(BaseDownloadTask task) {
 
                                                 }
-                                            }).start();
+                                            }).start();*//*
                                 }
                             });
                     normalDialog.setNegativeButton("取消",
@@ -151,9 +151,9 @@ public class WebGridAdapter extends RecyclerView.Adapter<WebGridAdapter.ViewHold
                                 public void onClick(DialogInterface dialog, int which) {
                                     //...To-do
                                 }
-                            });
+                            });*/
                     // 显示
-                    normalDialog.show();
+                    //normalDialog.show();
                     return true;
                 }
             });

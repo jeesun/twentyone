@@ -17,11 +17,13 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.jeesun.twentyone.util.ContextUtil;
+import com.jeesun.twentyone.util.ImageUtil;
 import com.liulishuo.filedownloader.BaseDownloadTask;
 import com.liulishuo.filedownloader.FileDownloadListener;
 import com.liulishuo.filedownloader.FileDownloader;
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
 import java.util.Calendar;
 
 public class PicActivity extends AppCompatActivity {
@@ -54,15 +56,21 @@ public class PicActivity extends AppCompatActivity {
         picPath = intent.getStringExtra("picPath");
         picType = intent.getIntExtra("picType", -1);
 
-        final Integer picType = intent.getIntExtra("picType", -1);
         if(-1 != picType){
             if(ContextUtil.PIC_WEB == picType){
-                Picasso.with(this).load(picPath).placeholder(R.drawable.bg_default).into(ivPicture);
+                Picasso.with(this)
+                        .load(picPath)
+                        .resize(ImageUtil.dp2px(PicActivity.this, 540), ImageUtil.dp2px(PicActivity.this, 270))
+                        .tag(ContextUtil.PICASSO_TAG_WEB)
+                        .placeholder(R.drawable.bg_default)
+                        .into(ivPicture);
             }else if(ContextUtil.PIC_LOCAL == picType){
-                BitmapFactory.Options options = new BitmapFactory.Options();
-                options.inSampleSize = 2;
-                Bitmap bitmap = BitmapFactory.decodeFile(picPath, options);
-                ivPicture.setImageBitmap(bitmap);
+                Picasso.with(PicActivity.this)
+                        .load(new File(picPath))
+                        .resize(ImageUtil.dp2px(PicActivity.this, 540), ImageUtil.dp2px(PicActivity.this, 270))
+                        .tag(ContextUtil.PICASSO_TAG_LOCAL)
+                        .placeholder(R.drawable.bg_default)
+                        .into(ivPicture);
             }
         }else{
             BitmapFactory.Options options = new BitmapFactory.Options();
@@ -119,11 +127,13 @@ public class PicActivity extends AppCompatActivity {
 
                                             @Override
                                             protected void completed(BaseDownloadTask task) {
-                                                Log.i(TAG, "下载完成\\(≥▽≤)/");
+                                                Log.i(TAG, getText(R.string.download_success).toString());
+                                                //当设置setIndeterminate(true)参数为真时，进度条采用不明确显示进度的‘模糊模式’，
+                                                //当设置setIndeterminate(false)参数为假时, 进度条不采用‘模糊模式’，而采用明确显示进度的‘明确模式’，
                                                 pb.setIndeterminate(false);
                                                 pb.setMax(task.getSmallFileTotalBytes());
                                                 pb.setProgress(task.getSmallFileSoFarBytes());
-                                                tvProgressHint.setText("下载完成\\(≥▽≤)/");
+                                                tvProgressHint.setText(getText(R.string.download_success));
                                                 //Toast.makeText(PicActivity.this, "下载完成", Toast.LENGTH_SHORT).show();
                                             }
 
