@@ -6,8 +6,11 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatSeekBar;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,13 +20,17 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.SeekBar;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.jeesun.twentyone.util.ColorUtil;
 import com.jeesun.twentyone.util.ContextUtil;
 import com.jeesun.twentyone.util.ImageUtil;
 import com.jeesun.twentyone.util.TypefaceUtil;
+
+import net.qiujuer.genius.blur.StackBlur;
 
 import java.util.Calendar;
 
@@ -36,6 +43,8 @@ public class BusinessCardActivity extends AppCompatActivity {
     private EditText etFontSizeCorner, etFontSizeCenter, etLeftTop, etLeftBottom, etRightTop, etRightBottom, etCenter;
     private Button btnMake, btnSave;
     private Spinner spFontColor, spTypefaceCorner, spTypefaceCenter;
+    private AppCompatSeekBar seekBar;
+    private TextView tvSeekBarValue;
     private static final int padding = 12;
     private int fontColor = Color.BLACK;
     private Bitmap bmDefault, bmWhite, bmTransparent;
@@ -43,6 +52,8 @@ public class BusinessCardActivity extends AppCompatActivity {
     String dirPath = ContextUtil.picSavePath;
 
     private String typefaceCornerUri="方正魏碑简体", typefaceCenterUri="连笔签名字体";
+
+    private static Handler handler;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,6 +68,14 @@ public class BusinessCardActivity extends AppCompatActivity {
         }
 
         finView();
+
+        handler = new Handler(new Handler.Callback() {
+            @Override
+            public boolean handleMessage(Message message) {
+                mWartermarkImage.setImageBitmap((Bitmap)message.obj);
+                return false;
+            }
+        });
 
         initView();
     }
@@ -78,6 +97,8 @@ public class BusinessCardActivity extends AppCompatActivity {
         spTypefaceCenter = findViewById(R.id.typeface_center);
         btnBuildInWhite = findViewById(R.id.build_in_white);
         btnBuildInTransparent = findViewById(R.id.build_in_transparent);
+        seekBar = findViewById(R.id.seek_bar);
+        tvSeekBarValue = findViewById(R.id.seek_bar_value);
     }
 
     private void initView(){
@@ -158,44 +179,55 @@ public class BusinessCardActivity extends AppCompatActivity {
         btnMake.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //没有下一行代码，无法从ImageView对象中获取图像；
-                mSourImage.setDrawingCacheEnabled(true);
-                //Bitmap sourBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.bg_business_card);
-                Bitmap sourBitmap = mSourImage.getDrawingCache();
+                new Thread(){
+                    @Override
+                    public void run() {
+                        //没有下一行代码，无法从ImageView对象中获取图像；
+                        mSourImage.setDrawingCacheEnabled(true);
+                        //Bitmap sourBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.bg_business_card);
+                        Bitmap sourBitmap = mSourImage.getDrawingCache();
 
-                Integer fontSizeCorner, fontSizeCenter;
-                if(!"".equals(etFontSizeCorner.getText().toString())){
-                    fontSizeCorner = Integer.parseInt(etFontSizeCorner.getText().toString());
-                    if(fontSizeCorner <= 0){
-                        fontSizeCorner = 36;
+                        Integer fontSizeCorner, fontSizeCenter;
+                        if(!"".equals(etFontSizeCorner.getText().toString())){
+                            fontSizeCorner = Integer.parseInt(etFontSizeCorner.getText().toString());
+                            if(fontSizeCorner <= 0){
+                                fontSizeCorner = 36;
+                            }
+                        }else{
+                            fontSizeCorner = 36;
+                        }
+                        if(!"".equals(etFontSizeCenter.getText().toString())){
+                            fontSizeCenter = Integer.parseInt(etFontSizeCenter.getText().toString());
+                            if(fontSizeCenter <= 0){
+                                fontSizeCenter = 36;
+                            }
+                        }else{
+                            fontSizeCenter = 36;
+                        }
+
+                        //高斯模糊
+                        if(seekBar.getProgress() > 0){
+                            sourBitmap = StackBlur.blurNativelyPixels(sourBitmap, seekBar.getProgress(), false);
+                        }
+
+                        Bitmap textBitmap = ImageUtil.drawTextToLeftTop(BusinessCardActivity.this, sourBitmap, etLeftTop.getText().toString(), fontSizeCorner, typefaceCornerUri, fontColor, padding, padding);
+                        textBitmap = ImageUtil.drawTextToRightBottom(BusinessCardActivity.this, textBitmap, etRightBottom.getText().toString(), fontSizeCorner, typefaceCornerUri, fontColor, padding, padding);
+                        textBitmap = ImageUtil.drawTextToRightTop(BusinessCardActivity.this, textBitmap, etRightTop.getText().toString(), fontSizeCorner,typefaceCornerUri, fontColor, padding, padding);
+                        textBitmap = ImageUtil.drawTextToLeftBottom(BusinessCardActivity.this, textBitmap, etLeftBottom.getText().toString(), fontSizeCorner, typefaceCornerUri, fontColor, padding, padding);
+                        textBitmap = ImageUtil.drawTextToCenterAndTextStartFromCenter(BusinessCardActivity.this, textBitmap, etCenter.getText().toString(), fontSizeCenter, typefaceCenterUri, fontColor);
+
+                        Message message = new Message();
+                        message.obj = textBitmap;
+                        handler.sendMessage(message);
+
+                        //mWartermarkImage.setImageBitmap(textBitmap);
+
+                        hideKeyboard();
+
+                        //清空画图缓冲区，否则，下一次从ImageView对象中获取的图像，还是原来的图像。
+                        mSourImage.setDrawingCacheEnabled(false);
                     }
-                }else{
-                    fontSizeCorner = 36;
-                }
-                if(!"".equals(etFontSizeCenter.getText().toString())){
-                    fontSizeCenter = Integer.parseInt(etFontSizeCenter.getText().toString());
-                    if(fontSizeCenter <= 0){
-                        fontSizeCenter = 36;
-                    }
-                }else{
-                    fontSizeCenter = 36;
-                }
-
-                //高斯模糊
-                //sourBitmap = StackBlur.blurNativelyPixels(sourBitmap, seekBar.getProgress(), false);
-
-                Bitmap textBitmap = ImageUtil.drawTextToLeftTop(BusinessCardActivity.this, sourBitmap, etLeftTop.getText().toString(), fontSizeCorner, typefaceCornerUri, fontColor, padding, padding);
-                textBitmap = ImageUtil.drawTextToRightBottom(BusinessCardActivity.this, textBitmap, etRightBottom.getText().toString(), fontSizeCorner, typefaceCornerUri, fontColor, padding, padding);
-                textBitmap = ImageUtil.drawTextToRightTop(BusinessCardActivity.this, textBitmap, etRightTop.getText().toString(), fontSizeCorner,typefaceCornerUri, fontColor, padding, padding);
-                textBitmap = ImageUtil.drawTextToLeftBottom(BusinessCardActivity.this, textBitmap, etLeftBottom.getText().toString(), fontSizeCorner, typefaceCornerUri, fontColor, padding, padding);
-                textBitmap = ImageUtil.drawTextToCenterAndTextStartFromCenter(BusinessCardActivity.this, textBitmap, etCenter.getText().toString(), fontSizeCenter, typefaceCenterUri, fontColor);
-
-                mWartermarkImage.setImageBitmap(textBitmap);
-
-                hideKeyboard();
-
-                //清空画图缓冲区，否则，下一次从ImageView对象中获取的图像，还是原来的图像。
-                mSourImage.setDrawingCacheEnabled(false);
+                }.start();
             }
         });
 
@@ -209,6 +241,23 @@ public class BusinessCardActivity extends AppCompatActivity {
                 ImageUtil.saveBitmap(BusinessCardActivity.this, TAG, dirPath, filename, textBitmap);
                 //清空画图缓冲区，否则，下一次从ImageView对象中获取的图像，还是原来的图像。
                 mWartermarkImage.setDrawingCacheEnabled(false);
+            }
+        });
+
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                tvSeekBarValue.setText((i<10)?("0"+String.valueOf(i)):String.valueOf(i));
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
             }
         });
 
