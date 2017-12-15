@@ -143,20 +143,18 @@ public class WebFragment extends Fragment implements SwipeRefreshLayout.OnRefres
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-                //判断是否滑动到底部
-                if(RecyclerView.SCROLL_STATE_IDLE == newState){
 
+                if(RecyclerView.SCROLL_STATE_IDLE == newState){
                     if(null == webPicInfoList){
                         return;
                     }
                     if(webPicInfoList.size() <= 0){
                        return;
                     }
+                    Picasso.with(getActivity()).resumeTag(ContextUtil.PICASSO_TAG_WEB);
                     //RecyclerView.canScrollVertically(1)的值表示是否能向上滚动，false表示已经滚动到底部
                     //RecyclerView.canScrollVertically(-1)的值表示是否能向下滚动，false表示已经滚动到顶部
-                    if(recyclerView.canScrollVertically(1)){
-                        Picasso.with(getActivity()).resumeTag(ContextUtil.PICASSO_TAG_WEB);
-                    }else{
+                    if(!recyclerView.canScrollVertically(1)){
                         Retrofit retrofit2 = new Retrofit.Builder().baseUrl("http://cdn.apc.360.cn")
 //retrofit已经把Json解析封装在内部了 你需要传入你想要的解析工具就行了 默认支持Gson解析
                                 .addConverterFactory(GsonConverterFactory.create())
