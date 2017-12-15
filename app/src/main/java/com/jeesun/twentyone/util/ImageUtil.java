@@ -34,6 +34,7 @@ import static android.graphics.Bitmap.createBitmap;
  *
  */
 public class ImageUtil {
+    private static final String TAG = ImageUtil.class.getName();
 
     /**
      * 设置水印图片在左上角
@@ -468,5 +469,28 @@ public class ImageUtil {
         // 使用获取到的inSampleSize值再次解析图片
         options.inJustDecodeBounds = false;
         return BitmapFactory.decodeFile(imagePath,options);
+    }
+
+    public static Bitmap cropBitmap(Bitmap bitmap){
+        int width = bitmap.getWidth();
+        int height = bitmap.getHeight();
+        Log.i(TAG, "width=" + width + ", height=" + height);
+        float flag = (float)width/(float)height;
+        if(2.0f < flag){
+            //以height为基准
+            int widthTarget = height * 2;
+            int x = (width - widthTarget)/2;
+            int y = 0;
+            bitmap = Bitmap.createBitmap(bitmap, x, y, widthTarget, height);
+        }else if(2.0f == flag){
+
+        }else{
+            //以width为基准
+            int heightTarget = width / 2;
+            int x = 0;
+            int y = (height - heightTarget) / 2;
+            bitmap = Bitmap.createBitmap(bitmap, x, y, width, heightTarget);
+        }
+        return bitmap;
     }
 }

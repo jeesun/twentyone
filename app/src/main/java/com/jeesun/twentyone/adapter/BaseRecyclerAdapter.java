@@ -9,10 +9,10 @@ import android.view.ViewGroup;
 
 import java.util.List;
 
+//http://blog.csdn.net/qibin0506/article/details/49716795
 /**
  * Created by simon on 2017/12/16.
  */
-
 public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public static final int TYPE_HEADER = 0;

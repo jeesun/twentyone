@@ -72,6 +72,7 @@ public class SavePicDialog extends Dialog {
                 //没有下一行代码，无法从ImageView对象中获取图像；
                 ivPicture.setDrawingCacheEnabled(true);
                 Bitmap bitmap = Bitmap.createBitmap(ivPicture.getDrawingCache());
+                bitmap = ImageUtil.cropBitmap(bitmap);
                 String filename = String.format("%d_%s", Calendar.getInstance().getTimeInMillis(), "card.png");
                 ImageUtil.saveBitmap(context, TAG, ContextUtil.picSavePath, filename, bitmap);
                 //清空画图缓冲区，否则，下一次从ImageView对象中获取的图像，还是原来的图像。

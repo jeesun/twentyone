@@ -104,7 +104,7 @@ public class PicActivity extends AppCompatActivity {
                             public void onClick(DialogInterface dialog, int which) {
                                 tvProgressHint.setVisibility(View.VISIBLE);
                                 pb.setVisibility(View.VISIBLE);
-                                String filename = String.format("%d_%s", Calendar.getInstance().getTimeInMillis(), "card.png");
+                                final String filename = String.format("%d_%s", Calendar.getInstance().getTimeInMillis(), "card.png");
                                 Log.i(TAG, "picPath="+picPath);
                                 FileDownloader.getImpl().create(picPath)
                                         .setPath(ContextUtil.picSavePath + "/" + filename)
@@ -135,6 +135,9 @@ public class PicActivity extends AppCompatActivity {
                                                 pb.setProgress(task.getSmallFileSoFarBytes());
                                                 tvProgressHint.setText(getText(R.string.download_success));
                                                 //Toast.makeText(PicActivity.this, "下载完成", Toast.LENGTH_SHORT).show();
+                                                Bitmap localBitmap = BitmapFactory.decodeFile(ContextUtil.picSavePath + "/" + filename);
+                                                localBitmap = ImageUtil.cropBitmap(localBitmap);
+                                                ImageUtil.saveBitmap(PicActivity.this, TAG, ContextUtil.picSavePath, filename, localBitmap);
                                             }
 
                                             @Override
