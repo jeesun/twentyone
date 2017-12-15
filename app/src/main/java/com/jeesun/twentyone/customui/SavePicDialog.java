@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -113,6 +114,12 @@ public class SavePicDialog extends Dialog {
                                 Bitmap localBitmap = BitmapFactory.decodeFile(ContextUtil.picSavePath + "/" + filename);
                                 localBitmap = ImageUtil.cropBitmap(localBitmap);
                                 ImageUtil.saveBitmap(context, TAG, ContextUtil.picSavePath, filename, localBitmap);
+                                new Handler().postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        dismiss();
+                                    }
+                                }, 1000);
                             }
 
                             @Override

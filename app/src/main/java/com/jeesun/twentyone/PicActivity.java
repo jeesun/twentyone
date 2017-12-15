@@ -94,11 +94,12 @@ public class PicActivity extends AppCompatActivity {
                     Log.i(TAG, "本地图片长按无操作");
                     return true;
                 }
-                final AlertDialog.Builder normalDialog =
+                final AlertDialog.Builder builder =
                         new AlertDialog.Builder(PicActivity.this);
-                normalDialog.setTitle("提示");
-                normalDialog.setMessage("确认保存该图片吗？");
-                normalDialog.setPositiveButton("确定",
+                builder.setTitle("提示");
+                builder.setMessage("确认保存该图片吗？");
+
+                builder.setPositiveButton("确定",
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -138,6 +139,7 @@ public class PicActivity extends AppCompatActivity {
                                                 Bitmap localBitmap = BitmapFactory.decodeFile(ContextUtil.picSavePath + "/" + filename);
                                                 localBitmap = ImageUtil.cropBitmap(localBitmap);
                                                 ImageUtil.saveBitmap(PicActivity.this, TAG, ContextUtil.picSavePath, filename, localBitmap);
+
                                             }
 
                                             @Override
@@ -157,7 +159,7 @@ public class PicActivity extends AppCompatActivity {
                                         }).start();
                             }
                         });
-                normalDialog.setNegativeButton("取消",
+                builder.setNegativeButton("取消",
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -165,7 +167,7 @@ public class PicActivity extends AppCompatActivity {
                             }
                         });
                 // 显示
-                normalDialog.show();
+                builder.show();
                 return true;
             }
         });
