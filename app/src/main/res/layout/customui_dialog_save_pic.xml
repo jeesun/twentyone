@@ -30,7 +30,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_margin="5dp"
-        android:indeterminate="true"
         android:visibility="gone"/>
 
     <LinearLayout

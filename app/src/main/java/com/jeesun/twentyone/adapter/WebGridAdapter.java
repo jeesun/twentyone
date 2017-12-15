@@ -95,7 +95,7 @@ public class WebGridAdapter extends RecyclerView.Adapter<WebGridAdapter.ViewHold
             imageView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View view) {
-                    SavePicDialog dialog = new SavePicDialog(context, R.style.dialogStyle);
+                    SavePicDialog dialog = new SavePicDialog(context, R.style.dialogStyle, webPicInfo);
                     dialog.setIvPicture(webPicInfo.getImg_1366_768());
                     dialog.show();
 
