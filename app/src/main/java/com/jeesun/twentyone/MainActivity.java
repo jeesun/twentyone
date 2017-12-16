@@ -1,7 +1,5 @@
 package com.jeesun.twentyone;
 
-import android.app.SearchManager;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -13,7 +11,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -194,31 +191,13 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main, menu);
+        getMenuInflater().inflate(R.menu.menu_main, menu);
         miSearch = menu.findItem(R.id.search);
         miPick = menu.findItem(R.id.pick);
         miBusinessCard = menu.findItem(R.id.business_card);
         miTutorial = menu.findItem(R.id.tutorial);
         miAbout = menu.findItem(R.id.about);
-        SearchManager searchManager =
-                (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        SearchView searchView =
-                (SearchView) menu.findItem(R.id.search).getActionView();
-        searchView.setSearchableInfo(
-                searchManager.getSearchableInfo(getComponentName()));
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                Toast.makeText(MainActivity.this, "query", Toast.LENGTH_SHORT).show();
-                return false;
-            }
 
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                //Toast.makeText(MainActivity.this, "newText", Toast.LENGTH_SHORT).show();
-                return false;
-            }
-        });
         return true;
     }
 
@@ -245,7 +224,8 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
                 startActivity(intent);
                 break;
             case R.id.search:
-
+                intent = new Intent(MainActivity.this, SearchActivity.class);
+                startActivity(intent);
                 break;
             default:
                 break;

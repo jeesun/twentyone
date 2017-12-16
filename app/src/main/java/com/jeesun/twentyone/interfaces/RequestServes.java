@@ -1,6 +1,7 @@
 package com.jeesun.twentyone.interfaces;
 
 import com.jeesun.twentyone.model.ResultMsg;
+import com.jeesun.twentyone.model.SoResultMsg;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -18,4 +19,10 @@ public interface RequestServes {
     Call<ResultMsg> getPicsByCategory(@Query(value = "cid")Integer categoryId,
                                       @Query("start")Integer start,
                                       @Query("count")Integer count);
+    @GET("/j?src=srp")
+    Call<SoResultMsg> getSoPicsByKeyWord(@Query(value = "q")String q,
+                                         @Query(value = "correct")String correct,
+                                         @Query("src")int src,
+                                         @Query("pn")int pn,
+                                         @Query("zoom")int zoom);
 }
