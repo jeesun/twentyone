@@ -60,6 +60,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     private WebFragment webFragment;
 
     private int mOffset, mOneDis, mCurrentIndex;
+    private MenuItem miSearch, miPick, miBusinessCard, miTutorial, miAbout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -192,6 +193,11 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
+        miSearch = menu.findItem(R.id.search);
+        miPick = menu.findItem(R.id.pick);
+        miBusinessCard = menu.findItem(R.id.business_card);
+        miTutorial = menu.findItem(R.id.tutorial);
+        miAbout = menu.findItem(R.id.about);
         return true;
     }
 
@@ -217,10 +223,9 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
                 intent = new Intent(MainActivity.this, TutorialActivity.class);
                 startActivity(intent);
                 break;
-            /*case R.id.fonts:
-                intent = new Intent(MainActivity.this, FontsActivity.class);
-                startActivity(intent);
-                break;*/
+            case R.id.search:
+
+                break;
             default:
                 break;
         }
@@ -277,10 +282,26 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
                 if(1 == mCurrentIndex){
                     anim = new TranslateAnimation(mOneDis, 0, 0, 0);
                 }
+                //ActionBar关闭显示搜索图标
+                if(null != miSearch){
+                    miSearch.setVisible(false);
+                    miPick.setVisible(true);
+                    miBusinessCard.setVisible(true);
+                    miTutorial.setVisible(true);
+                    miAbout.setVisible(true);
+                }
                 break;
             case 1:
                 if(0 == mCurrentIndex){
                     anim = new TranslateAnimation(mOffset, mOneDis, 0, 0);
+                }
+                //ActionBar显示搜索图标
+                if(null != miSearch){
+                    miSearch.setVisible(true);
+                    miPick.setVisible(false);
+                    miBusinessCard.setVisible(false);
+                    miTutorial.setVisible(false);
+                    miAbout.setVisible(false);
                 }
                 break;
             default:
