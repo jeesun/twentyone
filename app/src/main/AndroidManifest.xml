@@ -31,7 +31,8 @@
         <activity
             android:name=".BusinessCardActivity"
             android:windowSoftInputMode="adjustUnspecified|stateHidden" />
-        <activity android:name=".MainActivity" android:process=":picture" />
+        <activity android:name=".MainActivity"
+            android:process=":picture" />
         <activity android:name=".SpecificSymbolActivity" />
         <activity
             android:name=".PicActivity"

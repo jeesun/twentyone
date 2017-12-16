@@ -64,7 +64,16 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FileDownloader.setup(this);
+
+        // 手动在oncreate里hide()actionbar
+        /*if (getSupportActionBar() != null){
+            getSupportActionBar().hide();
+        }*/
+        // 第二种最简单 直接用supportrequestwindowFeature好了：
+        //supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
+
         setContentView(R.layout.activity_main);
+        setTitle(R.string.app_name_short);
 
         vpViewPager = findViewById(R.id.view_pager);
         ivCursor = findViewById(R.id.cursor);

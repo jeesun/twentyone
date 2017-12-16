@@ -3,6 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/search"
+        android:orderInCategory="100"
+        app:showAsAction="always"
+        android:title="@string/search"
+        android:icon="@mipmap/search"/>
+
+    <item
         android:id="@+id/pick"
         android:orderInCategory="100"
         app:showAsAction="always"
@@ -11,7 +18,7 @@
     <item
         android:id="@+id/business_card"
         android:orderInCategory="100"
-        app:showAsAction="always"
+        app:showAsAction="ifRoom"
         android:title="@string/business_card"/>
 
     <item
