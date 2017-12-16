@@ -1,5 +1,7 @@
 package com.jeesun.twentyone;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -11,6 +13,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
+import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -61,25 +65,23 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 
     private int mOffset, mOneDis, mCurrentIndex;
     private MenuItem miSearch, miPick, miBusinessCard, miTutorial, miAbout;
+    private Toolbar toolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FileDownloader.setup(this);
 
-        // 手动在oncreate里hide()actionbar
-        /*if (getSupportActionBar() != null){
-            getSupportActionBar().hide();
-        }*/
-        // 第二种最简单 直接用supportrequestwindowFeature好了：
-        //supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
-
         setContentView(R.layout.activity_main);
-        setTitle(R.string.app_name_short);
 
+        toolbar = findViewById(R.id.toolbar);
         vpViewPager = findViewById(R.id.view_pager);
         ivCursor = findViewById(R.id.cursor);
         tvOne = findViewById(R.id.viewpager_tv_one);
         tvTwo = findViewById(R.id.viewpager_tv_two);
+
+        toolbar.setTitle(R.string.app_name_short);
+        //设置导航图标要在setSupportActionBar方法之后
+        setSupportActionBar(toolbar);
 
         //初始化指示器位置
         initCursorPosition();
@@ -198,6 +200,25 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         miBusinessCard = menu.findItem(R.id.business_card);
         miTutorial = menu.findItem(R.id.tutorial);
         miAbout = menu.findItem(R.id.about);
+        SearchManager searchManager =
+                (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView =
+                (SearchView) menu.findItem(R.id.search).getActionView();
+        searchView.setSearchableInfo(
+                searchManager.getSearchableInfo(getComponentName()));
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                Toast.makeText(MainActivity.this, "query", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                //Toast.makeText(MainActivity.this, "newText", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        });
         return true;
     }
 

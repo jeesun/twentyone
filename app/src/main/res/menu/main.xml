@@ -7,7 +7,7 @@
         android:orderInCategory="100"
         app:showAsAction="always"
         android:title="@string/search"
-        android:icon="@mipmap/search"
+        app:actionViewClass="android.support.v7.widget.SearchView"
         android:visible="false"/>
 
     <item
