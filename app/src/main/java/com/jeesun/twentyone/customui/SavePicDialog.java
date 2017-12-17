@@ -16,6 +16,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.jeesun.twentyone.R;
+import com.jeesun.twentyone.model.SoPicInfo;
 import com.jeesun.twentyone.model.WebPicInfo;
 import com.jeesun.twentyone.util.ContextUtil;
 import com.jeesun.twentyone.util.ImageUtil;
@@ -41,6 +42,7 @@ public class SavePicDialog extends Dialog {
     private Button btnSave;
 
     private WebPicInfo webPicInfo;
+    private SoPicInfo soPicInfo;
 
     public SavePicDialog(@NonNull Context context, int themeResId, WebPicInfo webPicInfo) {
         super(context, themeResId);
@@ -53,6 +55,19 @@ public class SavePicDialog extends Dialog {
         btnCancelSave = rootView.findViewById(R.id.cancel_save_pic);
         btnSave = rootView.findViewById(R.id.save_pic);
         this.webPicInfo = webPicInfo;
+    }
+
+    public SavePicDialog(@NonNull Context context, int themeResId, SoPicInfo soPicInfo) {
+        super(context, themeResId);
+        this.context = context;
+        LayoutInflater inflater = LayoutInflater.from(context);
+        rootView = inflater.inflate(R.layout.customui_dialog_save_pic, null);
+        ivPicture = rootView.findViewById(R.id.picture);
+        tvProgressHint = rootView.findViewById(R.id.progress_hint);
+        pb = rootView.findViewById(R.id.progress_bar);
+        btnCancelSave = rootView.findViewById(R.id.cancel_save_pic);
+        btnSave = rootView.findViewById(R.id.save_pic);
+        this.soPicInfo = soPicInfo;
     }
 
     @Override
@@ -82,7 +97,27 @@ public class SavePicDialog extends Dialog {
                 pb.setProgress(100);
 
                 tvProgressHint.setText(context.getText(R.string.download_success));*/
-                FileDownloader.getImpl().create(webPicInfo.getImg_1366_768())
+                String picPath;
+                if(null != webPicInfo){
+                    picPath = webPicInfo.getImg_1366_768();
+                }else if(null != soPicInfo){
+                    if(null != soPicInfo.getImg()){
+                        picPath = soPicInfo.getImg();
+                    }else if(null != soPicInfo.getThunmb()){
+                        picPath = soPicInfo.getThunmb();
+                    }else if(null != soPicInfo.getThumb_bak()){
+                        picPath = soPicInfo.getThumb_bak();
+                    }else if(null != soPicInfo.get_thunmb()){
+                        picPath = soPicInfo.get_thunmb();
+                    }else if(null != soPicInfo.get_thumb_bak()){
+                        picPath = soPicInfo.get_thumb_bak();
+                    }else{
+                        return;
+                    }
+                }else{
+                    return;
+                }
+                FileDownloader.getImpl().create(picPath)
                         .setPath(ContextUtil.picSavePath + "/" + filename)
                         .setListener(new FileDownloadListener() {
                             @Override
@@ -137,6 +172,7 @@ public class SavePicDialog extends Dialog {
 
                             }
                         }).start();
+
             }
         });
 

@@ -124,4 +124,23 @@ public class SoResultMsg {
     public void setWordguess(Object wordguess) {
         this.wordguess = wordguess;
     }
+
+    @Override
+    public String toString() {
+        return "SoResultMsg{" +
+                "total=" + total +
+                ", end=" + end +
+                ", sid='" + sid + '\'' +
+                ", ran=" + ran +
+                ", ras=" + ras +
+                ", kn=" + kn +
+                ", cn=" + cn +
+                ", gn=" + gn +
+                ", lastindex=" + lastindex +
+                ", ceg=" + ceg +
+                ", list=" + list +
+                ", boxresult=" + boxresult +
+                ", wordguess=" + wordguess +
+                '}';
+    }
 }

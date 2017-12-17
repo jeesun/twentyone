@@ -45,7 +45,7 @@ public class MyGridAdapter extends BaseRecyclerAdapter<WebPicInfo> {
         }
     }
 
-    class MyHolder extends BaseRecyclerAdapter.Holder{
+    private class MyHolder extends BaseRecyclerAdapter.Holder{
         View itemView;
         ImageView imageView;
         TextView textView;

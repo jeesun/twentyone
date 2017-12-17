@@ -248,4 +248,37 @@ public class SoPicInfo {
     public void setFixedSize(boolean fixedSize) {
         this.fixedSize = fixedSize;
     }
+
+    @Override
+    public String toString() {
+        return "SoPicInfo{" +
+                "id='" + id + '\'' +
+                ", qqfaceDownUrl=" + qqfaceDownUrl +
+                ", downurl=" + downurl +
+                ", grpmd5=" + grpmd5 +
+                ", type=" + type +
+                ", src='" + src + '\'' +
+                ", index=" + index +
+                ", title='" + title + '\'' +
+                ", litetitle='" + litetitle + '\'' +
+                ", width=" + width +
+                ", height=" + height +
+                ", imgsize='" + imgsize + '\'' +
+                ", imgtype='" + imgtype + '\'' +
+                ", key='" + key + '\'' +
+                ", dspurl='" + dspurl + '\'' +
+                ", link='" + link + '\'' +
+                ", source=" + source +
+                ", img='" + img + '\'' +
+                ", thumb_bak='" + thumb_bak + '\'' +
+                ", thunmb='" + thunmb + '\'' +
+                ", _thumb_bak='" + _thumb_bak + '\'' +
+                ", _thunmb='" + _thunmb + '\'' +
+                ", thumbWidth=" + thumbWidth +
+                ", dsptime='" + dsptime + '\'' +
+                ", thumbHeight=" + thumbHeight +
+                ", grpcnt='" + grpcnt + '\'' +
+                ", fixedSize=" + fixedSize +
+                '}';
+    }
 }

@@ -7,4 +7,10 @@
     android:orientation="vertical"
     tools:context="com.jeesun.twentyone.SearchActivity">
     <include layout="@layout/component_toolbar" />
+    <!--本文主角-->
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/grid_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
 </LinearLayout>

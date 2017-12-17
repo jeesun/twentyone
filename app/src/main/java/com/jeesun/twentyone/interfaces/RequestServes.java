@@ -21,8 +21,7 @@ public interface RequestServes {
                                       @Query("count")Integer count);
     @GET("/j?src=srp")
     Call<SoResultMsg> getSoPicsByKeyWord(@Query(value = "q")String q,
-                                         @Query(value = "correct")String correct,
-                                         @Query("src")int src,
+                                         @Query("sn")int sn,
                                          @Query("pn")int pn,
                                          @Query("zoom")int zoom);
 }
