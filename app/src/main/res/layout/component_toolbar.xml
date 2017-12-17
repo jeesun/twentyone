@@ -8,7 +8,7 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:popupTheme="@style/OverflowMenuStyle"
+        app:popupTheme="@style/ToolbarPopupTheme"
         android:background="?attr/colorPrimary"
         app:titleTextColor="@android:color/white"
         app:subtitleTextColor="@android:color/white">
