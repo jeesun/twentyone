@@ -9,7 +9,10 @@ import android.os.Environment;
 public class ContextUtil {
 
     public static final String dcimPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath();
-    public static final String picSavePath = dcimPath + "/Camera";
+    //public static final String picSavePath = dcimPath + "/Camera";
+
+    public static final String sdPath = Environment.getExternalStorageDirectory().getPath();
+    public static final String picSavePath = sdPath + "/TwentyOne";
 
     public static final String fontPath = "/TwentyOne/fonts";
     public static final String fontFullPath = Environment.getExternalStorageDirectory().getPath() + fontPath;

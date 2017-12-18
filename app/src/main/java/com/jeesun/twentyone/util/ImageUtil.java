@@ -5,6 +5,7 @@ package com.jeesun.twentyone.util;
  */
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -13,6 +14,7 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
@@ -161,7 +163,11 @@ public class ImageUtil {
         paint.setColor(color);
         paint.setTextSize(dp2px(context, size));
         if(null != fontPath && !"".equals(fontPath)){
-            paint.setTypeface(Typeface.createFromAsset(context.getAssets(), fontPath));
+            if(fontPath.contains(ContextUtil.fontPath)){
+                paint.setTypeface(Typeface.createFromFile(fontPath));
+            }else{
+                paint.setTypeface(Typeface.createFromAsset(context.getAssets(), fontPath));
+            }
         }
         Rect bounds = new Rect();
         paint.getTextBounds(text, 0, text.length(), bounds);
@@ -200,7 +206,11 @@ public class ImageUtil {
         paint.setColor(color);
         paint.setTextSize(dp2px(context, size));
         if(null != fontPath && !"".equals(fontPath)){
-            paint.setTypeface(Typeface.createFromAsset(context.getAssets(), fontPath));
+            if(fontPath.contains(ContextUtil.fontPath)){
+                paint.setTypeface(Typeface.createFromFile(fontPath));
+            }else{
+                paint.setTypeface(Typeface.createFromAsset(context.getAssets(), fontPath));
+            }
         }
         Rect bounds = new Rect();
         paint.getTextBounds(text, 0, text.length(), bounds);
@@ -238,7 +248,11 @@ public class ImageUtil {
         paint.setColor(color);
         paint.setTextSize(dp2px(context, size));
         if(null != fontPath && !"".equals(fontPath)){
-            paint.setTypeface(Typeface.createFromAsset(context.getAssets(), fontPath));
+            if(fontPath.contains(ContextUtil.fontPath)){
+                paint.setTypeface(Typeface.createFromFile(fontPath));
+            }else{
+                paint.setTypeface(Typeface.createFromAsset(context.getAssets(), fontPath));
+            }
         }
         Rect bounds = new Rect();
         paint.getTextBounds(text, 0, text.length(), bounds);
@@ -276,7 +290,11 @@ public class ImageUtil {
         paint.setColor(color);
         paint.setTextSize(dp2px(context, size));
         if(null != fontPath && !"".equals(fontPath)){
-            paint.setTypeface(Typeface.createFromAsset(context.getAssets(), fontPath));
+            if(fontPath.contains(ContextUtil.fontPath)){
+                paint.setTypeface(Typeface.createFromFile(fontPath));
+            }else{
+                paint.setTypeface(Typeface.createFromAsset(context.getAssets(), fontPath));
+            }
         }
         Rect bounds = new Rect();
         paint.getTextBounds(text, 0, text.length(), bounds);
@@ -312,7 +330,11 @@ public class ImageUtil {
         paint.setColor(color);
         paint.setTextSize(dp2px(context, size));
         if(null != fontPath && !"".equals(fontPath)){
-            paint.setTypeface(Typeface.createFromAsset(context.getAssets(), fontPath));
+            if(fontPath.contains(ContextUtil.fontPath)){
+                paint.setTypeface(Typeface.createFromFile(fontPath));
+            }else{
+                paint.setTypeface(Typeface.createFromAsset(context.getAssets(), fontPath));
+            }
         }
         Rect bounds = new Rect();
         paint.getTextBounds(text, 0, text.length(), bounds);
@@ -328,7 +350,11 @@ public class ImageUtil {
         paint.setColor(color);
         paint.setTextSize(dp2px(context, size));
         if(null != fontPath && !"".equals(fontPath)){
-            paint.setTypeface(Typeface.createFromAsset(context.getAssets(), fontPath));
+            if(fontPath.contains(ContextUtil.fontPath)){
+                paint.setTypeface(Typeface.createFromFile(fontPath));
+            }else{
+                paint.setTypeface(Typeface.createFromAsset(context.getAssets(), fontPath));
+            }
         }
         Rect bounds = new Rect();
         paint.getTextBounds(text, 0, text.length(), bounds);
@@ -427,7 +453,10 @@ public class ImageUtil {
             out.flush();
             out.close();
             Log.i(tag, "已经保存");
-            Toast.makeText(context, "图片已保存到相册的相机文件夹中，返回主页刷新", Toast.LENGTH_SHORT).show();
+            // 其次把文件插入到系统图库
+            /*MediaStore.Images.Media.insertImage(context.getContentResolver(),
+                    f.getAbsolutePath(), picName, null);*/
+            Toast.makeText(context, "图片已保存，返回主页刷新", Toast.LENGTH_SHORT).show();
         } catch (FileNotFoundException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -437,6 +466,9 @@ public class ImageUtil {
             e.printStackTrace();
             Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
+        // 最后通知图库更新
+        context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,
+                Uri.fromFile(new File(f.getPath()))));
 
     }
 

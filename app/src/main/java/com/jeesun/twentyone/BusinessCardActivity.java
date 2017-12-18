@@ -12,12 +12,14 @@ import android.provider.MediaStore;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatSeekBar;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.SeekBar;
@@ -32,7 +34,11 @@ import com.jeesun.twentyone.util.TypefaceUtil;
 
 import net.qiujuer.genius.blur.StackBlur;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.List;
 
 public class BusinessCardActivity extends AppCompatActivity {
     public final static int REQUEST_IMAGE_CAPTURE = 1;
@@ -51,6 +57,8 @@ public class BusinessCardActivity extends AppCompatActivity {
 
     String dirPath = ContextUtil.picSavePath;
 
+    private List<String> fontNameList = new ArrayList<>();
+    private List<String> fontAbsolutePathList = new ArrayList<>();
     private String typefaceCornerUri="", typefaceCenterUri="";
 
     private static Handler handler;
@@ -77,7 +85,43 @@ public class BusinessCardActivity extends AppCompatActivity {
             }
         });
 
+        initFonts();
+
         initView();
+    }
+
+    private void initFonts() {
+        String typefaces[] = getResources().getStringArray(R.array.typeface);
+        fontNameList.addAll(Arrays.asList(typefaces));
+
+        for(int i=0; i<typefaces.length; i++){
+            typefaces[i] = TypefaceUtil.getInstance().getTypefaceUri(typefaces[i]);
+        }
+
+        Log.i(TAG, fontNameList.toString());
+
+        fontAbsolutePathList.addAll(Arrays.asList(typefaces));
+
+        Log.i(TAG, fontAbsolutePathList.toString());
+
+        //获取sdcard/TwentyOne/fonts文件夹下的字体
+        //读取sdcard下的TwentyOne文件夹
+        File scannerDirectory = new File(ContextUtil.fontFullPath);
+        if (scannerDirectory.isDirectory()) {
+            for (File file : scannerDirectory.listFiles()) {
+                String path = file.getAbsolutePath();
+                if (path.endsWith(".TTF") || path.endsWith(".ttf")) {
+                    fontAbsolutePathList.add(path);
+                    fontNameList.add(file.getName());
+                }
+            }
+        }
+
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(
+                this, android.R.layout.simple_spinner_item, fontNameList);
+        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spTypefaceCorner.setAdapter(arrayAdapter);
+        spTypefaceCenter.setAdapter(arrayAdapter);
     }
 
     private void finView() {
@@ -152,8 +196,7 @@ public class BusinessCardActivity extends AppCompatActivity {
         spTypefaceCorner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                String[] typefaces = getResources().getStringArray(R.array.typeface);
-                typefaceCornerUri = TypefaceUtil.getInstance().getTypefaceUri(typefaces[i]);
+                typefaceCornerUri = fontAbsolutePathList.get(i);
             }
 
             @Override
@@ -165,8 +208,7 @@ public class BusinessCardActivity extends AppCompatActivity {
         spTypefaceCenter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                String[] typefaces = getResources().getStringArray(R.array.typeface);
-                typefaceCenterUri = TypefaceUtil.getInstance().getTypefaceUri(typefaces[i]);
+                typefaceCenterUri = fontAbsolutePathList.get(i);
             }
 
             @Override
