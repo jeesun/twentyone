@@ -160,7 +160,9 @@ public class ImageUtil {
         Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         paint.setColor(color);
         paint.setTextSize(dp2px(context, size));
-        paint.setTypeface(Typeface.createFromAsset(context.getAssets(), fontPath));
+        if(null != fontPath && !"".equals(fontPath)){
+            paint.setTypeface(Typeface.createFromAsset(context.getAssets(), fontPath));
+        }
         Rect bounds = new Rect();
         paint.getTextBounds(text, 0, text.length(), bounds);
         return drawTextToBitmap(context, bitmap, text, paint, bounds,
@@ -197,7 +199,9 @@ public class ImageUtil {
         Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         paint.setColor(color);
         paint.setTextSize(dp2px(context, size));
-        paint.setTypeface(Typeface.createFromAsset(context.getAssets(), fontPath));
+        if(null != fontPath && !"".equals(fontPath)){
+            paint.setTypeface(Typeface.createFromAsset(context.getAssets(), fontPath));
+        }
         Rect bounds = new Rect();
         paint.getTextBounds(text, 0, text.length(), bounds);
         return drawTextToBitmap(context, bitmap, text, paint, bounds,
@@ -233,7 +237,9 @@ public class ImageUtil {
         Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         paint.setColor(color);
         paint.setTextSize(dp2px(context, size));
-        paint.setTypeface(Typeface.createFromAsset(context.getAssets(), fontPath));
+        if(null != fontPath && !"".equals(fontPath)){
+            paint.setTypeface(Typeface.createFromAsset(context.getAssets(), fontPath));
+        }
         Rect bounds = new Rect();
         paint.getTextBounds(text, 0, text.length(), bounds);
         return drawTextToBitmap(context, bitmap, text, paint, bounds,
@@ -269,7 +275,9 @@ public class ImageUtil {
         Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         paint.setColor(color);
         paint.setTextSize(dp2px(context, size));
-        paint.setTypeface(Typeface.createFromAsset(context.getAssets(), fontPath));
+        if(null != fontPath && !"".equals(fontPath)){
+            paint.setTypeface(Typeface.createFromAsset(context.getAssets(), fontPath));
+        }
         Rect bounds = new Rect();
         paint.getTextBounds(text, 0, text.length(), bounds);
         return drawTextToBitmap(context, bitmap, text, paint, bounds,
@@ -303,7 +311,9 @@ public class ImageUtil {
         Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         paint.setColor(color);
         paint.setTextSize(dp2px(context, size));
-        paint.setTypeface(Typeface.createFromAsset(context.getAssets(), fontPath));
+        if(null != fontPath && !"".equals(fontPath)){
+            paint.setTypeface(Typeface.createFromAsset(context.getAssets(), fontPath));
+        }
         Rect bounds = new Rect();
         paint.getTextBounds(text, 0, text.length(), bounds);
         TextPaint textPaint = new TextPaint(paint);
@@ -317,7 +327,9 @@ public class ImageUtil {
         Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         paint.setColor(color);
         paint.setTextSize(dp2px(context, size));
-        paint.setTypeface(Typeface.createFromAsset(context.getAssets(), fontPath));
+        if(null != fontPath && !"".equals(fontPath)){
+            paint.setTypeface(Typeface.createFromAsset(context.getAssets(), fontPath));
+        }
         Rect bounds = new Rect();
         paint.getTextBounds(text, 0, text.length(), bounds);
         //Toast.makeText(context, "长度为"+text.length(), Toast.LENGTH_SHORT).show();
