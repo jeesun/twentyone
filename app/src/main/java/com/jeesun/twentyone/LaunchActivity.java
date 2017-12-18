@@ -3,7 +3,6 @@ package com.jeesun.twentyone;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -32,10 +31,6 @@ public class LaunchActivity extends AppCompatActivity {
 
         /*getSupportActionBar().hide();
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);*/
-
-        tvLaunchInfo = findViewById(R.id.launch_info);
-        Typeface typeface = Typeface.createFromAsset(getAssets(), "fonts/方正魏碑简体.ttf");
-        tvLaunchInfo.setTypeface(typeface);
 
 
         // 版本判断。当手机系统大于 23 时，才有必要去判断权限是否获取
