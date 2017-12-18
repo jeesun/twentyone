@@ -13,11 +13,10 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <!--<item name="android:textColorPrimary">@android:color/white</item>-->
+        <!--menu 字体颜色-->
+        <item name="actionMenuTextColor">@android:color/white</item>
         <!-- 溢出菜单图标颜色-->
         <item name="colorControlNormal">@android:color/white</item>
-        <!-- 溢出菜单文字颜色-->
-        <!--<item name="textAppearanceLargePopupMenu">@style/Overflow_Menu_Text_style</item>-->
     </style>
 
     <style name="WelcomeStyle" parent="Theme.AppCompat.Light.NoActionBar">
@@ -46,33 +45,9 @@
         <item name="android:backgroundDimEnabled">true</item>
     </style>
 
-<!--    &lt;!&ndash; toolbar弹出菜单样式背景 &ndash;&gt;
-    <style name="ToolbarPopupTheme" parent="@style/ThemeOverlay.AppCompat">
-        <item name="android:colorBackground">@color/colorPrimary</item>
-    </style>
-    &lt;!&ndash;溢出菜单文字颜色&ndash;&gt;
-    <style name="Overflow_Menu_Text_style" parent="@style/TextAppearance.AppCompat.Widget.PopupMenu.Large">
-        <item name="android:textColor">@android:color/white</item>
-    </style>-->
-<!--    <style name="OverflowMenuStyle" parent="@style/ThemeOverlay.AppCompat.ActionBar">
-        &lt;!&ndash; 是否覆盖锚点，默认为true，即盖住Toolbar &ndash;&gt;
-        <item name="overlapAnchor">false</item>
-        <item name="android:dropDownWidth">wrap_content</item>
-        <item name="android:paddingRight">4dp</item>
-        &lt;!&ndash; 弹出层背景颜色 &ndash;&gt;
-        <item name="android:colorBackground">@color/colorPrimary</item>
-        &lt;!&ndash; 弹出层垂直方向上的偏移，即在竖直方向上距离Toolbar的距离，值为负则会盖住Toolbar &ndash;&gt;
-        <item name="android:dropDownVerticalOffset">8dp</item>
-        &lt;!&ndash; 弹出层水平方向上的偏移，即距离屏幕左边的距离，负值会导致右边出现空隙 &ndash;&gt;
-        <item name="android:dropDownHorizontalOffset">0dp</item>
-        &lt;!&ndash; 设置弹出菜单文字颜色 &ndash;&gt;
-        <item name="android:textColor">@android:color/white</item>
-        <item name="android:actionMenuTextColor">@android:color/white</item>
-    </style>-->
-
     <style name="ToolbarPopupTheme" parent="@style/ThemeOverlay.AppCompat.Dark">
         <item name="android:colorBackground">@color/colorPrimary</item>
-        <item name="android:textColor">@android:color/black</item>
+        <item name="android:textColor">@android:color/white</item>
         <item name="actionOverflowMenuStyle">@style/OverflowMenuStyle</item> <!--新增一个item，用于控制menu-->
     </style>
 
