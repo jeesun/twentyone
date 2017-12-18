@@ -51,7 +51,7 @@ public class BusinessCardActivity extends AppCompatActivity {
 
     String dirPath = ContextUtil.picSavePath;
 
-    private String typefaceCornerUri="方正魏碑简体", typefaceCenterUri="连笔签名字体";
+    private String typefaceCornerUri="", typefaceCenterUri="";
 
     private static Handler handler;
     @Override
