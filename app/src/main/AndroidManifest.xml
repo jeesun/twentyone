@@ -34,7 +34,8 @@
         <activity
             android:name=".MainActivity"
             android:theme="@style/NoTitleStyle"
-            android:process=":picture">
+            android:process=":picture"
+            android:configChanges="orientation|keyboardHidden">
             <!--<meta-data android:name="android.app.default_searchable"
                 android:value=".SearchActivity"/>-->
         </activity>

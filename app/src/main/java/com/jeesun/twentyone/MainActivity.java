@@ -1,6 +1,7 @@
 package com.jeesun.twentyone;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.net.Uri;
@@ -39,6 +40,7 @@ import java.util.Calendar;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener, View.OnClickListener {
+    private final static String TAG = MainActivity.class.getName();
     public final static int REQUEST_IMAGE_CAPTURE = 1;
     public final static int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 2;
     public final static String IMAGE_TYPE = "image/*";
@@ -321,5 +323,14 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 
     public void updateLocalData(PictureInfo pictureInfo){
         localFragment.updateData(pictureInfo);
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        //横向
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE){
+            Log.i(TAG, "屏幕当前是横屏");
+        }
     }
 }
