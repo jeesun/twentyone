@@ -273,7 +273,7 @@ public class BusinessCardActivity extends AppCompatActivity {
                         textBitmap = ImageUtil.drawTextToCenterAndTextStartFromCenter(BusinessCardActivity.this, textBitmap, etCenter.getText().toString(), fontSizeCenter, typefaceCenterUri, fontColor);
 
                         if (addStampChecked){
-                            textBitmap = ImageUtil.addStampEdge(BusinessCardActivity.this, textBitmap, 90, 26, 26);
+                            textBitmap = ImageUtil.addStampEdge(BusinessCardActivity.this, textBitmap, 0.9f, 27, 27);
                         }
 
                         Message message = new Message();

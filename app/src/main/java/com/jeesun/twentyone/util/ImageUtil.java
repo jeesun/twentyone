@@ -541,12 +541,12 @@ public class ImageUtil {
         return bitmap;
     }
 
-    public static Bitmap addStampEdge(Context context, Bitmap bitmap, int edgeWidth,int radius, int interval){
+    public static Bitmap addStampEdge(Context context, Bitmap bitmap, float scale,int radius, int interval){
         DisplayMetrics dm =context.getResources().getDisplayMetrics();
         int width = dm.widthPixels;
         int height = dm.widthPixels/2;
         //缩小0.9倍
-        bitmap = scaleWithWH(bitmap, width*0.8, height*0.8);
+        bitmap = scaleWithWH(bitmap, width*scale, height*scale);
         RectF rf22 = new RectF(0,0,0,0);
 
 
@@ -557,70 +557,98 @@ public class ImageUtil {
         Paint paint = new Paint();
         paint.setAntiAlias(true);//无锯齿
 
-        paint.setStyle(Paint.Style.STROKE);//空心
+        //绘制大边框
+        paint.setStyle(Paint.Style.FILL);//空心
         // 设置“空心”的外框的宽度
-        paint.setStrokeWidth(edgeWidth);
+        //paint.setStrokeWidth(edgeWidth);
         RectF rf1 = new RectF(0, 0, width, height);
-        paint.setColor(Color.WHITE);
+        paint.setColor(Color.BLACK);
         canvas.drawRect(rf1, paint);
 
+        //先绘制图片
+        canvas.drawBitmap(bitmap, null, new Rect((width-bitWidth)/2,(height-bitHeight)/2,
+                (width+bitWidth)/2,(height+bitHeight)/2), paint);
+
+        //绘制波浪边框
         paint.setStyle(Paint.Style.FILL);//实心
         paint.setColor(Color.BLACK);
         //上边
-        int leftFlag = -radius;
-        int topFlag = -radius;
-        int rightFlag = radius;
-        int bottomFlag = radius;
-        while (rightFlag<=width){
+        int leftFlag = -radius +(width-bitWidth)/2;
+        //(height-bitHeight)/2正好是上边框宽度
+        int topFlag = -radius+(height-bitHeight)/2;
+        int rightFlag = radius+(width-bitWidth)/2;
+        int bottomFlag = radius+(height-bitHeight)/2;
+        while (rightFlag<width-(width-bitWidth)/2-radius){
             rf22.set(leftFlag, topFlag, rightFlag, bottomFlag);
-            canvas.drawArc(rf22, 0, 180, true, paint);
+            //如果是第一个，只绘制90度
+            if(rightFlag == radius+(width-bitWidth)/2){
+                canvas.drawArc(rf22, 0, 90, true, paint);
+            }else{
+                canvas.drawArc(rf22, 0, 180, true, paint);
+            }
+
+            leftFlag+=radius*2+interval;
+            rightFlag+=radius*2+interval;
+        }
+
+        //下边
+        leftFlag = -radius +(width-bitWidth)/2;
+        topFlag = -radius+height-(height-bitHeight)/2;
+        rightFlag = radius+(width-bitWidth)/2;
+        bottomFlag = radius+height-(height-bitHeight)/2;
+        while (rightFlag<width-(width-bitWidth)/2-radius){
+            rf22.set(leftFlag, topFlag, rightFlag, bottomFlag);
+            //如果是第一个，只绘制90度
+            if(rightFlag == radius+(width-bitWidth)/2){
+                canvas.drawArc(rf22, -90, 90, true, paint);
+            }else{
+                canvas.drawArc(rf22, -180, 180, true, paint);
+            }
             leftFlag+=radius*2+interval;
             rightFlag+=radius*2+interval;
         }
         //左边
-        leftFlag = -radius;
-        topFlag = -radius;
-        rightFlag = radius;
-        bottomFlag = radius;
-        while (bottomFlag<=height){
+        //(width-bitWidth)/2左边框的宽度
+        leftFlag = -radius+(width-bitWidth)/2;
+        topFlag = -radius+(height-bitHeight)/2;
+        rightFlag = radius+(width-bitWidth)/2;
+        bottomFlag = radius+(height-bitHeight)/2;
+        while (bottomFlag<height-(height-bitHeight)/2-radius){
             rf22.set(leftFlag, topFlag, rightFlag, bottomFlag);
-            canvas.drawArc(rf22, -90, 180, true, paint);
+            //如果是第一个，只绘制90度
+            if(bottomFlag == radius+(height-bitHeight)/2){
+                canvas.drawArc(rf22, 0, 90, true, paint);
+            }else{
+                canvas.drawArc(rf22, -90, 180, true, paint);
+            }
             topFlag+=radius*2+interval;
             bottomFlag+=radius*2+interval;
         }
-        //下边
-        leftFlag = -radius;
-        topFlag = -radius+height;
-        rightFlag = radius;
-        bottomFlag = radius+height;
-        while (rightFlag<=width){
-            rf22.set(leftFlag, topFlag, rightFlag, bottomFlag);
-            canvas.drawArc(rf22, -180, 180, true, paint);
-            leftFlag+=radius*2+interval;
-            rightFlag+=radius*2+interval;
-        }
-
         //右边
-        leftFlag = -radius+width;
-        topFlag = -radius;
-        rightFlag = radius+width;
-        bottomFlag = radius;
-        while (bottomFlag<=height){
+        leftFlag = -radius+width-(width-bitWidth)/2;
+        topFlag = -radius+(height-bitHeight)/2;
+        rightFlag = radius+width-(width-bitWidth)/2;
+        bottomFlag = radius+(height-bitHeight)/2;
+        while (bottomFlag<height-(height-bitHeight)/2-radius){
             rf22.set(leftFlag, topFlag, rightFlag, bottomFlag);
-            canvas.drawArc(rf22, 90, 180, true, paint);
+            //如果是第一个，只绘制90度
+            if(bottomFlag == radius+(height-bitHeight)/2){
+                canvas.drawArc(rf22, 90, 90, true, paint);
+            }else{
+                canvas.drawArc(rf22, 90, 180, true, paint);
+            }
+
             topFlag+=radius*2+interval;
             bottomFlag+=radius*2+interval;
         }
         //右下角补一个角
-        leftFlag = -radius+width;
-        topFlag = -radius+height;
-        rightFlag = radius+width;
-        bottomFlag = radius+height;
+        leftFlag = -radius+width-(width-bitWidth)/2;
+        topFlag = -radius+height-(height-bitHeight)/2;
+        rightFlag = radius+width-(width-bitWidth)/2;
+        bottomFlag = radius+height-(height-bitHeight)/2;
         rf22.set(leftFlag, topFlag, rightFlag, bottomFlag);
-        canvas.drawArc(rf22, 90, 180, true, paint);
+        canvas.drawArc(rf22, 180, 90, true, paint);
 
-        canvas.drawBitmap(bitmap, null, new Rect((width-bitWidth)/2,(height-bitHeight)/2,
-                (width+bitWidth)/2,(height+bitHeight)/2), paint);
         return alter;
     }
 }
