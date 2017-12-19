@@ -10,7 +10,7 @@
         android:icon="@drawable/ic_action_search"
         android:visible="false"/>
 
-    <item
+    <!--<item
         android:id="@+id/pick"
         android:orderInCategory="100"
         app:showAsAction="always"
@@ -28,15 +28,9 @@
         app:showAsAction="ifRoom"
         android:title="@string/tutorial"/>
 
-    <!--<item
-        android:id="@+id/fonts"
-        android:orderInCategory="100"
-        app:showAsAction="ifRoom"
-        android:title="@string/fonts"/>-->
-
     <item
         android:id="@+id/about"
         android:orderInCategory="100"
         app:showAsAction="ifRoom"
-        android:title="@string/about"/>
+        android:title="@string/about"/>-->
 </menu>

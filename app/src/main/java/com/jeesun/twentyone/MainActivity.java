@@ -218,10 +218,10 @@ public class MainActivity extends AppCompatActivity implements
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         miSearch = menu.findItem(R.id.search);
-        miPick = menu.findItem(R.id.pick);
+        /*miPick = menu.findItem(R.id.pick);
         miBusinessCard = menu.findItem(R.id.business_card);
         miTutorial = menu.findItem(R.id.tutorial);
-        miAbout = menu.findItem(R.id.about);
+        miAbout = menu.findItem(R.id.about);*/
 
         return true;
     }
@@ -230,7 +230,7 @@ public class MainActivity extends AppCompatActivity implements
     public boolean onOptionsItemSelected(MenuItem item) {
         Intent intent;
         switch (item.getItemId()){
-            case R.id.about:
+            /*case R.id.about:
                 intent = new Intent(MainActivity.this, AboutActivity.class);
                 startActivity(intent);
                 break;
@@ -247,7 +247,7 @@ public class MainActivity extends AppCompatActivity implements
             case R.id.tutorial:
                 intent = new Intent(MainActivity.this, TutorialActivity.class);
                 startActivity(intent);
-                break;
+                break;*/
             case R.id.search:
                 intent = new Intent(MainActivity.this, SearchActivity.class);
                 startActivity(intent);
@@ -311,10 +311,10 @@ public class MainActivity extends AppCompatActivity implements
                 //ActionBar关闭显示搜索图标
                 if(null != miSearch){
                     miSearch.setVisible(false);
-                    miPick.setVisible(true);
+                    /*miPick.setVisible(true);
                     miBusinessCard.setVisible(true);
                     miTutorial.setVisible(true);
-                    miAbout.setVisible(true);
+                    miAbout.setVisible(true);*/
                 }
                 break;
             case 1:
@@ -324,17 +324,17 @@ public class MainActivity extends AppCompatActivity implements
                 //ActionBar显示搜索图标
                 if(null != miSearch){
                     miSearch.setVisible(true);
-                    miPick.setVisible(false);
+                    /*miPick.setVisible(false);
                     miBusinessCard.setVisible(false);
                     miTutorial.setVisible(false);
-                    miAbout.setVisible(false);
+                    miAbout.setVisible(false);*/
                 }
                 break;
             default:
                 break;
         }
         mCurrentIndex = position;
-        anim.setFillAfter(true); //Ture:图片停在动画结束位置
+        anim.setFillAfter(true); //true:图片停在动画结束位置
         anim.setDuration(300);
         ivCursor.startAnimation(anim);
     }
@@ -369,20 +369,32 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        int id = item.getItemId();
-
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+        Intent intent;
+        switch (item.getItemId()){
+            case R.id.nav_pick:
+                intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.addCategory(Intent.CATEGORY_OPENABLE);
+                intent.setType(IMAGE_TYPE);
+                startActivityForResult(intent,REQUEST_IMAGE_CAPTURE);
+                break;
+            case R.id.nav_business_card:
+                intent = new Intent(MainActivity.this, BusinessCardActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.nav_tutorial:
+                intent = new Intent(MainActivity.this, TutorialActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.nav_about:
+                intent = new Intent(MainActivity.this, AboutActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.search:
+                intent = new Intent(MainActivity.this, SearchActivity.class);
+                startActivity(intent);
+                break;
+            default:
+                break;
         }
         drawer.closeDrawer(GravityCompat.START);
         return true;
