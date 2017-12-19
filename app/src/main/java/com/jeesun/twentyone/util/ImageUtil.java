@@ -10,14 +10,17 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -536,5 +539,88 @@ public class ImageUtil {
             bitmap = Bitmap.createBitmap(bitmap, x, y, width, heightTarget);
         }
         return bitmap;
+    }
+
+    public static Bitmap addStampEdge(Context context, Bitmap bitmap, int edgeWidth,int radius, int interval){
+        DisplayMetrics dm =context.getResources().getDisplayMetrics();
+        int width = dm.widthPixels;
+        int height = dm.widthPixels/2;
+        //缩小0.9倍
+        bitmap = scaleWithWH(bitmap, width*0.8, height*0.8);
+        RectF rf22 = new RectF(0,0,0,0);
+
+
+        int bitWidth = bitmap.getWidth();
+        int bitHeight = bitmap.getHeight();
+        Bitmap alter = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(alter);
+        Paint paint = new Paint();
+        paint.setAntiAlias(true);//无锯齿
+
+        paint.setStyle(Paint.Style.STROKE);//空心
+        // 设置“空心”的外框的宽度
+        paint.setStrokeWidth(edgeWidth);
+        RectF rf1 = new RectF(0, 0, width, height);
+        paint.setColor(Color.WHITE);
+        canvas.drawRect(rf1, paint);
+
+        paint.setStyle(Paint.Style.FILL);//实心
+        paint.setColor(Color.BLACK);
+        //上边
+        int leftFlag = -radius;
+        int topFlag = -radius;
+        int rightFlag = radius;
+        int bottomFlag = radius;
+        while (rightFlag<=width){
+            rf22.set(leftFlag, topFlag, rightFlag, bottomFlag);
+            canvas.drawArc(rf22, 0, 180, true, paint);
+            leftFlag+=radius*2+interval;
+            rightFlag+=radius*2+interval;
+        }
+        //左边
+        leftFlag = -radius;
+        topFlag = -radius;
+        rightFlag = radius;
+        bottomFlag = radius;
+        while (bottomFlag<=height){
+            rf22.set(leftFlag, topFlag, rightFlag, bottomFlag);
+            canvas.drawArc(rf22, -90, 180, true, paint);
+            topFlag+=radius*2+interval;
+            bottomFlag+=radius*2+interval;
+        }
+        //下边
+        leftFlag = -radius;
+        topFlag = -radius+height;
+        rightFlag = radius;
+        bottomFlag = radius+height;
+        while (rightFlag<=width){
+            rf22.set(leftFlag, topFlag, rightFlag, bottomFlag);
+            canvas.drawArc(rf22, -180, 180, true, paint);
+            leftFlag+=radius*2+interval;
+            rightFlag+=radius*2+interval;
+        }
+
+        //右边
+        leftFlag = -radius+width;
+        topFlag = -radius;
+        rightFlag = radius+width;
+        bottomFlag = radius;
+        while (bottomFlag<=height){
+            rf22.set(leftFlag, topFlag, rightFlag, bottomFlag);
+            canvas.drawArc(rf22, 90, 180, true, paint);
+            topFlag+=radius*2+interval;
+            bottomFlag+=radius*2+interval;
+        }
+        //右下角补一个角
+        leftFlag = -radius+width;
+        topFlag = -radius+height;
+        rightFlag = radius+width;
+        bottomFlag = radius+height;
+        rf22.set(leftFlag, topFlag, rightFlag, bottomFlag);
+        canvas.drawArc(rf22, 90, 180, true, paint);
+
+        canvas.drawBitmap(bitmap, null, new Rect((width-bitWidth)/2,(height-bitHeight)/2,
+                (width+bitWidth)/2,(height+bitHeight)/2), paint);
+        return alter;
     }
 }

@@ -11,7 +11,11 @@ import android.os.Message;
 import android.provider.MediaStore;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatButton;
+import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.AppCompatSeekBar;
+import android.support.v7.widget.AppCompatSpinner;
+import android.support.v7.widget.AppCompatTextView;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -20,11 +24,9 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.SeekBar;
-import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.jeesun.twentyone.util.ColorUtil;
@@ -45,12 +47,13 @@ public class BusinessCardActivity extends AppCompatActivity {
     private static final String TAG = BusinessCardActivity.class.getName();
     private ImageView mSourImage;
     private ImageView mWartermarkImage;
-    private Button btnBuildInWhite, btnBuildInTransparent;
+    private AppCompatButton btnBuildInWhite, btnBuildInTransparent;
     private TextInputEditText etFontSizeCorner, etFontSizeCenter, etLeftTop, etLeftBottom, etRightTop, etRightBottom, etCenter;
-    private Button btnMake, btnSave;
-    private Spinner spFontColor, spTypefaceCorner, spTypefaceCenter;
+    private AppCompatButton btnMake, btnSave;
+    private AppCompatSpinner spFontColor, spTypefaceCorner, spTypefaceCenter;
     private AppCompatSeekBar seekBar;
-    private TextView tvSeekBarValue;
+    private AppCompatTextView tvSeekBarValue;
+    private AppCompatCheckBox accbAddStamp;
     private static final int padding = 12;
     private int fontColor = Color.BLACK;
     private Bitmap bmDefault, bmWhite, bmTransparent;
@@ -60,6 +63,7 @@ public class BusinessCardActivity extends AppCompatActivity {
     private List<String> fontNameList = new ArrayList<>();
     private List<String> fontAbsolutePathList = new ArrayList<>();
     private String typefaceCornerUri="", typefaceCenterUri="";
+    private boolean addStampChecked = false;
 
     private static Handler handler;
     @Override
@@ -143,6 +147,7 @@ public class BusinessCardActivity extends AppCompatActivity {
         btnBuildInTransparent = findViewById(R.id.build_in_transparent);
         seekBar = findViewById(R.id.seek_bar);
         tvSeekBarValue = findViewById(R.id.seek_bar_value);
+        accbAddStamp = findViewById(R.id.add_stamp);
     }
 
     private void initView(){
@@ -217,6 +222,12 @@ public class BusinessCardActivity extends AppCompatActivity {
             }
         });
 
+        accbAddStamp.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                addStampChecked = b;
+            }
+        });
 
         btnMake.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -228,6 +239,9 @@ public class BusinessCardActivity extends AppCompatActivity {
                         mSourImage.setDrawingCacheEnabled(true);
                         //Bitmap sourBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.bg_business_card);
                         Bitmap sourBitmap = mSourImage.getDrawingCache();
+
+                        Log.i(TAG, "sourBitmap.width=" + sourBitmap.getWidth() + ", sourBitmap.height=" + sourBitmap.getHeight());
+                        //Toast.makeText(BusinessCardActivity.this, ("sourBitmap.width=" + sourBitmap.getWidth() + ", sourBitmap.height=" + sourBitmap.getHeight()), Toast.LENGTH_SHORT).show();
 
                         Integer fontSizeCorner, fontSizeCenter;
                         if(!"".equals(etFontSizeCorner.getText().toString())){
@@ -257,6 +271,10 @@ public class BusinessCardActivity extends AppCompatActivity {
                         textBitmap = ImageUtil.drawTextToRightTop(BusinessCardActivity.this, textBitmap, etRightTop.getText().toString(), fontSizeCorner,typefaceCornerUri, fontColor, padding, padding);
                         textBitmap = ImageUtil.drawTextToLeftBottom(BusinessCardActivity.this, textBitmap, etLeftBottom.getText().toString(), fontSizeCorner, typefaceCornerUri, fontColor, padding, padding);
                         textBitmap = ImageUtil.drawTextToCenterAndTextStartFromCenter(BusinessCardActivity.this, textBitmap, etCenter.getText().toString(), fontSizeCenter, typefaceCenterUri, fontColor);
+
+                        if (addStampChecked){
+                            textBitmap = ImageUtil.addStampEdge(BusinessCardActivity.this, textBitmap, 90, 26, 26);
+                        }
 
                         Message message = new Message();
                         message.obj = textBitmap;

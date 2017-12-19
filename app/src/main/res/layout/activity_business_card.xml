@@ -7,31 +7,34 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/business_card_content_padding"
         android:orientation="vertical">
-        <TextView
+        <android.support.v7.widget.AppCompatTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/bc_padding"
+            android:paddingRight="@dimen/bc_padding"
             android:textColor="@android:color/black"
             android:text="@string/business_card_make" />
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/bc_padding"
+            android:paddingRight="@dimen/bc_padding"
             android:orientation="horizontal">
-            <TextView
+            <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/sour_pic_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/hint_sour_pic_title" />
 
-            <Button
+            <android.support.v7.widget.AppCompatButton
                 android:id="@+id/build_in_white"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/build_in_white" />
 
-            <Button
+            <android.support.v7.widget.AppCompatButton
                 android:id="@+id/build_in_transparent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -50,12 +53,14 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/bc_padding"
+            android:paddingRight="@dimen/bc_padding"
             android:orientation="horizontal">
-            <TextView
+            <android.support.v7.widget.AppCompatTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="四角字体"/>
-            <Spinner
+            <android.support.v7.widget.AppCompatSpinner
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
@@ -67,12 +72,14 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/bc_padding"
+            android:paddingRight="@dimen/bc_padding"
             android:orientation="horizontal">
-            <TextView
+            <android.support.v7.widget.AppCompatTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="中间字体"/>
-            <Spinner
+            <android.support.v7.widget.AppCompatSpinner
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
@@ -109,7 +116,7 @@
                 android:hint="@string/hint_font_size_center" />
         </android.support.design.widget.TextInputLayout>
 
-        <Spinner
+        <android.support.v7.widget.AppCompatSpinner
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/font_color"
@@ -182,8 +189,10 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/bc_padding"
+            android:paddingRight="@dimen/bc_padding"
             android:orientation="horizontal">
-            <TextView
+            <android.support.v7.widget.AppCompatTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="高斯模糊"/>
@@ -194,23 +203,30 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"/>
 
-            <TextView
+            <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/seek_bar_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="00"/>
         </LinearLayout>
 
-        <Button
+        <android.support.v7.widget.AppCompatCheckBox
+            android:id="@+id/add_stamp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/add_stamp_edge" />
+
+        <android.support.v7.widget.AppCompatButton
             android:id="@+id/make"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/generate_preview" />
 
-        <TextView
+        <android.support.v7.widget.AppCompatTextView
             android:id="@+id/watermark_pic_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/bc_padding"
             android:text="@string/preview" />
 
         <ImageView
@@ -220,7 +236,7 @@
             android:adjustViewBounds="true"
             android:scaleType="fitXY"/>
 
-        <Button
+        <android.support.v7.widget.AppCompatButton
             android:id="@+id/save"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

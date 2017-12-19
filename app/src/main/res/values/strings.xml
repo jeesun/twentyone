@@ -22,6 +22,7 @@
     <string name="hint_right_top">右上角内容（可不填）</string>
     <string name="hint_right_bottom">右下角内容（可不填）</string>
     <string name="hint_center">中间内容（可换行，按输入法换行键即可）</string>
+    <string name="add_stamp_edge">添加邮票边框</string>
     <string name="generate_preview">生成预览</string>
     <string name="preview">预览</string>
     <string name="save_preview">保存预览</string>
