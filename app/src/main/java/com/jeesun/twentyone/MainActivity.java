@@ -8,9 +8,14 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
@@ -39,7 +44,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener, View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements
+        ViewPager.OnPageChangeListener, View.OnClickListener,
+        NavigationView.OnNavigationItemSelectedListener {
     private final static String TAG = MainActivity.class.getName();
     public final static int REQUEST_IMAGE_CAPTURE = 1;
     public final static int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 2;
@@ -65,6 +72,9 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     private int mOffset, mOneDis, mCurrentIndex;
     private MenuItem miSearch, miPick, miBusinessCard, miTutorial, miAbout;
     private Toolbar toolbar;
+    private DrawerLayout drawer;
+    private ActionBarDrawerToggle toggle;
+    private NavigationView navigationView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,26 +82,17 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 
         setContentView(R.layout.activity_main);
 
-        toolbar = findViewById(R.id.toolbar);
-        vpViewPager = findViewById(R.id.view_pager);
-        ivCursor = findViewById(R.id.cursor);
-        tvOne = findViewById(R.id.viewpager_tv_one);
-        tvTwo = findViewById(R.id.viewpager_tv_two);
-
-        toolbar.setTitle(R.string.app_name_short);
-        //设置导航图标要在setSupportActionBar方法之后
-        setSupportActionBar(toolbar);
+        findView();
 
         //初始化指示器位置
         initCursorPosition();
-
-        mHandler = new Handler(){
+        mHandler = new Handler(new Handler.Callback() {
             @Override
-            public void handleMessage(Message msg) {
-                super.handleMessage(msg);
+            public boolean handleMessage(Message message) {
                 isExit = false;
+                return false;
             }
-        };
+        });
 
         fragmentList = new ArrayList<>();
         titleList = new ArrayList<>();
@@ -112,6 +113,28 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         vpViewPager.addOnPageChangeListener(this);
         //初始默认第一页
         vpViewPager.setCurrentItem(0);
+    }
+
+    private void findView() {
+        toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle("");
+        //设置导航图标要在setSupportActionBar方法之后
+        setSupportActionBar(toolbar);
+
+        vpViewPager = findViewById(R.id.view_pager);
+        ivCursor = findViewById(R.id.cursor);
+        tvOne = findViewById(R.id.viewpager_tv_one);
+        tvTwo = findViewById(R.id.viewpager_tv_two);
+        drawer = findViewById(R.id.drawer_layout);
+        toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+
+        navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
+
     }
 
     private void initCursorPosition() {
@@ -332,5 +355,36 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE){
             Log.i(TAG, "屏幕当前是横屏");
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.nav_camera) {
+            // Handle the camera action
+        } else if (id == R.id.nav_gallery) {
+
+        } else if (id == R.id.nav_slideshow) {
+
+        } else if (id == R.id.nav_manage) {
+
+        } else if (id == R.id.nav_share) {
+
+        } else if (id == R.id.nav_send) {
+
+        }
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
     }
 }
