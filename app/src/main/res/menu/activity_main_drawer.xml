@@ -12,10 +12,21 @@
             android:id="@+id/nav_business_card"
             android:icon="@drawable/ic_menu_account_box"
             android:title="@string/business_card" />
-
+        <item
+            android:id="@+id/nav_tutorial"
+            android:icon="@drawable/ic_menu_book"
+            android:title="@string/tutorial" />
+        <item
+            android:id="@+id/nav_about"
+            android:icon="@drawable/ic_menu_error_black"
+            android:title="@string/about" />
+        <item
+            android:id="@+id/nav_exit_app"
+            android:icon="@drawable/ic_menu_exit_to_app"
+            android:title="@string/exit_app"/>
     </group>
 
-    <item android:title="其他">
+    <!--<item android:title="其他">
         <menu>
             <item
                 android:id="@+id/nav_tutorial"
@@ -26,6 +37,6 @@
                 android:icon="@drawable/ic_menu_error_black"
                 android:title="@string/about" />
         </menu>
-    </item>
+    </item>-->
 
 </menu>

@@ -117,7 +117,7 @@ public class MainActivity extends AppCompatActivity implements
 
     private void findView() {
         toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitle("");
+        toolbar.setTitle(R.string.app_name);
         //设置导航图标要在setSupportActionBar方法之后
         setSupportActionBar(toolbar);
 
