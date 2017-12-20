@@ -391,6 +391,9 @@ public class MainActivity extends AppCompatActivity implements
                 intent = new Intent(MainActivity.this, SearchActivity.class);
                 startActivity(intent);
                 break;
+            case R.id.nav_exit_app:
+                MainActivity.this.finish();
+                System.exit(0);
             default:
                 break;
         }

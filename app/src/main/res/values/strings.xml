@@ -4,7 +4,7 @@
     <string name="search">搜索</string>
     <string name="about">关于</string>
     <string name="exit_app">退出</string>
-    <string name="pick">选取</string>
+    <string name="pick">裁剪</string>
     <string name="business_card">名片</string>
     <string name="tutorial">教程</string>
     <string name="fonts">字体</string>
@@ -60,4 +60,5 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
+    <string name="do_not_click_me">别点了，喝杯茶吧( ´･ω･`)_且</string>
 </resources>
