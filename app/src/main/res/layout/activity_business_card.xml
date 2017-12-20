@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorGray"
     >
 
     <LinearLayout
@@ -64,13 +65,12 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="@dimen/bc_padding"
-            android:paddingRight="@dimen/bc_padding"
+            android:padding="@dimen/bc_padding"
             android:orientation="horizontal">
             <android.support.v7.widget.AppCompatTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="四角字体"/>
+                android:text="@string/four_corner_font"/>
             <android.support.v7.widget.AppCompatSpinner
                 android:layout_width="0dp"
                 android:layout_weight="1"
@@ -83,19 +83,36 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="@dimen/bc_padding"
-            android:paddingRight="@dimen/bc_padding"
+            android:padding="@dimen/bc_padding"
             android:orientation="horizontal">
             <android.support.v7.widget.AppCompatTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="中间字体"/>
+                android:text="@string/center_font"/>
             <android.support.v7.widget.AppCompatSpinner
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:id="@+id/typeface_center"
                 android:entries="@array/typeface"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/bc_padding"
+            android:orientation="horizontal">
+            <android.support.v7.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/font_color"/>
+            <android.support.v7.widget.AppCompatSpinner
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:id="@+id/font_color"
+                android:entries="@array/font_color"
                 />
         </LinearLayout>
 
@@ -126,13 +143,6 @@
                 android:maxLines="1"
                 android:hint="@string/hint_font_size_center" />
         </android.support.design.widget.TextInputLayout>
-
-        <android.support.v7.widget.AppCompatSpinner
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/font_color"
-            android:entries="@array/font_color"
-            />
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"

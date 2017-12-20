@@ -14,9 +14,9 @@
     <string name="hint_sour_pic_title">背景原图（单击更换背景图）</string>
     <string name="build_in_white">内置白色</string>
     <string name="build_in_transparent">内置透明</string>
-    <string name="hint_font_size">设置字体大小：默认36sp</string>
-    <string name="hint_font_size_corner">设置四角内容字体大小：默认36sp</string>
-    <string name="hint_font_size_center">设置中间内容字体大小：默认36sp</string>
+    <string name="hint_font_size">字体大小：默认36sp</string>
+    <string name="hint_font_size_corner">四角内容字体大小：默认36sp</string>
+    <string name="hint_font_size_center">中间内容字体大小：默认36sp</string>
     <string name="hint_left_top">左上角内容（可不填）</string>
     <string name="hint_left_bottom">左下角内容（可不填）</string>
     <string name="hint_right_top">右上角内容（可不填）</string>
@@ -33,7 +33,7 @@
     <string name="save">保存</string>
 
     <string-array name="font_color">
-        <item>字体颜色（默认黑色）</item>
+        <item>默认黑色</item>
         <item>黑色</item>
         <item>白色</item>
         <item>灰色</item>
@@ -61,4 +61,8 @@
 
     <string name="action_settings">Settings</string>
     <string name="do_not_click_me">别点了，喝杯茶吧( ´･ω･`)_且</string>
+
+    <string name="four_corner_font">四角字体</string>
+    <string name="center_font">中间字体</string>
+    <string name="font_color">字体颜色</string>
 </resources>
