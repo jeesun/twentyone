@@ -35,7 +35,7 @@ public class LaunchActivity extends AppCompatActivity {
 
         // 版本判断。当手机系统大于 23 时，才有必要去判断权限是否获取
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            Log.e(TAG, "当手机系统大于 23");
+            Log.e(TAG, "当前android版本"+Build.VERSION.SDK_INT+"大于23");
             // 检查该权限是否已经获取
             if (ContextCompat.checkSelfPermission(LaunchActivity.this,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -77,7 +77,7 @@ public class LaunchActivity extends AppCompatActivity {
             }
         }else{
             //android版本低于23，权限已获取
-            Log.e(TAG, "当手机系统大于 23");
+            Log.e(TAG, "当前android版本"+Build.VERSION.SDK_INT+"低于23");
             //创建文件夹用于保存裁剪的图片
             File file = new File(dirPath);
             if(!file.exists()){
