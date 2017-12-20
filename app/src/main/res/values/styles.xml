@@ -58,4 +58,9 @@
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="SearchBarStyle" parent="@style/ThemeOverlay.AppCompat.ActionBar">
+        <!--图标及文字颜色，需要在代码中把返回按钮颜色改掉，因为这里的代码一并影响了返回按钮的颜色-->
+        <item name="android:textColorPrimary">@android:color/darker_gray</item>
+    </style>
 </resources>

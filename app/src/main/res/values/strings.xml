@@ -65,4 +65,6 @@
     <string name="four_corner_font">四角字体</string>
     <string name="center_font">中间字体</string>
     <string name="font_color">字体颜色</string>
+
+    <string name="pic_name">图片名称</string>
 </resources>

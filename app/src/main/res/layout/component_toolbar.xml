@@ -8,16 +8,19 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:popupTheme="@style/ToolbarPopupTheme"
-        android:background="?attr/colorPrimary"
-        app:titleTextColor="@android:color/white"
-        app:subtitleTextColor="@android:color/white">
+        app:theme="@style/SearchBarStyle"
+        android:background="?attr/colorPrimary">
 
         <SearchView
             android:id="@+id/search_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginRight="4dp"
+            android:layout_marginEnd="4dp"
+            android:background="@drawable/search_view_bg"
             android:iconifiedByDefault="false"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             android:queryHint="@string/search"
             android:layout_centerHorizontal="true" />
 

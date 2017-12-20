@@ -1,5 +1,8 @@
 package com.jeesun.twentyone;
 
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
@@ -49,17 +52,22 @@ public class SearchActivity extends AppCompatActivity {
         //String searchContent = getIntent().getStringExtra(SearchManager.QUERY);
         //Toast.makeText(this, searchContent, Toast.LENGTH_SHORT).show();
         toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitle("");
+        toolbar.setTitle(null);
         setSupportActionBar(toolbar);
         //标题栏返回键
         android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         if(actionBar != null){
+            //由于自定义ActionBar的Style，一并改变了返回按钮的颜色，此处代码用于设置返回按钮的颜色
+            Drawable upArrow = getResources().getDrawable(R.drawable.ic_menu_arrow_back);
+            upArrow.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
+            actionBar.setHomeAsUpIndicator(upArrow);
             actionBar.setHomeButtonEnabled(true);
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
         searchView = findViewById(R.id.search_view);
         recyclerView = findViewById(R.id.grid_recycler);
+
 
         StaggeredGridLayoutManager sglm = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         sglm.setReverseLayout(false);
