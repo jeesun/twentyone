@@ -133,8 +133,6 @@ public class MainActivity extends AppCompatActivity implements
 
         navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
-
     }
 
     private void initCursorPosition() {

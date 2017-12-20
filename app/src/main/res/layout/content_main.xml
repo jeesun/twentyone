@@ -10,6 +10,7 @@
     tools:showIn="@layout/app_bar_main">
 
     <LinearLayout
+        android:id="@+id/fragment_nav"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -21,6 +22,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:textColor="@android:color/black"
+            android:textSize="16sp"
             android:text="本地" />
 
         <TextView
@@ -30,6 +32,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:textColor="@android:color/black"
+            android:textSize="16sp"
             android:text="网络" />
     </LinearLayout>
 
