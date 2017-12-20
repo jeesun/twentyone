@@ -1,15 +1,15 @@
 package com.jeesun.twentyone;
 
 import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
+import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.SearchView;
 
 import com.jeesun.twentyone.adapter.SoGridAdapter;
@@ -20,6 +20,7 @@ import com.jeesun.twentyone.util.ContextUtil;
 import com.liulishuo.filedownloader.FileDownloader;
 import com.squareup.picasso.Picasso;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,15 +59,28 @@ public class SearchActivity extends AppCompatActivity {
         android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         if(actionBar != null){
             //由于自定义ActionBar的Style，一并改变了返回按钮的颜色，此处代码用于设置返回按钮的颜色
-            Drawable upArrow = getResources().getDrawable(R.drawable.ic_menu_arrow_back);
+            /*Drawable upArrow = getResources().getDrawable(R.drawable.ic_menu_arrow_back);
             upArrow.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
             actionBar.setHomeAsUpIndicator(upArrow);
             actionBar.setHomeButtonEnabled(true);
-            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setDisplayHomeAsUpEnabled(true);*/
         }
 
         searchView = findViewById(R.id.search_view);
         recyclerView = findViewById(R.id.grid_recycler);
+
+        Class<?> argClass = searchView.getClass();
+        // mSearchPlate是SearchView父布局的名字
+        try {
+            Field ownField = argClass.getDeclaredField("mSearchPlate");
+            ownField.setAccessible(true);
+            View mView = (View) ownField.get(searchView);
+            mView.setBackgroundColor(Color.TRANSPARENT);
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
 
 
         StaggeredGridLayoutManager sglm = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
@@ -172,6 +186,11 @@ public class SearchActivity extends AppCompatActivity {
             case android.R.id.home:
                 this.finish();
                 break;
+            case R.id.cancel:
+                this.finish();
+                break;
+            default:
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -194,4 +213,10 @@ public class SearchActivity extends AppCompatActivity {
             toolbar.setTitle("");//设置为空，可以自己定义一个居中的控件，当做标题控件使用
         }
     }*/
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_search, menu);
+        return true;
+    }
 }

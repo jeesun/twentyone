@@ -3,9 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/search"
-        android:orderInCategory="100"
+        android:id="@+id/cancel"
+        android:orderInCategory="0"
         app:showAsAction="always"
-        android:title="@string/search"
-        app:actionViewClass="android.support.v7.widget.SearchView"/>
+        android:title="@string/cancel"/>
 </menu>
