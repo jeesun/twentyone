@@ -60,6 +60,9 @@ public class WidgetActivity extends AppCompatActivity {
                     editor.putInt("widgetColor", 0);
                 }
                 editor.apply();
+
+                Intent intent = new Intent(WidgetProvider.ACTION_UPDATE_WIDGET_COLOR);
+                sendBroadcast(intent);
             }
         });
     }
@@ -71,11 +74,15 @@ public class WidgetActivity extends AppCompatActivity {
             if(requestCode == REQUEST_IMAGE_CAPTURE){
                 //Toast.makeText(this, "获取相册", Toast.LENGTH_SHORT).show();
                 Uri uri = data.getData();
-                Intent intent = new Intent(WidgetProvider.ACTION_UPDATE_ALL);
-                Log.i(TAG, uri.getPath());
-                intent.putExtra("widgetBgPicPath", uri.getPath());
-                sendBroadcast(intent);
-                Log.i(TAG, "广播已发送");
+                if(null != uri){
+                    Intent intent = new Intent(WidgetProvider.ACTION_UPDATE_ALL);
+                    Log.i(TAG, uri.toString());
+                    Log.i(TAG, uri.getPath());
+                    intent.putExtra("uriString", uri.toString());
+                    intent.putExtra("widgetBgPicPath", uri.getPath());
+                    sendBroadcast(intent);
+                    Log.i(TAG, "广播已发送");
+                }
             }
         }
     }

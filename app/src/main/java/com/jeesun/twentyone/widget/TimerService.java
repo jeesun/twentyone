@@ -36,6 +36,8 @@ public class TimerService extends Service {
     private Timer mTimer;
     private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
+
+
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
@@ -46,13 +48,22 @@ public class TimerService extends Service {
     public void onCreate() {
         super.onCreate();
 
+        // 时间类
+        Calendar startDate = Calendar.getInstance();
+
+        //设置开始执行的时间为 某年-某月-某月 00:00:00
+        startDate.set(startDate.get(Calendar.YEAR), startDate.get(Calendar.MONTH), startDate.get(Calendar.DATE), 0, 0, 0);
+
+        // 1天的毫秒设定
+        long timeInterval = 60 * 60 * 1000 * 24;
+
         mTimer = new Timer();
         mTimer.schedule(new TimerTask() {
             @Override
             public void run() {
                 updata();
             }
-        }, 0, 1000);
+        }, startDate.getTime(), timeInterval);
     }
 
     private void updata() {
@@ -69,19 +80,7 @@ public class TimerService extends Service {
         RemoteViews rv = new RemoteViews(getPackageName(), R.layout.widget);
         rv.setTextViewText(R.id.month_day, monthAndDay);
         rv.setTextViewText(R.id.time, time);
-        SharedPreferences pref = getSharedPreferences("data", MODE_PRIVATE);
-        int widgetColor = pref.getInt("widgetColor", -1);
-        //0指代黑色，1指代白色
-        if(0==widgetColor){
-            rv.setTextColor(R.id.month_day, getResources().getColor(R.color.black));
-            rv.setTextColor(R.id.time, getResources().getColor(R.color.black));
-        }else if(1 == widgetColor){
-            rv.setTextColor(R.id.month_day, getResources().getColor(R.color.white));
-            rv.setTextColor(R.id.time, getResources().getColor(R.color.white));
-        }else if(-1 == widgetColor){
-            rv.setTextColor(R.id.month_day, getResources().getColor(R.color.black));
-            rv.setTextColor(R.id.time, getResources().getColor(R.color.black));
-        }
+
 
         /*Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.new_card);
         bitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true);

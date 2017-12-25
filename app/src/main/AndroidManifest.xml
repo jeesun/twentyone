@@ -87,6 +87,7 @@
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
                 <action android:name="com.simon.widget.UPDATE_ALL"/>
+                <action android:name="com.simon.widget.UPDATE_WIDGET_COLOR"/>
             </intent-filter>
             <meta-data android:name="android.appwidget.provider"
                 android:resource="@xml/widgetconfig"/>
