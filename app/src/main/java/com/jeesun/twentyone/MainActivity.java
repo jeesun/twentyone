@@ -379,6 +379,10 @@ public class MainActivity extends AppCompatActivity implements
                 intent = new Intent(MainActivity.this, BusinessCardActivity.class);
                 startActivity(intent);
                 break;
+            case R.id.nav_desktop_widget:
+                intent = new Intent(MainActivity.this, WidgetActivity.class);
+                startActivity(intent);
+                break;
             case R.id.nav_tutorial:
                 intent = new Intent(MainActivity.this, TutorialActivity.class);
                 startActivity(intent);

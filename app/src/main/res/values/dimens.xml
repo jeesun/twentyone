@@ -12,4 +12,9 @@
     <dimen name="button_height">36dp</dimen>
     <dimen name="button_radius">18dp</dimen>
     <dimen name="button_margin">4dp</dimen>
+
+    <!-- size = (70 x n) - 30 -->
+    <dimen name="appwidget_margin">0dp</dimen>
+    <dimen name="appwidget_min_width">318dp</dimen><!--250+68-->
+    <dimen name="appwidget_min_height">110dp</dimen><!--110+34-->
 </resources>

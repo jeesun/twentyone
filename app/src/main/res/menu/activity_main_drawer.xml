@@ -11,6 +11,10 @@
         android:icon="@drawable/ic_menu_account_box"
         android:title="@string/business_card" />
     <item
+        android:id="@+id/nav_desktop_widget"
+        android:icon="@drawable/ic_menu_widgets"
+        android:title="@string/desktop_widget" />
+    <item
         android:id="@+id/nav_tutorial"
         android:icon="@drawable/ic_menu_book"
         android:title="@string/tutorial" />

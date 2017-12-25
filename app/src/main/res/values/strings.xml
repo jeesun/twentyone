@@ -6,6 +6,7 @@
     <string name="exit_app">退出</string>
     <string name="pick">裁剪</string>
     <string name="business_card">名片</string>
+    <string name="desktop_widget">桌面部件</string>
     <string name="tutorial">教程</string>
     <string name="fonts">字体</string>
     <string name="specific_symbol">特殊符号</string>
@@ -67,4 +68,7 @@
     <string name="font_color">字体颜色</string>
 
     <string name="pic_name">图片名称</string>
+
+    <string name="switch_widget_bg">切换图片</string>
+    <string name="switch_text_color">切换字体颜色</string>
 </resources>
