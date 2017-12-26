@@ -31,6 +31,7 @@ public class WidgetActivity extends AppCompatActivity {
             actionBar.setHomeButtonEnabled(true);
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+        setTitle(R.string.desktop_widget);
 
         btnSwitch = findViewById(R.id.switch_widget_bg);
         btnSwitchTextColor = findViewById(R.id.switch_text_color);
