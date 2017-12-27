@@ -1,5 +1,6 @@
 package com.jeesun.twentyone;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -12,7 +13,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import com.jeesun.twentyone.util.AndroidFileUtils;
+import com.jeesun.twentyone.util.ContextUtil;
+import com.jeesun.twentyone.util.PickUtil;
 import com.jeesun.twentyone.widget.WidgetProvider;
+
+import java.io.File;
+import java.io.IOException;
 
 public class WidgetActivity extends AppCompatActivity {
     private static final String TAG = WidgetActivity.class.getName();
@@ -86,9 +93,39 @@ public class WidgetActivity extends AppCompatActivity {
                     editor.putString("widgetBgPicPath", uri.getPath());
                     editor.apply();
 
+                    //复制文件
+                    File picFile = new File(uri.getPath());
+                    if(picFile.exists()){
+                        try {
+                            File dir = new File(ContextUtil.widgetPicDir);
+                            if(!dir.exists()){
+                                dir.mkdirs();
+                            }
+                            AndroidFileUtils.fileCopy(uri.getPath(), ContextUtil.widgetPicPath);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }else{
+                        if(null!=uri.toString() && !"".equals(uri.toString())){
+                            String picRealPath = PickUtil.getPath(WidgetActivity.this, uri);
+                            Log.i(TAG, "picRealPath=" + picRealPath);
+                            if(null != picRealPath && !"".equals(picRealPath)){
+                                try {
+                                    File dir = new File(ContextUtil.widgetPicDir);
+                                    if(!dir.exists()){
+                                        dir.mkdirs();
+                                    }
+                                    AndroidFileUtils.fileCopy(picRealPath, ContextUtil.widgetPicPath);
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                    }
+
                     Intent intent = new Intent(WidgetProvider.ACTION_UPDATE_WIDGET_BG_PIC);
                     sendBroadcast(intent);
-                    Log.i(TAG, "广播已发送");
+                    Log.i(TAG, "广播" + WidgetProvider.ACTION_UPDATE_WIDGET_BG_PIC + "已发送");
                 }
             }
         }
