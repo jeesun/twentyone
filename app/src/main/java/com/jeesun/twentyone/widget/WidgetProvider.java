@@ -1,5 +1,6 @@
 package com.jeesun.twentyone.widget;
 
+import android.app.Application;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
@@ -17,6 +18,7 @@ import android.widget.RemoteViews;
 import android.widget.Toast;
 
 import com.jeesun.twentyone.R;
+import com.jeesun.twentyone.util.AppContext;
 import com.jeesun.twentyone.util.ContextUtil;
 import com.jeesun.twentyone.util.Lauar;
 import com.jeesun.twentyone.util.Lunar;
@@ -36,6 +38,10 @@ import static android.content.Context.MODE_PRIVATE;
  */
 
 public class WidgetProvider extends AppWidgetProvider {
+    public WidgetProvider() {
+        startSchedule(AppContext.getContext());
+    }
+
     private static final String TAG = WidgetProvider.class.getName();
     private boolean DEBUG = false;
     // 启动ExampleAppWidgetService服务对应的action
@@ -78,27 +84,6 @@ public class WidgetProvider extends AppWidgetProvider {
         downloadIntent.setPackage(context.getPackageName());
         context.startService(downloadIntent);
 
-        // 时间类
-        Calendar startDate = Calendar.getInstance();
-
-        //设置开始执行的时间为 某年-某月-某月 00:00:00
-        startDate.set(
-                startDate.get(Calendar.YEAR),
-                startDate.get(Calendar.MONTH),
-                startDate.get(Calendar.DATE),
-                0, 0, 0);
-
-        // 1天的毫秒设定
-        long timeInterval = 60 * 60 * 1000 * 24;
-
-        mTimer = new Timer();
-        mTimer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                updateWidgetBgPic(context);
-                updata(context);
-            }
-        }, startDate.getTime(), timeInterval);
         updateWidgetBgPic(context);
         updata(context);
 
@@ -145,6 +130,20 @@ public class WidgetProvider extends AppWidgetProvider {
             manager.updateAppWidget(cn, rv);
         }else if(ACTION_BOOT_COMPLETED.equals(action)){
             Log.i(TAG, "执行定时任务");
+
+            startSchedule(context);
+
+            updateWidgetBgPic(context);
+            updata(context);
+        }else if("android.appwidget.action.APPWIDGET_UPDATE".equals(action)){
+            //说明应用被更新或者widget被用户创建
+            updateWidgetBgPic(context);
+            updata(context);
+        }
+    }
+
+    private void startSchedule(final Context context) {
+        if (null == mTimer){
             // 时间类
             Calendar startDate = Calendar.getInstance();
 
@@ -166,13 +165,6 @@ public class WidgetProvider extends AppWidgetProvider {
                     updata(context);
                 }
             }, startDate.getTime(), timeInterval);
-
-            updateWidgetBgPic(context);
-            updata(context);
-        }else if("android.appwidget.action.APPWIDGET_UPDATE".equals(action)){
-            //说明应用被更新或者widget被用户创建
-            updateWidgetBgPic(context);
-            updata(context);
         }
     }
 
