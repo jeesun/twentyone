@@ -16,6 +16,7 @@ import android.graphics.RectF;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.widget.RemoteViews;
+import android.widget.Toast;
 
 import com.jeesun.twentyone.R;
 import com.jeesun.twentyone.util.Lauar;
@@ -35,8 +36,6 @@ public class TimerService extends Service {
     private static final String TAG = TimerService.class.getName();
     private Timer mTimer;
     private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-
 
     @Nullable
     @Override
@@ -80,6 +79,24 @@ public class TimerService extends Service {
         RemoteViews rv = new RemoteViews(getPackageName(), R.layout.widget);
         rv.setTextViewText(R.id.month_day, monthAndDay);
         rv.setTextViewText(R.id.time, time);
+
+
+        SharedPreferences pref = getSharedPreferences("data", MODE_PRIVATE);
+        int widgetColor = pref.getInt("widgetColor", -1);
+        //0指代黑色，1指代白色
+        if(0==widgetColor){
+            rv.setTextColor(R.id.month_day, getResources().getColor(R.color.black));
+            rv.setTextColor(R.id.time, getResources().getColor(R.color.black));
+            //Toast.makeText(context, "已切换为黑色", Toast.LENGTH_SHORT).show();
+        }else if(1 == widgetColor){
+            rv.setTextColor(R.id.month_day, getResources().getColor(R.color.white));
+            rv.setTextColor(R.id.time, getResources().getColor(R.color.white));
+            //Toast.makeText(context, "已切换为白色", Toast.LENGTH_SHORT).show();
+        }else if(-1 == widgetColor){
+            rv.setTextColor(R.id.month_day, getResources().getColor(R.color.black));
+            rv.setTextColor(R.id.time, getResources().getColor(R.color.black));
+            //Toast.makeText(context, "已切换为黑色", Toast.LENGTH_SHORT).show();
+        }
 
 
         /*Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.new_card);

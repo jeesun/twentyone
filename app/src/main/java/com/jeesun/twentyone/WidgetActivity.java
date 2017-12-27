@@ -79,8 +79,14 @@ public class WidgetActivity extends AppCompatActivity {
                     Intent intent = new Intent(WidgetProvider.ACTION_UPDATE_ALL);
                     Log.i(TAG, uri.toString());
                     Log.i(TAG, uri.getPath());
-                    intent.putExtra("uriString", uri.toString());
-                    intent.putExtra("widgetBgPicPath", uri.getPath());
+                    //intent.putExtra("uriString", uri.toString());
+                    //intent.putExtra("widgetBgPicPath", uri.getPath());
+                    SharedPreferences pref = getSharedPreferences("data", MODE_PRIVATE);
+                    SharedPreferences.Editor editor = pref.edit();
+                    editor.putString("uriString", uri.toString());
+                    editor.putString("widgetBgPicPath", uri.getPath());
+                    editor.apply();
+
                     sendBroadcast(intent);
                     Log.i(TAG, "广播已发送");
                 }

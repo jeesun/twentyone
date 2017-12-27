@@ -20,6 +20,8 @@ import com.jeesun.twentyone.util.PickUtil;
 import java.io.File;
 import java.io.IOException;
 
+import static android.content.Context.MODE_PRIVATE;
+
 /**
  * Created by simon on 2017/12/25.
  */
@@ -33,6 +35,7 @@ public class WidgetProvider extends AppWidgetProvider {
     // 更新 widget 的广播对应的action
     public final static String ACTION_UPDATE_ALL = "com.simon.widget.UPDATE_ALL";
     public final static String ACTION_UPDATE_WIDGET_COLOR = "com.simon.widget.UPDATE_WIDGET_COLOR";
+    public static final String ACTION_BOOT_COMPLETED = "android.intent.action.BOOT_COMPLETED";
     // 按钮信息
     private static final int BUTTON_SHOW = 1;
 
@@ -73,17 +76,25 @@ public class WidgetProvider extends AppWidgetProvider {
         Log.i(TAG, "广播已接收");
         Log.i(TAG, "OnReceive:Action: " + action);
         if(ACTION_UPDATE_ALL.equals(action)){
-            String uriString = intent.getStringExtra("uriString");
-            String widgetBgPicPath = intent.getStringExtra("widgetBgPicPath");
-            if(null!=widgetBgPicPath && !"".equals(widgetBgPicPath)){
+            //String uriString = intent.getStringExtra("uriString");
+            //String widgetBgPicPath = intent.getStringExtra("widgetBgPicPath");
+            SharedPreferences pref = context.getSharedPreferences("data", MODE_PRIVATE);
+            String uriString = pref.getString("uriString", null);
+            String widgetBgPicPath = pref.getString("widgetBgPicPath", null);
+            Log.i(TAG, "uriString=" + uriString);
+            Log.i(TAG, "widgetBgPicPath=" + widgetBgPicPath);
+
+            if(null != widgetBgPicPath && !"".equals(widgetBgPicPath)){
                 Log.i(TAG, "widgetBgPicPath="+widgetBgPicPath);
                 //"更新"广播
                 updateAllAppWidget(context, uriString, widgetBgPicPath);
+            }else{
+                //显示默认的图片
             }
             //updateAllAppWidget(context, AppWidgetManager.getInstance(context), widgetBgPic);
         }else if(ACTION_UPDATE_WIDGET_COLOR.equals(action)){
             RemoteViews rv = new RemoteViews(context.getPackageName(), R.layout.widget);
-            SharedPreferences pref = context.getSharedPreferences("data", Context.MODE_PRIVATE);
+            SharedPreferences pref = context.getSharedPreferences("data", MODE_PRIVATE);
             int widgetColor = pref.getInt("widgetColor", -1);
             //0指代黑色，1指代白色
             if(0==widgetColor){
@@ -102,6 +113,8 @@ public class WidgetProvider extends AppWidgetProvider {
             AppWidgetManager manager = AppWidgetManager.getInstance(context);
             ComponentName cn =new ComponentName(context,WidgetProvider.class);
             manager.updateAppWidget(cn, rv);
+        }else if(ACTION_BOOT_COMPLETED.equals(action)){
+
         }
     }
 
@@ -130,22 +143,25 @@ public class WidgetProvider extends AppWidgetProvider {
             }
         }else{
             Log.i(TAG, "图片未找到");
-            Uri uri = Uri.parse(uriString);
-            String picRealPath = PickUtil.getPath(context, uri);
-            Log.i(TAG, "picRealPath=" + picRealPath);
-            Bitmap bitmap = BitmapFactory.decodeFile(picRealPath);
-            Log.i(TAG, bitmap.getHeight()+"x"+bitmap.getWidth());
-            bitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true);
+            if(null!=uriString && !"".equals(uriString)){
+                Uri uri = Uri.parse(uriString);
+                String picRealPath = PickUtil.getPath(context, uri);
+                Log.i(TAG, "picRealPath=" + picRealPath);
+                Bitmap bitmap = BitmapFactory.decodeFile(picRealPath);
+                Log.i(TAG, bitmap.getHeight()+"x"+bitmap.getWidth());
+                bitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true);
 
-            bitmap = Bitmap.createScaledBitmap(bitmap, 800, 400, true);
+                bitmap = Bitmap.createScaledBitmap(bitmap, 800, 400, true);
 
-            bitmap = TimerService.getRoundedCornerBitmap(bitmap,6);
+                bitmap = TimerService.getRoundedCornerBitmap(bitmap,6);
 
-            rv.setImageViewBitmap(R.id.background, bitmap);
-            AppWidgetManager manager = AppWidgetManager.getInstance(context);
-            ComponentName cn =new ComponentName(context,WidgetProvider.class);
-            manager.updateAppWidget(cn, rv);
-            Toast.makeText(context, "桌面部件背景图已更新", Toast.LENGTH_SHORT).show();
+                rv.setImageViewBitmap(R.id.background, bitmap);
+                AppWidgetManager manager = AppWidgetManager.getInstance(context);
+                ComponentName cn =new ComponentName(context,WidgetProvider.class);
+                manager.updateAppWidget(cn, rv);
+                Toast.makeText(context, "桌面部件背景图已更新", Toast.LENGTH_SHORT).show();
+            }
+
         }
     }
 }
