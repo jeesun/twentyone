@@ -12,6 +12,7 @@ import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.jeesun.twentyone.util.AndroidFileUtils;
 import com.jeesun.twentyone.util.ContextUtil;
@@ -96,36 +97,55 @@ public class WidgetActivity extends AppCompatActivity {
                     //复制文件
                     File picFile = new File(uri.getPath());
                     if(picFile.exists()){
+                        File dir = new File(ContextUtil.widgetPicDir);
+                        if(!dir.exists()){
+                            dir.mkdirs();
+                        }
+                        File pic = new File(ContextUtil.widgetPicPath);
+                        if(pic.exists()){
+                            pic.delete();
+                        }
+                        Log.i(TAG, "图片存在要删");
+                        Log.i(TAG, "图片已被删除");
                         try {
-                            File dir = new File(ContextUtil.widgetPicDir);
-                            if(!dir.exists()){
-                                dir.mkdirs();
-                            }
                             AndroidFileUtils.fileCopy(uri.getPath(), ContextUtil.widgetPicPath);
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
+                        Intent intent = new Intent(WidgetProvider.ACTION_UPDATE_WIDGET_BG_PIC);
+                        sendBroadcast(intent);
+                        Log.i(TAG, "广播" + WidgetProvider.ACTION_UPDATE_WIDGET_BG_PIC + "已发送");
                     }else{
+                        Log.i(TAG, "图片存在但uri.getPath不是标准格式");
                         if(null!=uri.toString() && !"".equals(uri.toString())){
                             String picRealPath = PickUtil.getPath(WidgetActivity.this, uri);
                             Log.i(TAG, "picRealPath=" + picRealPath);
                             if(null != picRealPath && !"".equals(picRealPath)){
+                                Log.i(TAG, "null != picRealPath && !\"\".equals(picRealPath)");
+                                File dir = new File(ContextUtil.widgetPicDir);
+                                if(!dir.exists()){
+                                    dir.mkdirs();
+                                }
+                                File pic = new File(ContextUtil.widgetPicPath);
+                                if(pic.exists()){
+                                    pic.delete();
+                                    Log.i(TAG, "图片已被删除");
+                                }
                                 try {
-                                    File dir = new File(ContextUtil.widgetPicDir);
-                                    if(!dir.exists()){
-                                        dir.mkdirs();
+                                    if (AndroidFileUtils.fileCopy(picRealPath, ContextUtil.widgetPicPath)){
+                                        Intent intent = new Intent(WidgetProvider.ACTION_UPDATE_WIDGET_BG_PIC);
+                                        sendBroadcast(intent);
+                                        Log.i(TAG, "广播" + WidgetProvider.ACTION_UPDATE_WIDGET_BG_PIC + "已发送");
+                                    }else{
+                                        Log.i(TAG, "图片未被删除");
+                                        Toast.makeText(WidgetActivity.this, "文件复制失败", Toast.LENGTH_SHORT).show();
                                     }
-                                    AndroidFileUtils.fileCopy(picRealPath, ContextUtil.widgetPicPath);
                                 } catch (IOException e) {
                                     e.printStackTrace();
                                 }
                             }
                         }
                     }
-
-                    Intent intent = new Intent(WidgetProvider.ACTION_UPDATE_WIDGET_BG_PIC);
-                    sendBroadcast(intent);
-                    Log.i(TAG, "广播" + WidgetProvider.ACTION_UPDATE_WIDGET_BG_PIC + "已发送");
                 }
             }
         }

@@ -64,7 +64,9 @@ public class WidgetProvider extends AppWidgetProvider {
     public void onDisabled(Context context) {
         Log.i(TAG, "执行onDisabled");
         //最后一个widget被从屏幕移除
-        context.stopService(EXAMPLE_SERVICE_INTENT);
+        Intent downloadIntent = new Intent(EXAMPLE_SERVICE_INTENT);
+        downloadIntent.setPackage(context.getPackageName());
+        context.stopService(downloadIntent);
         super.onDisabled(context);
     }
 
@@ -163,7 +165,10 @@ public class WidgetProvider extends AppWidgetProvider {
                 Toast.makeText(context, "桌面部件背景图已更新", Toast.LENGTH_SHORT).show();
             } catch (IOException e) {
                 e.printStackTrace();
+                Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
+        }else{
+            Toast.makeText(context, "图片不存在", Toast.LENGTH_SHORT).show();
         }
     }
 
