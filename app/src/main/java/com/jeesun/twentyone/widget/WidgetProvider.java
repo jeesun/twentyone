@@ -71,12 +71,37 @@ public class WidgetProvider extends AppWidgetProvider {
     }
 
     @Override
-    public void onEnabled(Context context) {
+    public void onEnabled(final Context context) {
         Log.i(TAG, "执行onEnabled");
         //widget添加到屏幕上执行
         Intent downloadIntent = new Intent(EXAMPLE_SERVICE_INTENT);
         downloadIntent.setPackage(context.getPackageName());
         context.startService(downloadIntent);
+
+        // 时间类
+        Calendar startDate = Calendar.getInstance();
+
+        //设置开始执行的时间为 某年-某月-某月 00:00:00
+        startDate.set(
+                startDate.get(Calendar.YEAR),
+                startDate.get(Calendar.MONTH),
+                startDate.get(Calendar.DATE),
+                0, 0, 0);
+
+        // 1天的毫秒设定
+        long timeInterval = 60 * 60 * 1000 * 24;
+
+        mTimer = new Timer();
+        mTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                updateWidgetBgPic(context);
+                updata(context);
+            }
+        }, startDate.getTime(), timeInterval);
+        updateWidgetBgPic(context);
+        updata(context);
+
         super.onEnabled(context);
     }
 
@@ -141,6 +166,9 @@ public class WidgetProvider extends AppWidgetProvider {
                     updata(context);
                 }
             }, startDate.getTime(), timeInterval);
+
+            updateWidgetBgPic(context);
+            updata(context);
         }else if("android.appwidget.action.APPWIDGET_UPDATE".equals(action)){
             //说明应用被更新或者widget被用户创建
             updateWidgetBgPic(context);
@@ -173,8 +201,6 @@ public class WidgetProvider extends AppWidgetProvider {
     }
 
     private void updata(Context context) {
-        //String time = sdf.format(new Date());
-        Date date = new Date();
         //Log.i(TAG, date.toString());
         Calendar cal = Calendar.getInstance();
         cal.setTime(new Date());
