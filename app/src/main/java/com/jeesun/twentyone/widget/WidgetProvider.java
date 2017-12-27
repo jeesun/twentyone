@@ -15,10 +15,16 @@ import android.widget.RemoteViews;
 import android.widget.Toast;
 
 import com.jeesun.twentyone.R;
+import com.jeesun.twentyone.util.Lauar;
+import com.jeesun.twentyone.util.Lunar;
 import com.jeesun.twentyone.util.PickUtil;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -33,30 +39,36 @@ public class WidgetProvider extends AppWidgetProvider {
     public final Intent EXAMPLE_SERVICE_INTENT =
             new Intent("android.appwidget.action.EXAMPLE_APP_WIDGET_SERVICE");
     // 更新 widget 的广播对应的action
-    public final static String ACTION_UPDATE_ALL = "com.simon.widget.UPDATE_ALL";
+    public final static String ACTION_UPDATE_WIDGET_BG_PIC = "com.simon.widget.UPDATE_WIDGET_BG_PIC";
     public final static String ACTION_UPDATE_WIDGET_COLOR = "com.simon.widget.UPDATE_WIDGET_COLOR";
     public static final String ACTION_BOOT_COMPLETED = "android.intent.action.BOOT_COMPLETED";
     // 按钮信息
     private static final int BUTTON_SHOW = 1;
 
+    private Timer mTimer;
     @Override
     public void onDeleted(Context context, int[] appWidgetIds) {
+        Log.i(TAG, "执行onDeleted");
         super.onDeleted(context, appWidgetIds);
         //widget被从屏幕移除
+        mTimer.cancel();
+        mTimer = null;
     }
 
     @Override
     public void onDisabled(Context context) {
+        Log.i(TAG, "执行onDisabled");
         super.onDisabled(context);
         //最后一个widget被从屏幕移除
-        context.stopService(new Intent(context,TimerService.class));
+        context.stopService(EXAMPLE_SERVICE_INTENT);
     }
 
     @Override
     public void onEnabled(Context context) {
+        Log.i(TAG, "执行onEnabled");
         super.onEnabled(context);
         //widget添加到屏幕上执行
-        context.startService(new Intent(context,TimerService.class));
+        context.startService(EXAMPLE_SERVICE_INTENT);
     }
 
     /**
@@ -64,35 +76,23 @@ public class WidgetProvider extends AppWidgetProvider {
      */
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
+        Log.i(TAG, "执行onUpdate");
         super.onUpdate(context, appWidgetManager, appWidgetIds);
         //刷新的时候执行widget
         //remoteView  AppWidgetManager
     }
 
     @Override
-    public void onReceive(Context context, Intent intent) {
+    public void onReceive(final Context context, Intent intent) {
         super.onReceive(context, intent);
         final String action = intent.getAction();
         Log.i(TAG, "广播已接收");
         Log.i(TAG, "OnReceive:Action: " + action);
-        if(ACTION_UPDATE_ALL.equals(action)){
-            //String uriString = intent.getStringExtra("uriString");
-            //String widgetBgPicPath = intent.getStringExtra("widgetBgPicPath");
-            SharedPreferences pref = context.getSharedPreferences("data", MODE_PRIVATE);
-            String uriString = pref.getString("uriString", null);
-            String widgetBgPicPath = pref.getString("widgetBgPicPath", null);
-            Log.i(TAG, "uriString=" + uriString);
-            Log.i(TAG, "widgetBgPicPath=" + widgetBgPicPath);
-
-            if(null != widgetBgPicPath && !"".equals(widgetBgPicPath)){
-                Log.i(TAG, "widgetBgPicPath="+widgetBgPicPath);
-                //"更新"广播
-                updateAllAppWidget(context, uriString, widgetBgPicPath);
-            }else{
-                //显示默认的图片
-            }
-            //updateAllAppWidget(context, AppWidgetManager.getInstance(context), widgetBgPic);
+        if(ACTION_UPDATE_WIDGET_BG_PIC.equals(action)){
+            updateWidgetBgPic(context);
+            updata(context);
         }else if(ACTION_UPDATE_WIDGET_COLOR.equals(action)){
+            updata(context);
             RemoteViews rv = new RemoteViews(context.getPackageName(), R.layout.widget);
             SharedPreferences pref = context.getSharedPreferences("data", MODE_PRIVATE);
             int widgetColor = pref.getInt("widgetColor", -1);
@@ -111,7 +111,47 @@ public class WidgetProvider extends AppWidgetProvider {
             ComponentName cn =new ComponentName(context,WidgetProvider.class);
             manager.updateAppWidget(cn, rv);
         }else if(ACTION_BOOT_COMPLETED.equals(action)){
+// 时间类
+            Calendar startDate = Calendar.getInstance();
 
+            //设置开始执行的时间为 某年-某月-某月 00:00:00
+            startDate.set(
+                    startDate.get(Calendar.YEAR),
+                    startDate.get(Calendar.MONTH),
+                    startDate.get(Calendar.DATE),
+                    0, 0, 0);
+
+            // 1天的毫秒设定
+            long timeInterval = 60 * 60 * 1000 * 24;
+
+            mTimer = new Timer();
+            mTimer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    updateWidgetBgPic(context);
+                    updata(context);
+                }
+            }, startDate.getTime(), timeInterval);
+        }else if("android.appwidget.action.APPWIDGET_UPDATE".equals(action)){
+            //说明应用被更新或者widget被用户创建
+            updateWidgetBgPic(context);
+            updata(context);
+        }
+    }
+
+    private void updateWidgetBgPic(Context context) {
+        SharedPreferences pref = context.getSharedPreferences("data", MODE_PRIVATE);
+        String uriString = pref.getString("uriString", null);
+        String widgetBgPicPath = pref.getString("widgetBgPicPath", null);
+        Log.i(TAG, "uriString=" + uriString);
+        Log.i(TAG, "widgetBgPicPath=" + widgetBgPicPath);
+
+        if(null != widgetBgPicPath && !"".equals(widgetBgPicPath)){
+            Log.i(TAG, "widgetBgPicPath="+widgetBgPicPath);
+            //"更新"广播
+            updateAllAppWidget(context, uriString, widgetBgPicPath);
+        }else{
+            //显示默认的图片
         }
     }
 
@@ -160,5 +200,43 @@ public class WidgetProvider extends AppWidgetProvider {
             }
 
         }
+    }
+
+    private void updata(Context context) {
+        //String time = sdf.format(new Date());
+        Date date = new Date();
+        //Log.i(TAG, date.toString());
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(new Date());
+        Lunar lunar = new Lunar(cal);
+        String time = Lauar.getWeekOfDate(cal) + " " + lunar.toString();
+
+        //Log.i(TAG, time);
+        String monthAndDay = Lauar.getChinaMonthAndDay(new Date());
+        RemoteViews rv = new RemoteViews(context.getPackageName(), R.layout.widget);
+        rv.setTextViewText(R.id.month_day, monthAndDay);
+        rv.setTextViewText(R.id.time, time);
+
+
+        SharedPreferences pref = context.getSharedPreferences("data", MODE_PRIVATE);
+        int widgetColor = pref.getInt("widgetColor", -1);
+        //0指代黑色，1指代白色
+        if(0==widgetColor){
+            rv.setTextColor(R.id.month_day, context.getResources().getColor(R.color.black));
+            rv.setTextColor(R.id.time, context.getResources().getColor(R.color.black));
+            //Toast.makeText(context, "已切换为黑色", Toast.LENGTH_SHORT).show();
+        }else if(1 == widgetColor){
+            rv.setTextColor(R.id.month_day, context.getResources().getColor(R.color.white));
+            rv.setTextColor(R.id.time, context.getResources().getColor(R.color.white));
+            //Toast.makeText(context, "已切换为白色", Toast.LENGTH_SHORT).show();
+        }else if(-1 == widgetColor){
+            rv.setTextColor(R.id.month_day, context.getResources().getColor(R.color.black));
+            rv.setTextColor(R.id.time, context.getResources().getColor(R.color.black));
+            //Toast.makeText(context, "已切换为黑色", Toast.LENGTH_SHORT).show();
+        }
+
+        AppWidgetManager manager = AppWidgetManager.getInstance(context);
+        ComponentName cn =new ComponentName(context,WidgetProvider.class);
+        manager.updateAppWidget(cn, rv);
     }
 }

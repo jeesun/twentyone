@@ -76,7 +76,6 @@ public class WidgetActivity extends AppCompatActivity {
                 //Toast.makeText(this, "获取相册", Toast.LENGTH_SHORT).show();
                 Uri uri = data.getData();
                 if(null != uri){
-                    Intent intent = new Intent(WidgetProvider.ACTION_UPDATE_ALL);
                     Log.i(TAG, uri.toString());
                     Log.i(TAG, uri.getPath());
                     //intent.putExtra("uriString", uri.toString());
@@ -87,6 +86,7 @@ public class WidgetActivity extends AppCompatActivity {
                     editor.putString("widgetBgPicPath", uri.getPath());
                     editor.apply();
 
+                    Intent intent = new Intent(WidgetProvider.ACTION_UPDATE_WIDGET_BG_PIC);
                     sendBroadcast(intent);
                     Log.i(TAG, "广播已发送");
                 }

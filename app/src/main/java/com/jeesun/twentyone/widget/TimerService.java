@@ -15,6 +15,7 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 
@@ -43,15 +44,36 @@ public class TimerService extends Service {
         return null;
     }
 
+    /**
+     * onStartCommand: 在执行了startService方法之后，有可能会调用Service的onCreate方法，
+     * 在这之后一定会执行Service的onStartCommand回调方法。
+     * 也就是说，如果多次执行了Context的startService方法，那么Service的onStartCommand方法也会相应的多次调用。
+     * onStartCommand方法很重要，我们在该方法中根据传入的Intent参数进行实际的操作，比如会在此处创建一个线程用于下载数据或播放音乐等。
+     * @param intent
+     * @param flags
+     * @param startId
+     * @return
+     */
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        Log.i(TAG, "执行onStartCommand");
+        return super.onStartCommand(intent, flags, startId);
+    }
+
     @Override
     public void onCreate() {
+        Log.i(TAG, "执行onCreate");
         super.onCreate();
 
         // 时间类
         Calendar startDate = Calendar.getInstance();
 
         //设置开始执行的时间为 某年-某月-某月 00:00:00
-        startDate.set(startDate.get(Calendar.YEAR), startDate.get(Calendar.MONTH), startDate.get(Calendar.DATE), 0, 0, 0);
+        startDate.set(
+                startDate.get(Calendar.YEAR),
+                startDate.get(Calendar.MONTH),
+                startDate.get(Calendar.DATE),
+                0, 0, 0);
 
         // 1天的毫秒设定
         long timeInterval = 60 * 60 * 1000 * 24;
@@ -98,16 +120,6 @@ public class TimerService extends Service {
             //Toast.makeText(context, "已切换为黑色", Toast.LENGTH_SHORT).show();
         }
 
-
-        /*Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.new_card);
-        bitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true);
-
-        bitmap = Bitmap.createScaledBitmap(bitmap, 800, 400, true);
-
-        bitmap = getRoundedCornerBitmap(bitmap,6);
-
-        rv.setImageViewBitmap(R.id.background, bitmap);*/
-        //rv.setImageViewResource(R.id.background, R.drawable.new_card);
         AppWidgetManager manager = AppWidgetManager.getInstance(getApplicationContext());
         ComponentName cn =new ComponentName(getApplicationContext(),WidgetProvider.class);
         manager.updateAppWidget(cn, rv);
