@@ -32,6 +32,11 @@ public class LaunchActivity extends AppCompatActivity {
         /*getSupportActionBar().hide();
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);*/
 
+        if (existSDCard()){
+            Log.i(TAG, "sd卡存在");
+        }else{
+            Log.i(TAG, "sd卡不存在");
+        }
 
         // 版本判断。当手机系统大于 23 时，才有必要去判断权限是否获取
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -136,5 +141,14 @@ public class LaunchActivity extends AppCompatActivity {
             // other 'case' lines to check for other
             // permissions this app might request
         }
+    }
+
+    //判断外部存储卡是否存在
+    private boolean existSDCard() {
+        if (android.os.Environment.getExternalStorageState().equals(
+                android.os.Environment.MEDIA_MOUNTED)) {
+            return true;
+        } else
+            return false;
     }
 }
