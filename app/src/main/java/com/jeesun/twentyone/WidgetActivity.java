@@ -85,61 +85,42 @@ public class WidgetActivity extends AppCompatActivity {
                 if(null != uri){
                     Log.i(TAG, uri.toString());
                     Log.i(TAG, uri.getPath());
-                    //intent.putExtra("uriString", uri.toString());
-                    //intent.putExtra("widgetBgPicPath", uri.getPath());
-                    SharedPreferences pref = getSharedPreferences("data", MODE_PRIVATE);
-                    SharedPreferences.Editor editor = pref.edit();
-                    editor.putString("uriString", uri.toString());
-                    editor.putString("widgetBgPicPath", uri.getPath());
-                    editor.apply();
-
                     //复制文件
                     File picFile = new File(uri.getPath());
                     if(picFile.exists()){
-                        File dir = new File(ContextUtil.widgetPicDir);
-                        if(!dir.exists()){
-                            dir.mkdirs();
-                        }else{
-                            dir.delete();
-                        }
-
-                        try {
-                            AndroidFileUtils.fileCopy(uri.getPath(), ContextUtil.widgetPicPath);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                        Intent intent = new Intent(WidgetProvider.ACTION_UPDATE_WIDGET_BG_PIC);
-                        sendBroadcast(intent);
-                        Log.i(TAG, "广播" + WidgetProvider.ACTION_UPDATE_WIDGET_BG_PIC + "已发送");
+                        copyPic(uri.getPath());
                     }else{
                         Log.i(TAG, "图片存在但uri.getPath不是标准格式");
                         if(null!=uri.toString() && !"".equals(uri.toString())){
                             String picRealPath = PickUtil.getPath(WidgetActivity.this, uri);
                             Log.i(TAG, "picRealPath=" + picRealPath);
                             if(null != picRealPath && !"".equals(picRealPath)){
-                                File dir = new File(ContextUtil.widgetPicDir);
-                                if(!dir.exists()){
-                                    dir.mkdirs();
-                                }else{
-                                    dir.delete();
-                                }
-                                try {
-                                    if (AndroidFileUtils.fileCopy(picRealPath, ContextUtil.widgetPicPath)){
-                                        Intent intent = new Intent(WidgetProvider.ACTION_UPDATE_WIDGET_BG_PIC);
-                                        sendBroadcast(intent);
-                                        Log.i(TAG, "广播" + WidgetProvider.ACTION_UPDATE_WIDGET_BG_PIC + "已发送");
-                                    }else{
-                                        Log.i(TAG, "图片未被删除");
-                                        Log.i(TAG, "文件复制失败");
-                                    }
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
+                                copyPic(picRealPath);
                             }
                         }
                     }
                 }
             }
+        }
+    }
+
+    private void copyPic(String picRealPath) {
+        try {
+            if (AndroidFileUtils.fileCopy(picRealPath, ContextUtil.widgetPicDir, true)){
+                SharedPreferences pref = getSharedPreferences("data", MODE_PRIVATE);
+                SharedPreferences.Editor editor = pref.edit();
+                editor.putString("widgetPicName", AndroidFileUtils.getFileName(picRealPath));
+                editor.apply();
+
+                Intent intent = new Intent(WidgetProvider.ACTION_UPDATE_WIDGET_BG_PIC);
+                sendBroadcast(intent);
+                Log.i(TAG, "广播" + WidgetProvider.ACTION_UPDATE_WIDGET_BG_PIC + "已发送");
+            }else{
+                Log.i(TAG, "图片未被删除");
+                Log.i(TAG, "文件复制失败");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

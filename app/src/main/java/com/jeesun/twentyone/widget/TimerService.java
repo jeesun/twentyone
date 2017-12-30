@@ -70,14 +70,14 @@ public class TimerService extends Service {
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
+
+        //发布
         calendar.add(Calendar.DATE, 1);
         calendar.set(Calendar.HOUR_OF_DAY, 0);
         calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-        /*//测试
-        calendar.set(Calendar.HOUR_OF_DAY, 9);
-        calendar.set(Calendar.MINUTE, 11);
-        calendar.set(Calendar.SECOND, 0);*/
+        calendar.set(Calendar.SECOND, 1);
+        //测试
+        //calendar.add(Calendar.MINUTE, 1);
 
         SimpleDateFormat df=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Log.i(TAG, "闹钟" + df.format(calendar.getTime()));
@@ -87,8 +87,11 @@ public class TimerService extends Service {
         //Intent i = new Intent(TimerService.this, AlarmReceiver.class);
         PendingIntent pi = PendingIntent.getBroadcast(this, 0, i, 0);
         //1000*60*60*24 一天
+        //发布
         manager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 1000*60*60*24, pi);
-        //manager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 1000*60, pi);
+
+        //测试
+        //manager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 1000*60*5, pi);
         return super.onStartCommand(intent, flags, startId);
     }
 

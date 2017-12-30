@@ -15,7 +15,6 @@ public class ContextUtil {
     public static final String picSavePath = sdPath + "/TwentyOne";
 
     public static final String widgetPicDir = picSavePath + "/widget";
-    public static final String widgetPicPath = widgetPicDir + "/widget_bg.png";
 
     public static final String fontPath = "/TwentyOne/fonts";
     public static final String fontFullPath = Environment.getExternalStorageDirectory().getPath() + fontPath;
