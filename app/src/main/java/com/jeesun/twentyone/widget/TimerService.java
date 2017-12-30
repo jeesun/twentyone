@@ -1,5 +1,8 @@
 package com.jeesun.twentyone.widget;
 
+import android.app.AlarmManager;
+import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
@@ -14,6 +17,7 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.os.IBinder;
+import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.widget.RemoteViews;
@@ -35,8 +39,7 @@ import java.util.TimerTask;
 
 public class TimerService extends Service {
     private static final String TAG = TimerService.class.getName();
-    private Timer mTimer;
-    private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    private static Timer mTimer;
 
     @Nullable
     @Override
@@ -57,6 +60,35 @@ public class TimerService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.i(TAG, "执行onStartCommand");
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Log.d("TimerService", "executed at " + new Date().toString());
+            }
+        }).start();
+        AlarmManager manager = (AlarmManager) getSystemService(ALARM_SERVICE);
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.add(Calendar.DATE, 1);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        /*//测试
+        calendar.set(Calendar.HOUR_OF_DAY, 9);
+        calendar.set(Calendar.MINUTE, 11);
+        calendar.set(Calendar.SECOND, 0);*/
+
+        SimpleDateFormat df=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Log.i(TAG, "闹钟" + df.format(calendar.getTime()));
+
+        Intent i = new Intent(this, AlarmReceiver.class);
+
+        //Intent i = new Intent(TimerService.this, AlarmReceiver.class);
+        PendingIntent pi = PendingIntent.getBroadcast(this, 0, i, 0);
+        //1000*60*60*24 一天
+        manager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 1000*60*60*24, pi);
+        //manager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 1000*60, pi);
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -65,71 +97,17 @@ public class TimerService extends Service {
         Log.i(TAG, "执行onCreate");
         super.onCreate();
 
-        // 时间类
-        Calendar startDate = Calendar.getInstance();
-
-        //设置开始执行的时间为 某年-某月-某月 00:00:00
-        startDate.set(
-                startDate.get(Calendar.YEAR),
-                startDate.get(Calendar.MONTH),
-                startDate.get(Calendar.DATE),
-                0, 0, 0);
-
-        // 1天的毫秒设定
-        long timeInterval = 60 * 60 * 1000 * 24;
-
-        mTimer = new Timer();
-        mTimer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                updata();
-            }
-        }, startDate.getTime(), timeInterval);
-    }
-
-    private void updata() {
-        //String time = sdf.format(new Date());
-        Date date = new Date();
-        //Log.i(TAG, date.toString());
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(new Date());
-        Lunar lunar = new Lunar(cal);
-        String time = Lauar.getWeekOfDate(cal) + " " + lunar.toString();
-
-        //Log.i(TAG, time);
-        String monthAndDay = Lauar.getChinaMonthAndDay(new Date());
-        RemoteViews rv = new RemoteViews(getPackageName(), R.layout.widget);
-        rv.setTextViewText(R.id.month_day, monthAndDay);
-        rv.setTextViewText(R.id.time, time);
-
-
-        SharedPreferences pref = getSharedPreferences("data", MODE_PRIVATE);
-        int widgetColor = pref.getInt("widgetColor", -1);
-        //0指代黑色，1指代白色
-        if(0==widgetColor){
-            rv.setTextColor(R.id.month_day, getResources().getColor(R.color.black));
-            rv.setTextColor(R.id.time, getResources().getColor(R.color.black));
-            //Toast.makeText(context, "已切换为黑色", Toast.LENGTH_SHORT).show();
-        }else if(1 == widgetColor){
-            rv.setTextColor(R.id.month_day, getResources().getColor(R.color.white));
-            rv.setTextColor(R.id.time, getResources().getColor(R.color.white));
-            //Toast.makeText(context, "已切换为白色", Toast.LENGTH_SHORT).show();
-        }else if(-1 == widgetColor){
-            rv.setTextColor(R.id.month_day, getResources().getColor(R.color.black));
-            rv.setTextColor(R.id.time, getResources().getColor(R.color.black));
-            //Toast.makeText(context, "已切换为黑色", Toast.LENGTH_SHORT).show();
-        }
-
-        AppWidgetManager manager = AppWidgetManager.getInstance(getApplicationContext());
-        ComponentName cn =new ComponentName(getApplicationContext(),WidgetProvider.class);
-        manager.updateAppWidget(cn, rv);
+        initTimer();
     }
 
     @Override
     public void onDestroy() {
+        Log.i(TAG, "执行onDestroy");
         super.onDestroy();
-        mTimer.cancel();
-        mTimer = null;
+        if (null != mTimer){
+            mTimer.cancel();
+            mTimer = null;
+        }
     }
 
     public static Bitmap getRoundedCornerBitmap(Bitmap bitmap, float roundPx){
@@ -159,5 +137,33 @@ public class TimerService extends Service {
         Canvas c = new Canvas(proxy);
         c.drawBitmap(bitmap, new Matrix(), null);
         views.setImageViewBitmap(resId, proxy);
+    }
+
+    /**
+     * timer不保证精确度且在无法唤醒cpu,不适合后台任务的定时。
+     */
+    private void initTimer() {
+        // 时间类
+        Calendar startDate = Calendar.getInstance();
+
+        //设置开始执行的时间为 某年-某月-某月 00:00:00
+        startDate.set(
+                startDate.get(Calendar.YEAR),
+                startDate.get(Calendar.MONTH),
+                startDate.get(Calendar.DATE),
+                0, 0, 0);
+
+        // 1天的毫秒设定
+        long timeInterval = 60 * 60 * 1000 * 24;
+
+        mTimer = new Timer();
+        mTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                //定时发送广播，更新时间
+                Intent updateIntent=new Intent(WidgetProvider.ACTION_UPDATE_ALL);
+                sendBroadcast(updateIntent);
+            }
+        }, startDate.getTime(), timeInterval);
     }
 }

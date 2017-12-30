@@ -17,17 +17,10 @@ public class BootReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         Log.i(TAG, "开机自启服务已启动");
-        /*Intent service = new Intent(context, TimerService.class);
-        context.startService(service);*/
-
-        SharedPreferences pref = context.getSharedPreferences("data", MODE_PRIVATE);
-        String widgetBgPicPath = pref.getString("widgetBgPicPath", null);
-        if(null != widgetBgPicPath){
-            Intent updateWidgetBgIntent = new Intent(WidgetProvider.ACTION_UPDATE_WIDGET_BG_PIC);
-            updateWidgetBgIntent.putExtra("widgetBgPicPath", widgetBgPicPath);
-            context.sendBroadcast(updateWidgetBgIntent);
-            Log.i(TAG, "广播已发送");
+        if ("android.intent.action.BOOT_COMPLETED".equals(intent.getAction())) {
+            // Set the alarm here.
+            Intent service = new Intent(context, TimerService.class);
+            context.startService(service);
         }
-
     }
 }

@@ -15,7 +15,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:name=".util.AppContext">
+        android:name=".util.AppContext"
+        android:persistent="true">
         <activity
             android:name=".LaunchActivity"
             android:theme="@style/WelcomeStyle">
@@ -36,7 +37,8 @@
         <activity
             android:name=".MainActivity"
             android:configChanges="orientation|keyboardHidden"
-            android:theme="@style/NoTitleStyle">
+            android:theme="@style/NoTitleStyle"
+            android:process=":picture">
 
             <!--
                 <meta-data android:name="android.app.default_searchable"
@@ -79,13 +81,15 @@
             android:theme="@style/NoTitleStyle" />
         <activity android:name=".WidgetActivity" />
 
-        <!--<service android:name=".widget.TimerService">
+        <service android:name=".widget.TimerService"
+            android:process=":TimerTask">
             <intent-filter>
-                <action android:name="android.appwidget.action.EXAMPLE_APP_WIDGET_SERVICE" />
+                <action android:name="com.simon.widget.TIMER_TASK" />
             </intent-filter>
-        </service>-->
+        </service>
         <receiver android:name=".widget.WidgetProvider">
             <intent-filter>
+                <action android:name="com.simon.widget.UPDATE_ALL"/>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
                 <action android:name="com.simon.widget.UPDATE_WIDGET_BG_PIC"/>
                 <action android:name="com.simon.widget.UPDATE_WIDGET_COLOR"/>
@@ -93,12 +97,13 @@
             <meta-data android:name="android.appwidget.provider"
                 android:resource="@xml/widgetconfig"/>
         </receiver>
-        <!--<receiver android:name=".widget.BootReceiver">
+        <receiver android:name=".widget.BootReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
-        </receiver>-->
+        </receiver>
+        <receiver android:name=".widget.AlarmReceiver" />
     </application>
 
 </manifest>

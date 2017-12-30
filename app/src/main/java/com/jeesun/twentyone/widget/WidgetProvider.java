@@ -38,39 +38,30 @@ import static android.content.Context.MODE_PRIVATE;
  */
 
 public class WidgetProvider extends AppWidgetProvider {
-    public WidgetProvider() {
-        startSchedule(AppContext.getContext());
-    }
 
     private static final String TAG = WidgetProvider.class.getName();
     private boolean DEBUG = false;
-    // 启动ExampleAppWidgetService服务对应的action
-    public final Intent EXAMPLE_SERVICE_INTENT =
-            new Intent("android.appwidget.action.EXAMPLE_APP_WIDGET_SERVICE");
+    // 启动TimerService服务所对应的action
+    public final Intent TIMER_TASK =
+            new Intent("com.simon.widget.TIMER_TASK");
     // 更新 widget 的广播对应的action
+    public static final String ACTION_UPDATE_ALL = "com.simon.widget.UPDATE_ALL";
     public final static String ACTION_UPDATE_WIDGET_BG_PIC = "com.simon.widget.UPDATE_WIDGET_BG_PIC";
     public final static String ACTION_UPDATE_WIDGET_COLOR = "com.simon.widget.UPDATE_WIDGET_COLOR";
     public static final String ACTION_BOOT_COMPLETED = "android.intent.action.BOOT_COMPLETED";
-    // 按钮信息
-    private static final int BUTTON_SHOW = 1;
 
-    private Timer mTimer;
     @Override
     public void onDeleted(Context context, int[] appWidgetIds) {
         Log.i(TAG, "执行onDeleted");
         super.onDeleted(context, appWidgetIds);
         //widget被从屏幕移除
-        if (null != mTimer){
-            mTimer.cancel();
-            mTimer = null;
-        }
     }
 
     @Override
     public void onDisabled(Context context) {
         Log.i(TAG, "执行onDisabled");
         //最后一个widget被从屏幕移除
-        Intent downloadIntent = new Intent(EXAMPLE_SERVICE_INTENT);
+        Intent downloadIntent = new Intent(TIMER_TASK);
         downloadIntent.setPackage(context.getPackageName());
         context.stopService(downloadIntent);
         super.onDisabled(context);
@@ -80,12 +71,12 @@ public class WidgetProvider extends AppWidgetProvider {
     public void onEnabled(final Context context) {
         Log.i(TAG, "执行onEnabled");
         //widget添加到屏幕上执行
-        Intent downloadIntent = new Intent(EXAMPLE_SERVICE_INTENT);
+        Intent downloadIntent = new Intent(TIMER_TASK);
         downloadIntent.setPackage(context.getPackageName());
         context.startService(downloadIntent);
 
         updateWidgetBgPic(context);
-        updata(context);
+        updateDate(context);
 
         super.onEnabled(context);
     }
@@ -107,65 +98,52 @@ public class WidgetProvider extends AppWidgetProvider {
         final String action = intent.getAction();
         Log.i(TAG, "广播"+action+"已接收");
         Log.i(TAG, "OnReceive:Action: " + action);
-        if(ACTION_UPDATE_WIDGET_BG_PIC.equals(action)){
+        if(ACTION_UPDATE_ALL.equals(action)){
+            updateWidgetBgPic(context);
+            updateDate(context);
+            updateWidgetTextColor(context);
+        }else if(ACTION_UPDATE_WIDGET_BG_PIC.equals(action)){
             updateWidgetBgPic(context);
         }else if(ACTION_UPDATE_WIDGET_COLOR.equals(action)){
-            updata(context);
-            RemoteViews rv = new RemoteViews(context.getPackageName(), R.layout.widget);
-            SharedPreferences pref = context.getSharedPreferences("data", MODE_PRIVATE);
-            int widgetColor = pref.getInt("widgetColor", -1);
-            //0指代黑色，1指代白色
-            if(0==widgetColor){
-                rv.setTextColor(R.id.month_day, context.getResources().getColor(R.color.black));
-                rv.setTextColor(R.id.time, context.getResources().getColor(R.color.black));
-                Toast.makeText(context, "已切换为黑色", Toast.LENGTH_SHORT).show();
-            }else if(1 == widgetColor || -1 == widgetColor){
-                //-1说明SharedPreferences还没有存这个item，那么字体是默认的黑色。
-                rv.setTextColor(R.id.month_day, context.getResources().getColor(R.color.white));
-                rv.setTextColor(R.id.time, context.getResources().getColor(R.color.white));
-                Toast.makeText(context, "已切换为白色", Toast.LENGTH_SHORT).show();
-            }
-            AppWidgetManager manager = AppWidgetManager.getInstance(context);
-            ComponentName cn =new ComponentName(context,WidgetProvider.class);
-            manager.updateAppWidget(cn, rv);
+            updateWidgetTextColor(context);
         }else if(ACTION_BOOT_COMPLETED.equals(action)){
-            Log.i(TAG, "执行定时任务");
-
-            startSchedule(context);
-
             updateWidgetBgPic(context);
-            updata(context);
+            updateDate(context);
+            updateWidgetTextColor(context);
         }else if("android.appwidget.action.APPWIDGET_UPDATE".equals(action)){
+            /**
+             * ACTION_APPWIDGET_UPDATE Action faire when:
+             1. an new instance of Your AppWidget added to Home Screen from AppWidget Chooser( from AppWidget provider),
+             2. when requested update interval having lapsed which you have provided in AppWidget meta-data file using android:updatePeriodMillis attribute , and
+             3. when device reboot
+             */
+            Intent downloadIntent = new Intent(TIMER_TASK);
+            downloadIntent.setPackage(context.getPackageName());
+            context.startService(downloadIntent);
             //说明应用被更新或者widget被用户创建
             updateWidgetBgPic(context);
-            updata(context);
+            updateDate(context);
         }
     }
 
-    private void startSchedule(final Context context) {
-        if (null == mTimer){
-            // 时间类
-            Calendar startDate = Calendar.getInstance();
-
-            //设置开始执行的时间为 某年-某月-某月 00:00:00
-            startDate.set(
-                    startDate.get(Calendar.YEAR),
-                    startDate.get(Calendar.MONTH),
-                    startDate.get(Calendar.DATE),
-                    0, 0, 0);
-
-            // 1天的毫秒设定
-            long timeInterval = 60 * 60 * 1000 * 24;
-
-            mTimer = new Timer();
-            mTimer.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    updateWidgetBgPic(context);
-                    updata(context);
-                }
-            }, startDate.getTime(), timeInterval);
+    private void updateWidgetTextColor(Context context) {
+        RemoteViews rv = new RemoteViews(context.getPackageName(), R.layout.widget);
+        SharedPreferences pref = context.getSharedPreferences("data", MODE_PRIVATE);
+        int widgetColor = pref.getInt("widgetColor", -1);
+        //0指代黑色，1指代白色
+        if(0==widgetColor){
+            rv.setTextColor(R.id.month_day, context.getResources().getColor(R.color.black));
+            rv.setTextColor(R.id.time, context.getResources().getColor(R.color.black));
+            Toast.makeText(context, "已切换为黑色", Toast.LENGTH_SHORT).show();
+        }else if(1 == widgetColor || -1 == widgetColor){
+            //-1说明SharedPreferences还没有存这个item，那么字体是默认的黑色。
+            rv.setTextColor(R.id.month_day, context.getResources().getColor(R.color.white));
+            rv.setTextColor(R.id.time, context.getResources().getColor(R.color.white));
+            Toast.makeText(context, "已切换为白色", Toast.LENGTH_SHORT).show();
         }
+        AppWidgetManager manager = AppWidgetManager.getInstance(context);
+        ComponentName cn =new ComponentName(context,WidgetProvider.class);
+        manager.updateAppWidget(cn, rv);
     }
 
     private void updateWidgetBgPic(Context context) {
@@ -173,26 +151,20 @@ public class WidgetProvider extends AppWidgetProvider {
         if(picFile.exists()){
             RemoteViews rv = new RemoteViews(context.getPackageName(), R.layout.widget);
 
-            Uri uri = Uri.fromFile(picFile);
-            try {
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), uri);
-                bitmap = Bitmap.createScaledBitmap(bitmap, 800, 400, true);
-                bitmap = TimerService.getRoundedCornerBitmap(bitmap,6);
-                rv.setImageViewBitmap(R.id.background, bitmap);
-                AppWidgetManager manager = AppWidgetManager.getInstance(context);
-                ComponentName cn =new ComponentName(context,WidgetProvider.class);
-                manager.updateAppWidget(cn, rv);
-                Toast.makeText(context, "桌面部件背景图已更新", Toast.LENGTH_SHORT).show();
-            } catch (IOException e) {
-                e.printStackTrace();
-                Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
-            }
+            Bitmap bitmap = BitmapFactory.decodeFile(ContextUtil.widgetPicPath);
+            bitmap = Bitmap.createScaledBitmap(bitmap, 800, 400, true);
+            bitmap = TimerService.getRoundedCornerBitmap(bitmap,6);
+            rv.setImageViewBitmap(R.id.background, bitmap);
+            AppWidgetManager manager = AppWidgetManager.getInstance(context);
+            ComponentName cn =new ComponentName(context,WidgetProvider.class);
+            manager.updateAppWidget(cn, rv);
+            Log.i(TAG, "桌面部件背景图已更新");
         }else{
-            Toast.makeText(context, "图片不存在", Toast.LENGTH_SHORT).show();
+            Log.i(TAG, "图片不存在");
         }
     }
 
-    private void updata(Context context) {
+    private void updateDate(Context context) {
         //Log.i(TAG, date.toString());
         Calendar cal = Calendar.getInstance();
         cal.setTime(new Date());

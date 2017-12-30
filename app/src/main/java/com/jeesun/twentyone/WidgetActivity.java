@@ -27,7 +27,6 @@ public class WidgetActivity extends AppCompatActivity {
     private AppCompatButton btnSwitch, btnSwitchTextColor;
 
     public final static int REQUEST_IMAGE_CAPTURE = 1;
-    public final static int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 2;
     public final static String IMAGE_TYPE = "image/*";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,13 +99,10 @@ public class WidgetActivity extends AppCompatActivity {
                         File dir = new File(ContextUtil.widgetPicDir);
                         if(!dir.exists()){
                             dir.mkdirs();
+                        }else{
+                            dir.delete();
                         }
-                        File pic = new File(ContextUtil.widgetPicPath);
-                        if(pic.exists()){
-                            pic.delete();
-                        }
-                        Log.i(TAG, "图片存在要删");
-                        Log.i(TAG, "图片已被删除");
+
                         try {
                             AndroidFileUtils.fileCopy(uri.getPath(), ContextUtil.widgetPicPath);
                         } catch (IOException e) {
@@ -121,15 +117,11 @@ public class WidgetActivity extends AppCompatActivity {
                             String picRealPath = PickUtil.getPath(WidgetActivity.this, uri);
                             Log.i(TAG, "picRealPath=" + picRealPath);
                             if(null != picRealPath && !"".equals(picRealPath)){
-                                Log.i(TAG, "null != picRealPath && !\"\".equals(picRealPath)");
                                 File dir = new File(ContextUtil.widgetPicDir);
                                 if(!dir.exists()){
                                     dir.mkdirs();
-                                }
-                                File pic = new File(ContextUtil.widgetPicPath);
-                                if(pic.exists()){
-                                    pic.delete();
-                                    Log.i(TAG, "图片已被删除");
+                                }else{
+                                    dir.delete();
                                 }
                                 try {
                                     if (AndroidFileUtils.fileCopy(picRealPath, ContextUtil.widgetPicPath)){
@@ -138,7 +130,7 @@ public class WidgetActivity extends AppCompatActivity {
                                         Log.i(TAG, "广播" + WidgetProvider.ACTION_UPDATE_WIDGET_BG_PIC + "已发送");
                                     }else{
                                         Log.i(TAG, "图片未被删除");
-                                        Toast.makeText(WidgetActivity.this, "文件复制失败", Toast.LENGTH_SHORT).show();
+                                        Log.i(TAG, "文件复制失败");
                                     }
                                 } catch (IOException e) {
                                     e.printStackTrace();
