@@ -21,6 +21,13 @@ public class BootReceiver extends BroadcastReceiver {
             // Set the alarm here.
             Intent service = new Intent(context, TimerService.class);
             context.startService(service);
+
+            SharedPreferences pref = context.getSharedPreferences("data", MODE_PRIVATE);
+            boolean enableDynamicWidget = pref.getBoolean(DynamicWidgetProvider.ENABLE_DYNAMIC_WIDGET, false);
+            if (enableDynamicWidget){
+                service = new Intent(context, DynamicTimerService.class);
+                context.startService(service);
+            }
         }
     }
 }

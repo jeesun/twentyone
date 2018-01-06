@@ -82,6 +82,13 @@
             android:theme="@style/NoTitleStyle" />
         <activity android:name=".WidgetActivity" />
 
+        <receiver android:name=".widget.BootReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </receiver>
+
         <service android:name=".widget.TimerService"
             android:process=":TimerTask">
             <intent-filter>
@@ -98,13 +105,25 @@
             <meta-data android:name="android.appwidget.provider"
                 android:resource="@xml/widgetconfig"/>
         </receiver>
-        <receiver android:name=".widget.BootReceiver">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
-        </receiver>
         <receiver android:name=".widget.AlarmReceiver" />
+
+
+        <service android:name=".widget.DynamicTimerService"
+            android:process=":DynamicTimerTask">
+            <intent-filter>
+                <action android:name="com.simon.widget.dynamic.TIMER_TASK" />
+            </intent-filter>
+        </service>
+        <receiver android:name=".widget.DynamicWidgetProvider">
+            <intent-filter>
+                <action android:name="com.simon.widget.UPDATE_ALL"/>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+                <action android:name="com.simon.widget.dynamic.UPDATE_WIDGET_BG_PIC"/>
+                <action android:name="com.simon.widget.UPDATE_WIDGET_COLOR"/>
+            </intent-filter>
+            <meta-data android:name="android.appwidget.provider"
+                android:resource="@xml/dynamic_widgetconfig"/>
+        </receiver>
     </application>
 
 </manifest>

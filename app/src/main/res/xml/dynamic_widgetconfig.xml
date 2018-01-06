@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    android:initialLayout="@layout/dynamic_widget"
+    android:minHeight="@dimen/appwidget_min_height"
+    android:minWidth="@dimen/appwidget_min_width"
+    android:resizeMode="none"
+    android:updatePeriodMillis="1036800000">
+    <!--android:updatePeriodMillis="86400000"是一小时更新一次widget，系统为了省电，小于1小时也是1小时-->
+</appwidget-provider>
