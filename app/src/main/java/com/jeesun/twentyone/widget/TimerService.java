@@ -39,7 +39,7 @@ import java.util.TimerTask;
 
 public class TimerService extends Service {
     private static final String TAG = TimerService.class.getName();
-    private static Timer mTimer;
+    //private static Timer mTimer;
 
     @Nullable
     @Override
@@ -60,12 +60,12 @@ public class TimerService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.i(TAG, "执行onStartCommand");
-        new Thread(new Runnable() {
+        /*new Thread(new Runnable() {
             @Override
             public void run() {
-                Log.d("TimerService", "executed at " + new Date().toString());
+                Log.d(TAG, "executed at " + new Date().toString());
             }
-        }).start();
+        }).start();*/
         AlarmManager manager = (AlarmManager) getSystemService(ALARM_SERVICE);
 
         Calendar calendar = Calendar.getInstance();
@@ -100,17 +100,17 @@ public class TimerService extends Service {
         Log.i(TAG, "执行onCreate");
         super.onCreate();
 
-        initTimer();
+        //initTimer();
     }
 
     @Override
     public void onDestroy() {
         Log.i(TAG, "执行onDestroy");
         super.onDestroy();
-        if (null != mTimer){
+        /*if (null != mTimer){
             mTimer.cancel();
             mTimer = null;
-        }
+        }*/
     }
 
     public static Bitmap getRoundedCornerBitmap(Bitmap bitmap, float roundPx){
@@ -145,7 +145,7 @@ public class TimerService extends Service {
     /**
      * timer不保证精确度且在无法唤醒cpu,不适合后台任务的定时。
      */
-    private void initTimer() {
+    /*private void initTimer() {
         // 时间类
         Calendar startDate = Calendar.getInstance();
 
@@ -168,5 +168,5 @@ public class TimerService extends Service {
                 sendBroadcast(updateIntent);
             }
         }, startDate.getTime(), timeInterval);
-    }
+    }*/
 }
