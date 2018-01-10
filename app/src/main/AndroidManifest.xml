@@ -136,6 +136,19 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/gif_widget_info" />
         </receiver>
+
+        <activity android:name=".HitokotoActivity" />
+
+        <receiver android:name=".widget.RamRemDanceWidget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.simon.action.ram_rem_dance.CLICK" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/ram_rem_dance_widget_info" />
+        </receiver>
     </application>
 
 </manifest>

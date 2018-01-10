@@ -21,10 +21,10 @@ import java.util.List;
 /**
  * Implementation of App Widget functionality.
  */
-public class GifWidget extends AppWidgetProvider {
-    private static final String TAG = GifWidget.class.getName();
+public class RamRemDanceWidget extends AppWidgetProvider {
+    private static final String TAG = RamRemDanceWidget.class.getName();
 
-    public static final String CLICK_ACTION = "com.simon.widget.gif.CLICK";
+    public static final String CLICK_ACTION = "com.simon.widget.ram_rem_dance.CLICK";
     //Android 定时器实现的几种方式和removeCallbacks失效问题详解
     //http://blog.csdn.net/xiaanming/article/details/9011193
     private static Runnable runnable;
@@ -42,8 +42,7 @@ public class GifWidget extends AppWidgetProvider {
         for (int appWidgetId : appWidgetIds) {
             updateAppWidget(context, appWidgetManager, appWidgetId);
         }
-
-        initHandler(context, GifWidget.class);
+        initHandler(context, RamRemDanceWidget.class);
     }
 
     @Override
@@ -76,7 +75,7 @@ public class GifWidget extends AppWidgetProvider {
         initFrameBitmaps(context);
         if (CLICK_ACTION.equals(action)){
             Toast.makeText(context, R.string.appwidget_dynamic, Toast.LENGTH_SHORT).show();
-            initHandler(context, GifWidget.class);
+            initHandler(context, RamRemDanceWidget.class);
         }
     }
 
@@ -95,8 +94,18 @@ public class GifWidget extends AppWidgetProvider {
         drawableIdList.add(R.drawable.frame3);
         drawableIdList.add(R.drawable.frame4);
         drawableIdList.add(R.drawable.frame5);*/
-        drawableIdList.add(R.drawable.umaru01);
-        drawableIdList.add(R.drawable.umaru02);
+        drawableIdList.add(R.drawable.ram_rem_dance01);
+        drawableIdList.add(R.drawable.ram_rem_dance02);
+        drawableIdList.add(R.drawable.ram_rem_dance03);
+        drawableIdList.add(R.drawable.ram_rem_dance04);
+        drawableIdList.add(R.drawable.ram_rem_dance05);
+        drawableIdList.add(R.drawable.ram_rem_dance06);
+        drawableIdList.add(R.drawable.ram_rem_dance07);
+        drawableIdList.add(R.drawable.ram_rem_dance08);
+        drawableIdList.add(R.drawable.ram_rem_dance09);
+        drawableIdList.add(R.drawable.ram_rem_dance10);
+        drawableIdList.add(R.drawable.ram_rem_dance11);
+        drawableIdList.add(R.drawable.ram_rem_dance12);
 
         for (int i=0; i<drawableIdList.size(); i++){
             bitmapList.add(BitmapFactory.decodeResource(context.getResources(), drawableIdList.get(i)));
@@ -106,7 +115,7 @@ public class GifWidget extends AppWidgetProvider {
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager, int appWidgetId) {
         Log.i(TAG, "appWidgetId = " + appWidgetId);
         RemoteViews rv = new RemoteViews(context.getPackageName(), widgetLayoutId);
-        Intent intentClick = new Intent(context, GifWidget.class);
+        Intent intentClick = new Intent(context, RamRemDanceWidget.class);
         intentClick.setAction(CLICK_ACTION);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intentClick, 0);
         rv.setOnClickPendingIntent(R.id.background, pendingIntent);

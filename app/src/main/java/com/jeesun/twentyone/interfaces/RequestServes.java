@@ -1,5 +1,6 @@
 package com.jeesun.twentyone.interfaces;
 
+import com.jeesun.twentyone.model.Hitokoto;
 import com.jeesun.twentyone.model.ResultMsg;
 import com.jeesun.twentyone.model.SoResultMsg;
 
@@ -24,4 +25,8 @@ public interface RequestServes {
                                          @Query("sn")int sn,
                                          @Query("pn")int pn,
                                          @Query("zoom")int zoom);
+
+    @GET
+    Call<Hitokoto> getHitokoto(@Query("c")String c,
+                               @Query("encode")String encode);
 }
