@@ -10,7 +10,7 @@
         android:layout_gravity="center_vertical"
         android:adjustViewBounds="true"
         android:scaleType="fitXY"
-        android:src="@drawable/card"/>
+        android:src="@drawable/time_umaru01"/>
 
     <LinearLayout
         android:id="@+id/wrapper"

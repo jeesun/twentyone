@@ -14,8 +14,11 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.net.Uri;
+import android.os.Build;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.View;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 
@@ -29,12 +32,15 @@ import com.jeesun.twentyone.util.PickUtil;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import static android.content.Context.ALARM_SERVICE;
+import static android.content.Context.MODE_MULTI_PROCESS;
 import static android.content.Context.MODE_PRIVATE;
 
 /**
@@ -44,9 +50,6 @@ import static android.content.Context.MODE_PRIVATE;
 public class DynamicWidgetProvider extends AppWidgetProvider {
 
     private static final String TAG = DynamicWidgetProvider.class.getName();
-    // 启动TimerService服务所对应的action
-    public final Intent TIMER_TASK =
-            new Intent("com.simon.widget.dynamic.TIMER_TASK");
     // 更新 widget 的广播对应的action
     public static final String ACTION_UPDATE_ALL = "com.simon.widget.UPDATE_ALL";
     public final static String ACTION_UPDATE_WIDGET_BG_PIC = "com.simon.widget.dynamic.UPDATE_WIDGET_BG_PIC";
@@ -55,17 +58,27 @@ public class DynamicWidgetProvider extends AppWidgetProvider {
 
     public static final String ENABLE_DYNAMIC_WIDGET = "enableDynamicWidget";
 
+    SimpleDateFormat df=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+    public static final String CLICK_ACTION = "com.simon.widget.dynamic.CLICK";
+    //Android 定时器实现的几种方式和removeCallbacks失效问题详解
+    //http://blog.csdn.net/xiaanming/article/details/9011193
+    private static Runnable runnable;
+    private static Handler handler;
+    private int currentIndex = 0;
+
+    private List<Bitmap> bitmapList = new ArrayList<>();
+    private List<Integer> drawableIdList = new ArrayList<>();
+
+    private static int widgetLayoutId = R.layout.dynamic_widget;
     @Override
     public void onDeleted(Context context, int[] appWidgetIds) {
         Log.i(TAG, "执行onDeleted");
         super.onDeleted(context, appWidgetIds);
         //widget被从屏幕移除
-        context.stopService(new Intent(context,DynamicTimerService.class));
-
-        SharedPreferences pref = context.getSharedPreferences("data", MODE_PRIVATE);
-        SharedPreferences.Editor editor = pref.edit();
-        editor.putBoolean(ENABLE_DYNAMIC_WIDGET, false);
-        editor.apply();
+        if (null != runnable && null != handler){
+            handler.removeCallbacks(runnable);
+        }
     }
 
     @Override
@@ -73,12 +86,9 @@ public class DynamicWidgetProvider extends AppWidgetProvider {
         Log.i(TAG, "执行onDisabled");
         //最后一个widget被从屏幕移除
         super.onDisabled(context);
-        context.stopService(new Intent(context,DynamicTimerService.class));
-
-        SharedPreferences pref = context.getSharedPreferences("data", MODE_PRIVATE);
-        SharedPreferences.Editor editor = pref.edit();
-        editor.putBoolean(ENABLE_DYNAMIC_WIDGET, false);
-        editor.apply();
+        if (null != runnable && null != handler){
+            handler.removeCallbacks(runnable);
+        }
     }
 
     @Override
@@ -86,11 +96,6 @@ public class DynamicWidgetProvider extends AppWidgetProvider {
         Log.i(TAG, "执行onEnabled");
         //widget添加到屏幕上执行
         super.onEnabled(context);
-        context.startService(new Intent(context, DynamicTimerService.class));
-        SharedPreferences pref = context.getSharedPreferences("data", MODE_PRIVATE);
-        SharedPreferences.Editor editor = pref.edit();
-        editor.putBoolean(ENABLE_DYNAMIC_WIDGET, true);
-        editor.apply();
     }
 
     /**
@@ -100,14 +105,21 @@ public class DynamicWidgetProvider extends AppWidgetProvider {
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         Log.i(TAG, "执行onUpdate");
         super.onUpdate(context, appWidgetManager, appWidgetIds);
-        context.startService(new Intent(context, DynamicTimerService.class));
 
-        RemoteViews rv = new RemoteViews(context.getPackageName(), R.layout.dynamic_widget);
+        initFrameBitmaps(context);
+
+        RemoteViews rv = new RemoteViews(context.getPackageName(), widgetLayoutId);
         updateDate(context, rv);
         updateWidgetTextColor(context, rv);
         AppWidgetManager manager = AppWidgetManager.getInstance(context);
         ComponentName cn =new ComponentName(context,DynamicWidgetProvider.class);
         manager.updateAppWidget(cn, rv);
+
+        for (int appWidgetId : appWidgetIds){
+            onWidgetUpdate(context, appWidgetManager, appWidgetId);
+        }
+
+        initHandler(context, DynamicWidgetProvider.class);
     }
 
     @Override
@@ -115,29 +127,58 @@ public class DynamicWidgetProvider extends AppWidgetProvider {
         super.onReceive(context, intent);
         final String action = intent.getAction();
         Log.i(TAG, "广播"+action+"已接收");
-        RemoteViews rv = new RemoteViews(context.getPackageName(), R.layout.dynamic_widget);
+
+        initFrameBitmaps(context);
+
         if(ACTION_UPDATE_ALL.equals(action)){
-            updateWidget(context, rv);
+            RemoteViews rv = new RemoteViews(context.getPackageName(), widgetLayoutId);
+            updateDate(context, rv);
+            updateWidgetTextColor(context, rv);
+            AppWidgetManager manager = AppWidgetManager.getInstance(context);
+            ComponentName cn =new ComponentName(context,DynamicWidgetProvider.class);
+            manager.updateAppWidget(cn, rv);
         }else if(ACTION_UPDATE_WIDGET_BG_PIC.equals(action)){
-            updateWidget(context, rv);
+            /*updateWidget(context, rv);
+            AppWidgetManager manager = AppWidgetManager.getInstance(context);
+            ComponentName cn =new ComponentName(context,DynamicWidgetProvider.class);
+            manager.updateAppWidget(cn, rv);*/
         }else if(ACTION_UPDATE_WIDGET_COLOR.equals(action)){
-            updateWidget(context, rv);
-        }else if(ACTION_BOOT_COMPLETED.equals(action)){
-            updateWidget(context, rv);
+            RemoteViews rv = new RemoteViews(context.getPackageName(), widgetLayoutId);
+            updateWidgetTextColor(context, rv);
+            AppWidgetManager manager = AppWidgetManager.getInstance(context);
+            ComponentName cn =new ComponentName(context,DynamicWidgetProvider.class);
+            manager.updateAppWidget(cn, rv);
+        }else if (CLICK_ACTION.equals(action)){
+            Toast.makeText(context, R.string.appwidget_dynamic, Toast.LENGTH_SHORT).show();
+            initHandler(context, DynamicWidgetProvider.class);
         }
-        AppWidgetManager manager = AppWidgetManager.getInstance(context);
-        ComponentName cn =new ComponentName(context,DynamicWidgetProvider.class);
-        manager.updateAppWidget(cn, rv);
     }
 
-    private void updateWidget(Context context, RemoteViews rv){
-        //updateWidgetBgPic(context,rv);
-        updateDate(context, rv);
-        updateWidgetTextColor(context, rv);
+    private void initFrameBitmaps(final Context context) {
+        Log.i(TAG, "initFrameBitmaps");
+        if (!bitmapList.isEmpty()){
+            bitmapList.clear();
+        }
+        if (!drawableIdList.isEmpty()){
+            drawableIdList.clear();
+        }
+
+        //图片长不得超过940px，否则程序卡住。
+        /*drawableIdList.add(R.drawable.frame1);
+        drawableIdList.add(R.drawable.frame2);
+        drawableIdList.add(R.drawable.frame3);
+        drawableIdList.add(R.drawable.frame4);
+        drawableIdList.add(R.drawable.frame5);*/
+        drawableIdList.add(R.drawable.time_umaru01);
+        drawableIdList.add(R.drawable.time_umaru02);
+
+        for (int i=0; i<drawableIdList.size(); i++){
+            bitmapList.add(BitmapFactory.decodeResource(context.getResources(), drawableIdList.get(i)));
+        }
     }
 
     private void updateWidgetTextColor(Context context, RemoteViews rv) {
-        SharedPreferences pref = context.getSharedPreferences("data", MODE_PRIVATE);
+        SharedPreferences pref = context.getSharedPreferences(ContextUtil.SHARED_PREF_DYNAMIC, MODE_PRIVATE);
         int widgetColor = pref.getInt("widgetColor", -1);
         //0指代黑色，1指代白色
         if(0==widgetColor){
@@ -151,30 +192,6 @@ public class DynamicWidgetProvider extends AppWidgetProvider {
             Toast.makeText(context, "已切换为白色", Toast.LENGTH_SHORT).show();
         }
     }
-
-    /*private void updateWidgetBgPic(Context context, RemoteViews rv) {
-        SharedPreferences pref = context.getSharedPreferences("data", MODE_PRIVATE);
-        String widgetPicName = pref.getString("widgetPicName", null);
-        if (null == widgetPicName || "".equals(widgetPicName)){
-            return;
-        }
-        Log.i(TAG, widgetPicName);
-        File picFile = new File(ContextUtil.widgetPicDir + "/" + widgetPicName);
-        if(picFile.exists()){
-
-            Bitmap bitmap = BitmapFactory.decodeFile(ContextUtil.widgetPicDir + "/" + widgetPicName);
-            if (null == bitmap){
-                return;
-            }
-            bitmap = Bitmap.createScaledBitmap(bitmap, 800, 400, true);
-            bitmap = TimerService.getRoundedCornerBitmap(bitmap,6);
-            rv.setImageViewBitmap(R.id.background, null);
-            rv.setImageViewBitmap(R.id.background, bitmap);
-
-        }else{
-            Log.i(TAG, "图片不存在");
-        }
-    }*/
 
     private void updateDate(Context context, RemoteViews rv) {
         //Log.i(TAG, date.toString());
@@ -203,5 +220,50 @@ public class DynamicWidgetProvider extends AppWidgetProvider {
             rv.setTextColor(R.id.month_day, context.getResources().getColor(R.color.black));
             rv.setTextColor(R.id.time, context.getResources().getColor(R.color.black));
         }
+    }
+
+    static void onWidgetUpdate(Context context, AppWidgetManager appWidgetManager, int appWidgetId) {
+        Log.i(TAG, "appWidgetId = " + appWidgetId);
+        RemoteViews rv = new RemoteViews(context.getPackageName(), widgetLayoutId);
+        Intent intentClick = new Intent(context, DynamicWidgetProvider.class);
+        intentClick.setAction(CLICK_ACTION);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intentClick, 0);
+        rv.setOnClickPendingIntent(R.id.background, pendingIntent);
+        appWidgetManager.updateAppWidget(appWidgetId, rv);
+    }
+
+    private void initHandler(final Context context, final Class<?> c){
+        Log.i(TAG, "initHandler");
+        //恢复默认状态，停止正在运行的线程
+        if (null != runnable && null != handler){
+            handler.removeCallbacks(runnable);
+        }
+        if (null == handler){
+            handler = new Handler();
+        }
+        currentIndex = 0;
+
+        if (null == runnable){
+            runnable = new Runnable() {
+                @Override
+                public void run() {
+                    currentIndex++;
+                    updateFrame(context, c);
+                    handler.postDelayed(this, 500);
+                }
+            };
+        }
+
+        handler.postDelayed(runnable, 500);
+    }
+
+    private void updateFrame(Context context, Class<?> c) {
+        RemoteViews rv = new RemoteViews(context.getPackageName(), widgetLayoutId);
+
+        rv.setImageViewBitmap(R.id.background, bitmapList.get(currentIndex%(bitmapList.size())));
+
+        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+        ComponentName cn =new ComponentName(context,c);
+        appWidgetManager.updateAppWidget(cn, rv);
     }
 }

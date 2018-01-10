@@ -10,14 +10,14 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
+        android:name=".util.AppContext"
         android:allowBackup="true"
         android:icon="@mipmap/app_icon"
         android:label="@string/app_name"
+        android:persistent="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        android:name=".util.AppContext"
-        android:persistent="true">
+        android:theme="@style/AppTheme">
         <activity
             android:name=".LaunchActivity"
             android:theme="@style/WelcomeStyle">
@@ -38,8 +38,8 @@
         <activity
             android:name=".MainActivity"
             android:configChanges="orientation|keyboardHidden"
-            android:theme="@style/NoTitleStyle"
-            android:process=":picture">
+            android:process=":picture"
+            android:theme="@style/NoTitleStyle">
 
             <!--
                 <meta-data android:name="android.app.default_searchable"
@@ -85,44 +85,56 @@
         <receiver android:name=".widget.BootReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
-                <category android:name="android.intent.category.LAUNCHER"/>
+
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </receiver>
 
-        <service android:name=".widget.TimerService"
+        <service
+            android:name=".widget.TimerService"
             android:process=":TimerTask">
             <intent-filter>
                 <action android:name="com.simon.widget.TIMER_TASK" />
             </intent-filter>
         </service>
+
         <receiver android:name=".widget.WidgetProvider">
             <intent-filter>
-                <action android:name="com.simon.widget.UPDATE_ALL"/>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
-                <action android:name="com.simon.widget.UPDATE_WIDGET_BG_PIC"/>
-                <action android:name="com.simon.widget.UPDATE_WIDGET_COLOR"/>
+                <action android:name="com.simon.widget.UPDATE_ALL" />
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.simon.widget.UPDATE_WIDGET_BG_PIC" />
+                <action android:name="com.simon.widget.UPDATE_WIDGET_COLOR" />
             </intent-filter>
-            <meta-data android:name="android.appwidget.provider"
-                android:resource="@xml/widgetconfig"/>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widgetconfig" />
         </receiver>
         <receiver android:name=".widget.AlarmReceiver" />
-
-
-        <service android:name=".widget.DynamicTimerService"
-            android:process=":DynamicTimerTask">
+        <receiver
+            android:name=".widget.DynamicWidgetProvider"
+            android:process=":DynamicWidgetProvider">
             <intent-filter>
-                <action android:name="com.simon.widget.dynamic.TIMER_TASK" />
+                <action android:name="com.simon.action.dynamic.CLICK" />
+                <action android:name="com.simon.widget.UPDATE_ALL" />
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.simon.widget.dynamic.UPDATE_WIDGET_BG_PIC" />
+                <action android:name="com.simon.widget.UPDATE_WIDGET_COLOR" />
             </intent-filter>
-        </service>
-        <receiver android:name=".widget.DynamicWidgetProvider">
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/dynamic_widgetconfig" />
+        </receiver>
+        <receiver android:name=".widget.GifWidget">
             <intent-filter>
-                <action android:name="com.simon.widget.UPDATE_ALL"/>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
-                <action android:name="com.simon.widget.dynamic.UPDATE_WIDGET_BG_PIC"/>
-                <action android:name="com.simon.widget.UPDATE_WIDGET_COLOR"/>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.simon.action.gif.CLICK" />
             </intent-filter>
-            <meta-data android:name="android.appwidget.provider"
-                android:resource="@xml/dynamic_widgetconfig"/>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/gif_widget_info" />
         </receiver>
     </application>
 

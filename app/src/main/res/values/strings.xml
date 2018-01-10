@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MIUI9 21壁纸</string>
+    <string name="app_name">21壁纸</string>
     <string name="app_name_short">21壁纸</string>
     <string name="search">搜索</string>
     <string name="about">关于</string>
@@ -71,4 +71,8 @@
 
     <string name="switch_widget_bg">切换图片</string>
     <string name="switch_text_color">切换字体颜色</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
+
+    <string name="appwidget_dynamic">别点了，我自己动还不行吗</string>
 </resources>

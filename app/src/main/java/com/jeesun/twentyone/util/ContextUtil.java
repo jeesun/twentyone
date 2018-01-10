@@ -24,4 +24,10 @@ public class ContextUtil {
 
     public static final String PICASSO_TAG_LOCAL = "local";
     public static final String PICASSO_TAG_WEB = "web";
+
+    public static final String DYNAMIC_UPDATE_TAG = "dynamic";
+    public static final String SHARED_PREF_DYNAMIC = "dynamic";
+
+    public static final int MAX_INTERVAL_SECONDS = 60;
+    public static final int TIME_INTERVAL = 45;
 }
