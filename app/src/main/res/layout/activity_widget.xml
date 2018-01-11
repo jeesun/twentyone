@@ -5,8 +5,21 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:gravity="center_vertical"
     tools:context="com.jeesun.twentyone.WidgetActivity">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/button_margin"
+        android:textSize="18sp"
+        android:text="@string/how_to_add_appwidget"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/button_margin"
+        android:textSize="18sp"
+        android:text="@string/set_bg_rule"/>
+
     <android.support.v7.widget.AppCompatButton
         android:id="@+id/switch_widget_bg"
         android:layout_width="match_parent"
@@ -23,7 +36,7 @@
         android:layout_margin="@dimen/button_margin"
         android:background="@drawable/btn_selector"
         android:textColor="@android:color/white"
-        android:text="@string/switch_text_color"/>
+        android:text="@string/switch_clock_color"/>
 
 
     <!--<LinearLayout

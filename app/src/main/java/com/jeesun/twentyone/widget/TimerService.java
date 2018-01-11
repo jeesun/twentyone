@@ -2,6 +2,7 @@ package com.jeesun.twentyone.widget;
 
 import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.appwidget.AppWidgetManager;
@@ -60,6 +61,7 @@ public class TimerService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.i(TAG, "执行onStartCommand");
+        startForeground(1,new Notification());
         /*new Thread(new Runnable() {
             @Override
             public void run() {
@@ -99,7 +101,6 @@ public class TimerService extends Service {
     public void onCreate() {
         Log.i(TAG, "执行onCreate");
         super.onCreate();
-
         //initTimer();
     }
 

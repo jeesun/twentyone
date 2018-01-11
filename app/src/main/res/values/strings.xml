@@ -70,9 +70,15 @@
     <string name="pic_name">图片名称</string>
 
     <string name="switch_widget_bg">切换图片</string>
-    <string name="switch_text_color">切换字体颜色</string>
+    <string name="switch_clock_color">切换时间颜色</string>
     <string name="appwidget_text">EXAMPLE</string>
     <string name="add_widget">Add widget</string>
 
     <string name="appwidget_dynamic">别戳我了(*/ω＼*)，我自己动还不行吗</string>
+    <string name="apply_bg_failed">更换桌面部件背景图片失败</string>
+    <string name="apply_bg_succeed">更换桌面部件背景图片成功</string>
+    <string name="set_bg_rule">使用本功能之前，请先在桌面或者负一屏添加本应用的静态背景桌面部件，部件图标与应用相同。
+        目前桌面部件只支持更换png格式的背景图，为了保证显示效果，请您优先选择您制作或者下载的壁纸，即/sdcard/TwentyOne目录下的图片。
+    </string>
+    <string name="how_to_add_appwidget">如何添加桌面部件：长按桌面部件空白处，从部件列表选择本应用的部件，长按，拖动到桌面上。</string>
 </resources>

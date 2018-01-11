@@ -30,4 +30,6 @@ public class ContextUtil {
 
     public static final int MAX_INTERVAL_SECONDS = 60;
     public static final int TIME_INTERVAL = 45;
+
+    public static final String TIMER_TASK = "com.simon.widget.TIMER_TASK";
 }

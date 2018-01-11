@@ -92,7 +92,9 @@
 
         <service
             android:name=".widget.TimerService"
-            android:process=":TimerTask">
+            android:process=":TimerTask"
+            android:label="TimerService"
+            android:enabled="true">
             <intent-filter>
                 <action android:name="com.simon.widget.TIMER_TASK" />
             </intent-filter>
@@ -118,8 +120,6 @@
                 <action android:name="com.simon.action.dynamic.CLICK" />
                 <action android:name="com.simon.widget.UPDATE_ALL" />
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-                <action android:name="com.simon.widget.dynamic.UPDATE_WIDGET_BG_PIC" />
-                <action android:name="com.simon.widget.UPDATE_WIDGET_COLOR" />
             </intent-filter>
 
             <meta-data
@@ -149,6 +149,8 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/ram_rem_dance_widget_info" />
         </receiver>
+        <receiver android:name=".widget.ChangeBgReceiver" />
+        <receiver android:name=".widget.ChangeClockColorReceiver" />
     </application>
 
 </manifest>

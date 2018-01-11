@@ -17,6 +17,8 @@ import android.widget.Toast;
 import com.jeesun.twentyone.util.AndroidFileUtils;
 import com.jeesun.twentyone.util.ContextUtil;
 import com.jeesun.twentyone.util.PickUtil;
+import com.jeesun.twentyone.widget.ChangeBgReceiver;
+import com.jeesun.twentyone.widget.ChangeClockColorReceiver;
 import com.jeesun.twentyone.widget.WidgetProvider;
 
 import java.io.File;
@@ -69,7 +71,10 @@ public class WidgetActivity extends AppCompatActivity {
                 }
                 editor.apply();
 
-                Intent intent = new Intent(WidgetProvider.ACTION_UPDATE_WIDGET_COLOR);
+                //参考http://blog.csdn.net/chenshengfa/article/details/71407704
+                //android 8.0 后台限制，如果这样发送隐式广播，receiver将接收不到广播。
+                //Intent intent = new Intent(WidgetProvider.ACTION_UPDATE_WIDGET_COLOR);
+                Intent intent = new Intent(WidgetActivity.this, ChangeClockColorReceiver.class);
                 sendBroadcast(intent);
             }
         });
@@ -112,12 +117,14 @@ public class WidgetActivity extends AppCompatActivity {
                 editor.putString("widgetPicName", AndroidFileUtils.getFileName(picRealPath));
                 editor.apply();
 
-                Intent intent = new Intent(WidgetProvider.ACTION_UPDATE_WIDGET_BG_PIC);
+                //参考http://blog.csdn.net/chenshengfa/article/details/71407704
+                //android 8.0 后台限制，如果这样发送隐式广播，receiver将接收不到广播。
+                //Intent intent = new Intent(WidgetProvider.ACTION_UPDATE_WIDGET_BG_PIC);
+                Intent intent = new Intent(WidgetActivity.this, ChangeBgReceiver.class);
                 sendBroadcast(intent);
-                Log.i(TAG, "广播" + WidgetProvider.ACTION_UPDATE_WIDGET_BG_PIC + "已发送");
             }else{
-                Log.i(TAG, "图片未被删除");
-                Log.i(TAG, "文件复制失败");
+                Log.i(TAG, "图片路径存在问题");
+                Toast.makeText(this, R.string.apply_bg_failed, Toast.LENGTH_SHORT).show();
             }
         } catch (IOException e) {
             e.printStackTrace();

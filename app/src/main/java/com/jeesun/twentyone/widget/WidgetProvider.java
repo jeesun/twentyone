@@ -12,6 +12,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.net.Uri;
+import android.os.Build;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.RemoteViews;
@@ -46,8 +47,8 @@ public class WidgetProvider extends AppWidgetProvider {
             new Intent("com.simon.widget.TIMER_TASK");
     // 更新 widget 的广播对应的action
     public static final String ACTION_UPDATE_ALL = "com.simon.widget.UPDATE_ALL";
-    public final static String ACTION_UPDATE_WIDGET_BG_PIC = "com.simon.widget.UPDATE_WIDGET_BG_PIC";
-    public final static String ACTION_UPDATE_WIDGET_COLOR = "com.simon.widget.UPDATE_WIDGET_COLOR";
+    //public final static String ACTION_UPDATE_WIDGET_BG_PIC = "com.simon.widget.UPDATE_WIDGET_BG_PIC";
+    //public final static String ACTION_UPDATE_WIDGET_COLOR = "com.simon.widget.UPDATE_WIDGET_COLOR";
     public static final String ACTION_BOOT_COMPLETED = "android.intent.action.BOOT_COMPLETED";
 
     @Override
@@ -61,8 +62,7 @@ public class WidgetProvider extends AppWidgetProvider {
     public void onDisabled(Context context) {
         Log.i(TAG, "执行onDisabled");
         //最后一个widget被从屏幕移除
-        Intent downloadIntent = new Intent(TIMER_TASK);
-        downloadIntent.setPackage(context.getPackageName());
+        Intent downloadIntent = new Intent(context, TimerService.class);
         context.stopService(downloadIntent);
         super.onDisabled(context);
     }
@@ -71,16 +71,6 @@ public class WidgetProvider extends AppWidgetProvider {
     public void onEnabled(final Context context) {
         Log.i(TAG, "执行onEnabled");
         //widget添加到屏幕上执行
-        Intent downloadIntent = new Intent(TIMER_TASK);
-        downloadIntent.setPackage(context.getPackageName());
-        context.startService(downloadIntent);
-
-        RemoteViews rv = new RemoteViews(context.getPackageName(), R.layout.widget);
-        updateWidget(context, rv);
-        AppWidgetManager manager = AppWidgetManager.getInstance(context);
-        ComponentName cn =new ComponentName(context,WidgetProvider.class);
-        manager.updateAppWidget(cn, rv);
-
         super.onEnabled(context);
     }
 
@@ -91,9 +81,17 @@ public class WidgetProvider extends AppWidgetProvider {
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         Log.i(TAG, "执行onUpdate");
         super.onUpdate(context, appWidgetManager, appWidgetIds);
-        Intent downloadIntent = new Intent(TIMER_TASK);
-        downloadIntent.setPackage(context.getPackageName());
-        context.startService(downloadIntent);
+
+        Intent intent = new Intent();
+        intent.setAction(ContextUtil.TIMER_TASK);
+        intent.setPackage(context.getPackageName());
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1) {
+            context.startForegroundService(intent);
+        } else {
+            context.startService(intent);
+        }
+        /*Intent downloadIntent = new Intent(context, TimerService.class);
+        context.startService(downloadIntent);*/
 
         RemoteViews rv = new RemoteViews(context.getPackageName(), R.layout.widget);
         updateWidget(context, rv);
@@ -108,15 +106,7 @@ public class WidgetProvider extends AppWidgetProvider {
         final String action = intent.getAction();
         Log.i(TAG, "广播"+action+"已接收");
         RemoteViews rv = new RemoteViews(context.getPackageName(), R.layout.widget);
-        if(ACTION_UPDATE_ALL.equals(action)){
-            updateWidget(context, rv);
-        }else if(ACTION_UPDATE_WIDGET_BG_PIC.equals(action)){
-            updateWidget(context, rv);
-        }else if(ACTION_UPDATE_WIDGET_COLOR.equals(action)){
-            updateWidget(context, rv);
-        }else if(ACTION_BOOT_COMPLETED.equals(action)){
-            updateWidget(context, rv);
-        }
+        updateWidget(context, rv);
         AppWidgetManager manager = AppWidgetManager.getInstance(context);
         ComponentName cn =new ComponentName(context,WidgetProvider.class);
         manager.updateAppWidget(cn, rv);
@@ -135,12 +125,12 @@ public class WidgetProvider extends AppWidgetProvider {
         if(0==widgetColor){
             rv.setTextColor(R.id.month_day, context.getResources().getColor(R.color.black));
             rv.setTextColor(R.id.time, context.getResources().getColor(R.color.black));
-            Toast.makeText(context, "已切换为黑色", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(context, "已切换为黑色", Toast.LENGTH_SHORT).show();
         }else if(1 == widgetColor || -1 == widgetColor){
             //-1说明SharedPreferences还没有存这个item，那么字体是默认的黑色。
             rv.setTextColor(R.id.month_day, context.getResources().getColor(R.color.white));
             rv.setTextColor(R.id.time, context.getResources().getColor(R.color.white));
-            Toast.makeText(context, "已切换为白色", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(context, "已切换为白色", Toast.LENGTH_SHORT).show();
         }
     }
 
