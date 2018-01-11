@@ -50,8 +50,6 @@
 
     <string-array name="typeface">
         <item>系统默认</item>
-        <item>连笔中文签名字体</item>
-        <item>连笔英文签名字体</item>
     </string-array>
     <string name="title_activity_pic">PicActivity</string>
 
