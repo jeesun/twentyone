@@ -85,7 +85,6 @@
         <receiver android:name=".widget.BootReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </receiver>
@@ -104,8 +103,6 @@
             <intent-filter>
                 <action android:name="com.simon.widget.UPDATE_ALL" />
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-                <action android:name="com.simon.widget.UPDATE_WIDGET_BG_PIC" />
-                <action android:name="com.simon.widget.UPDATE_WIDGET_COLOR" />
             </intent-filter>
 
             <meta-data
@@ -114,8 +111,7 @@
         </receiver>
         <receiver android:name=".widget.AlarmReceiver" />
         <receiver
-            android:name=".widget.DynamicWidgetProvider"
-            android:process=":DynamicWidgetProvider">
+            android:name=".widget.DynamicWidgetProvider">
             <intent-filter>
                 <action android:name="com.simon.action.dynamic.CLICK" />
                 <action android:name="com.simon.widget.UPDATE_ALL" />

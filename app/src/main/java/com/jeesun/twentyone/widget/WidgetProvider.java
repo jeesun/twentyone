@@ -46,10 +46,10 @@ public class WidgetProvider extends AppWidgetProvider {
     public final Intent TIMER_TASK =
             new Intent("com.simon.widget.TIMER_TASK");
     // 更新 widget 的广播对应的action
-    public static final String ACTION_UPDATE_ALL = "com.simon.widget.UPDATE_ALL";
+    //public static final String ACTION_UPDATE_ALL = "com.simon.widget.UPDATE_ALL";
     //public final static String ACTION_UPDATE_WIDGET_BG_PIC = "com.simon.widget.UPDATE_WIDGET_BG_PIC";
     //public final static String ACTION_UPDATE_WIDGET_COLOR = "com.simon.widget.UPDATE_WIDGET_COLOR";
-    public static final String ACTION_BOOT_COMPLETED = "android.intent.action.BOOT_COMPLETED";
+    //public static final String ACTION_BOOT_COMPLETED = "android.intent.action.BOOT_COMPLETED";
 
     @Override
     public void onDeleted(Context context, int[] appWidgetIds) {
