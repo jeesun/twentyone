@@ -92,9 +92,9 @@
 
         <service
             android:name=".widget.TimerService"
-            android:process=":TimerTask"
+            android:enabled="true"
             android:label="TimerService"
-            android:enabled="true">
+            android:process=":TimerTask">
             <intent-filter>
                 <action android:name="com.simon.widget.TIMER_TASK" />
             </intent-filter>
@@ -151,6 +151,10 @@
         </receiver>
         <receiver android:name=".widget.ChangeBgReceiver" />
         <receiver android:name=".widget.ChangeClockColorReceiver" />
+        <receiver
+            android:name=".widget.ChangeClockReceiver"
+            android:enabled="true"
+            android:exported="true"></receiver>
     </application>
 
 </manifest>

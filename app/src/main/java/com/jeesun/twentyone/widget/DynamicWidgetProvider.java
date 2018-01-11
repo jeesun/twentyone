@@ -50,13 +50,6 @@ import static android.content.Context.MODE_PRIVATE;
 public class DynamicWidgetProvider extends AppWidgetProvider {
 
     private static final String TAG = DynamicWidgetProvider.class.getName();
-    // 更新 widget 的广播对应的action
-    public static final String ACTION_UPDATE_ALL = "com.simon.widget.UPDATE_ALL";
-    public final static String ACTION_UPDATE_WIDGET_BG_PIC = "com.simon.widget.dynamic.UPDATE_WIDGET_BG_PIC";
-    public final static String ACTION_UPDATE_WIDGET_COLOR = "com.simon.widget.UPDATE_WIDGET_COLOR";
-    public static final String ACTION_BOOT_COMPLETED = "android.intent.action.BOOT_COMPLETED";
-
-    public static final String ENABLE_DYNAMIC_WIDGET = "enableDynamicWidget";
 
     SimpleDateFormat df=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
@@ -130,25 +123,7 @@ public class DynamicWidgetProvider extends AppWidgetProvider {
 
         initFrameBitmaps(context);
 
-        if(ACTION_UPDATE_ALL.equals(action)){
-            RemoteViews rv = new RemoteViews(context.getPackageName(), widgetLayoutId);
-            updateDate(context, rv);
-            updateWidgetTextColor(context, rv);
-            AppWidgetManager manager = AppWidgetManager.getInstance(context);
-            ComponentName cn =new ComponentName(context,DynamicWidgetProvider.class);
-            manager.updateAppWidget(cn, rv);
-        }else if(ACTION_UPDATE_WIDGET_BG_PIC.equals(action)){
-            /*updateWidget(context, rv);
-            AppWidgetManager manager = AppWidgetManager.getInstance(context);
-            ComponentName cn =new ComponentName(context,DynamicWidgetProvider.class);
-            manager.updateAppWidget(cn, rv);*/
-        }else if(ACTION_UPDATE_WIDGET_COLOR.equals(action)){
-            RemoteViews rv = new RemoteViews(context.getPackageName(), widgetLayoutId);
-            updateWidgetTextColor(context, rv);
-            AppWidgetManager manager = AppWidgetManager.getInstance(context);
-            ComponentName cn =new ComponentName(context,DynamicWidgetProvider.class);
-            manager.updateAppWidget(cn, rv);
-        }else if (CLICK_ACTION.equals(action)){
+        if (CLICK_ACTION.equals(action)){
             Toast.makeText(context, R.string.appwidget_dynamic, Toast.LENGTH_SHORT).show();
             initHandler(context, DynamicWidgetProvider.class);
         }
