@@ -121,6 +121,13 @@ public class DynamicWidgetProvider extends AppWidgetProvider {
         final String action = intent.getAction();
         Log.i(TAG, "广播"+action+"已接收");
 
+        RemoteViews rv = new RemoteViews(context.getPackageName(), widgetLayoutId);
+        updateDate(context, rv);
+        updateWidgetTextColor(context, rv);
+        AppWidgetManager manager = AppWidgetManager.getInstance(context);
+        ComponentName cn =new ComponentName(context,DynamicWidgetProvider.class);
+        manager.updateAppWidget(cn, rv);
+
         initFrameBitmaps(context);
 
         if (CLICK_ACTION.equals(action)){

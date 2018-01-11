@@ -21,7 +21,9 @@ public class AlarmReceiver extends BroadcastReceiver {
         /*Intent updateWidgetBgIntent = new Intent(WidgetProvider.ACTION_UPDATE_ALL);
         context.sendBroadcast(updateWidgetBgIntent);
         Log.i(TAG, "广播" + WidgetProvider.ACTION_UPDATE_ALL + "已发送");*/
-        Intent updateClockIntent = new Intent(context, ChangeClockColorReceiver.class);
-        context.sendBroadcast(updateClockIntent);
+        Intent updateIntent = new Intent(context, ChangeClockReceiver.class);
+        context.sendBroadcast(updateIntent);
+        updateIntent = new Intent(context, ChangeClockColorReceiver.class);
+        context.sendBroadcast(updateIntent);
     }
 }
