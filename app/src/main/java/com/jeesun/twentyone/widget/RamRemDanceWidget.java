@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.Toast;
@@ -17,6 +18,8 @@ import com.jeesun.twentyone.R;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Implementation of App Widget functionality.
@@ -25,24 +28,33 @@ public class RamRemDanceWidget extends AppWidgetProvider {
     private static final String TAG = RamRemDanceWidget.class.getName();
 
     public static final String CLICK_ACTION = "com.simon.widget.ram_rem_dance.CLICK";
-    //Android 定时器实现的几种方式和removeCallbacks失效问题详解
-    //http://blog.csdn.net/xiaanming/article/details/9011193
-    private static Runnable runnable;
-    private static Handler handler;
     private int currentIndex = 0;
 
     private List<Bitmap> bitmapList = new ArrayList<>();
     private List<Integer> drawableIdList = new ArrayList<>();
 
     private static int widgetLayoutId = R.layout.gif_widget;
-
+    private static Timer timer;
+    private static TimerTask timerTask;
+    private Context context;
+    private Handler timerHandler = new Handler(new Handler.Callback() {
+        @Override
+        public boolean handleMessage(Message message) {
+            if (message.what == 0x123){
+                currentIndex++;
+                updateFrame(context, RamRemDanceWidget.class);
+            }
+            return false;
+        }
+    });
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
+        this.context = context;
         // There may be multiple widgets active, so update all of them
         for (int appWidgetId : appWidgetIds) {
             updateAppWidget(context, appWidgetManager, appWidgetId);
         }
-        initHandler(context, RamRemDanceWidget.class);
+        initTimer();
     }
 
     @Override
@@ -53,29 +65,40 @@ public class RamRemDanceWidget extends AppWidgetProvider {
     @Override
     public void onDisabled(Context context) {
         // Enter relevant functionality for when the last widget is disabled
-        if (null != runnable && null != handler){
-            handler.removeCallbacks(runnable);
+        if (null != timer){
+            timer.cancel();
+            timer = null;
+        }
+        if (null != timerTask){
+            timerTask.cancel();
+            timerTask = null;
         }
     }
 
     @Override
     public void onDeleted(Context context, int[] appWidgetIds) {
         super.onDeleted(context, appWidgetIds);
-        if (null != runnable && null != handler){
-            handler.removeCallbacks(runnable);
+        if (null != timer){
+            timer.cancel();
+            timer = null;
+        }
+        if (null != timerTask){
+            timerTask.cancel();
+            timerTask = null;
         }
     }
 
     @Override
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
+        this.context = context;
         final String action = intent.getAction();
         Log.i(TAG, "广播"+action+"已接收");
 
         initFrameBitmaps(context);
         if (CLICK_ACTION.equals(action)){
             Toast.makeText(context, R.string.appwidget_dynamic, Toast.LENGTH_SHORT).show();
-            initHandler(context, RamRemDanceWidget.class);
+            initTimer();
         }
     }
 
@@ -89,11 +112,6 @@ public class RamRemDanceWidget extends AppWidgetProvider {
         }
 
         //图片长不得超过940px，否则程序卡住。
-        /*drawableIdList.add(R.drawable.frame1);
-        drawableIdList.add(R.drawable.frame2);
-        drawableIdList.add(R.drawable.frame3);
-        drawableIdList.add(R.drawable.frame4);
-        drawableIdList.add(R.drawable.frame5);*/
         drawableIdList.add(R.drawable.ram_rem_dance01);
         drawableIdList.add(R.drawable.ram_rem_dance02);
         drawableIdList.add(R.drawable.ram_rem_dance03);
@@ -122,30 +140,6 @@ public class RamRemDanceWidget extends AppWidgetProvider {
         appWidgetManager.updateAppWidget(appWidgetId, rv);
     }
 
-    private void initHandler(final Context context, final Class<?> c){
-        Log.i(TAG, "initHandler");
-        //恢复默认状态，停止正在运行的线程
-        if (null != runnable && null != handler){
-            handler.removeCallbacks(runnable);
-        }
-        if (null == handler){
-            handler = new Handler();
-        }
-        currentIndex = 0;
-
-        if (null == runnable){
-            runnable = new Runnable() {
-                @Override
-                public void run() {
-                    currentIndex++;
-                    updateFrame(context, c);
-                    handler.postDelayed(this, 500);
-                }
-            };
-        }
-
-        handler.postDelayed(runnable, 500);
-    }
 
     private void updateFrame(Context context, Class<?> c) {
         RemoteViews rv = new RemoteViews(context.getPackageName(), widgetLayoutId);
@@ -155,6 +149,27 @@ public class RamRemDanceWidget extends AppWidgetProvider {
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
         ComponentName cn =new ComponentName(context,c);
         appWidgetManager.updateAppWidget(cn, rv);
+    }
+
+    private void initTimer(){
+        currentIndex = 0;
+
+        if (null != timer){
+            timer.cancel();
+            timer = null;
+        }
+        timer = new Timer();
+        if (null != timerTask){
+            timerTask.cancel();
+        }
+        timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                // 发送空消息，通知界面更新
+                timerHandler.sendEmptyMessage(0x123);
+            }
+        };
+        timer.schedule(timerTask, 0, 500);
     }
 }
 

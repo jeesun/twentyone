@@ -7,6 +7,7 @@
     <string name="pick">裁剪</string>
     <string name="business_card">名片</string>
     <string name="desktop_widget">桌面部件</string>
+    <string name="dynamic_desktop_widget">动态桌面部件</string>
     <string name="tutorial">教程</string>
     <string name="fonts">字体</string>
     <string name="specific_symbol">特殊符号</string>
@@ -79,4 +80,15 @@
         目前桌面部件只支持更换png格式的背景图，为了保证显示效果，请您优先选择您制作或者下载的壁纸，即/sdcard/TwentyOne目录下的图片。
     </string>
     <string name="how_to_add_appwidget">如何添加桌面部件：长按桌面部件空白处，从部件列表选择本应用的部件，长按，拖动到桌面上。</string>
+    <string name="about_dynamic_widget">关于动态桌面部件：\n
+        app更新后，如果出现以下bug，请删除并重新创建动态部件：\n
+        1、部件中的时间不见了；\n
+        2、部件点击没反应。\n
+        \n如果正常使用过程中，动态部件不动了，请点击动态部件即可重新让动态部件动起来。
+    </string>
+    <string name="how_to_use_dynamic_widget">在添加动态桌面部件之前：\n
+        1、MIUI用户请把本应用锁定在后台；\n
+        2、原生/类原生系统用户，请把本应用锁定在后台，并在系统设置--->电池--->电池优化--->单击本应用图标，选择不优化本应用；\n
+        如果您使用了诸如黑域、绿色守护等后台管理应用，请把本应用添加进白名单。
+    </string>
 </resources>

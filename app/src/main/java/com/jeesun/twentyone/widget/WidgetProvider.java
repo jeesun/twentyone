@@ -82,6 +82,7 @@ public class WidgetProvider extends AppWidgetProvider {
         Log.i(TAG, "执行onUpdate");
         super.onUpdate(context, appWidgetManager, appWidgetIds);
 
+        //启动TimerService，用于更新时间
         Intent intent = new Intent();
         intent.setAction(ContextUtil.TIMER_TASK);
         intent.setPackage(context.getPackageName());

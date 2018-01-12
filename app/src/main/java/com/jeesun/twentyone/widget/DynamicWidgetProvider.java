@@ -16,6 +16,7 @@ import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
+import android.os.Message;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
@@ -56,21 +57,43 @@ public class DynamicWidgetProvider extends AppWidgetProvider {
     public static final String CLICK_ACTION = "com.simon.widget.dynamic.CLICK";
     //Android 定时器实现的几种方式和removeCallbacks失效问题详解
     //http://blog.csdn.net/xiaanming/article/details/9011193
-    private static Runnable runnable;
-    private static Handler handler;
-    private int currentIndex = 0;
+    /*private static Runnable runnable;
+    private static Handler handler;*/
+    private static int currentIndex = 0;
 
     private List<Bitmap> bitmapList = new ArrayList<>();
     private List<Integer> drawableIdList = new ArrayList<>();
 
     private static int widgetLayoutId = R.layout.dynamic_widget;
+
+    private static Timer timer;
+    private static TimerTask timerTask;
+    private Context context;
+    private Handler timerHandler = new Handler(new Handler.Callback() {
+        @Override
+        public boolean handleMessage(Message message) {
+            if (message.what == 0x123){
+                currentIndex++;
+                updateFrame(context, DynamicWidgetProvider.class);
+            }
+            return false;
+        }
+    });
     @Override
     public void onDeleted(Context context, int[] appWidgetIds) {
         Log.i(TAG, "执行onDeleted");
         super.onDeleted(context, appWidgetIds);
         //widget被从屏幕移除
-        if (null != runnable && null != handler){
+        /*if (null != runnable && null != handler){
             handler.removeCallbacks(runnable);
+        }*/
+        if (null != timer){
+            timer.cancel();
+            timer = null;
+        }
+        if (null != timerTask){
+            timerTask.cancel();
+            timerTask = null;
         }
     }
 
@@ -79,8 +102,16 @@ public class DynamicWidgetProvider extends AppWidgetProvider {
         Log.i(TAG, "执行onDisabled");
         //最后一个widget被从屏幕移除
         super.onDisabled(context);
-        if (null != runnable && null != handler){
+        /*if (null != runnable && null != handler){
             handler.removeCallbacks(runnable);
+        }*/
+        if (null != timer){
+            timer.cancel();
+            timer = null;
+        }
+        if (null != timerTask){
+            timerTask.cancel();
+            timerTask = null;
         }
     }
 
@@ -98,9 +129,19 @@ public class DynamicWidgetProvider extends AppWidgetProvider {
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         Log.i(TAG, "执行onUpdate");
         super.onUpdate(context, appWidgetManager, appWidgetIds);
+        this.context = context;
 
-        initFrameBitmaps(context);
+        //启动TimerService，用于更新时间
+        Intent intent = new Intent();
+        intent.setAction(ContextUtil.TIMER_TASK);
+        intent.setPackage(context.getPackageName());
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1) {
+            context.startForegroundService(intent);
+        } else {
+            context.startService(intent);
+        }
 
+        //initFrameBitmaps太耗时，所以把这段代码调到initFrameBitmaps之前执行，防止这段代码不生效
         RemoteViews rv = new RemoteViews(context.getPackageName(), widgetLayoutId);
         updateDate(context, rv);
         updateWidgetTextColor(context, rv);
@@ -108,16 +149,19 @@ public class DynamicWidgetProvider extends AppWidgetProvider {
         ComponentName cn =new ComponentName(context,DynamicWidgetProvider.class);
         manager.updateAppWidget(cn, rv);
 
+        initFrameBitmaps(context);
         for (int appWidgetId : appWidgetIds){
             onWidgetUpdate(context, appWidgetManager, appWidgetId);
         }
-
-        initHandler(context, DynamicWidgetProvider.class);
+        //initHandler(context, DynamicWidgetProvider.class);
+        initTimer(context, DynamicWidgetProvider.class);
     }
 
     @Override
     public void onReceive(final Context context, Intent intent) {
         super.onReceive(context, intent);
+        //这一行是有必要的，因为onUpdate可能没有执行，context可能为null
+        this.context = context;
         final String action = intent.getAction();
         Log.i(TAG, "广播"+action+"已接收");
 
@@ -132,7 +176,8 @@ public class DynamicWidgetProvider extends AppWidgetProvider {
 
         if (CLICK_ACTION.equals(action)){
             Toast.makeText(context, R.string.appwidget_dynamic, Toast.LENGTH_SHORT).show();
-            initHandler(context, DynamicWidgetProvider.class);
+            //initHandler(context, DynamicWidgetProvider.class);
+            initTimer(context, DynamicWidgetProvider.class);
         }
     }
 
@@ -214,7 +259,8 @@ public class DynamicWidgetProvider extends AppWidgetProvider {
         appWidgetManager.updateAppWidget(appWidgetId, rv);
     }
 
-    private void initHandler(final Context context, final Class<?> c){
+    //实验证明，使用【Handler、Timer、TimerTask】比单纯的用【Handler、Runnable】更稳定，定时任务停止运行的几率更低。
+    /*private void initHandler(final Context context, final Class<?> c){
         Log.i(TAG, "initHandler");
         //恢复默认状态，停止正在运行的线程
         if (null != runnable && null != handler){
@@ -237,6 +283,48 @@ public class DynamicWidgetProvider extends AppWidgetProvider {
         }
 
         handler.postDelayed(runnable, 500);
+    }*/
+
+    private void initTimer(final Context context, final Class<?> c){
+        currentIndex = 0;
+        /*if (null == timerHandler){
+            timerHandler = new Handler(new Handler.Callback() {
+                @Override
+                public boolean handleMessage(Message message) {
+                    if (message.what == 0x123){
+                        currentIndex++;
+                        updateFrame(context, c);
+                    }
+                    return false;
+                }
+            });
+        }*/
+        if (null == timer){
+            timer = new Timer();
+        }else{
+            timer.cancel();
+            timer = null;
+            timer = new Timer();
+        }
+        if (null == timerTask){
+            timerTask = new TimerTask() {
+                @Override
+                public void run() {
+                    // 发送空消息，通知界面更新
+                    timerHandler.sendEmptyMessage(0x123);
+                }
+            };
+        }else{
+            timerTask.cancel();
+            timerTask = new TimerTask() {
+                @Override
+                public void run() {
+                    // 发送空消息，通知界面更新
+                    timerHandler.sendEmptyMessage(0x123);
+                }
+            };
+        }
+        timer.schedule(timerTask, 0, 500);
     }
 
     private void updateFrame(Context context, Class<?> c) {
