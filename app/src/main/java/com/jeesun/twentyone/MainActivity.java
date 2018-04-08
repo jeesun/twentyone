@@ -49,7 +49,6 @@ public class MainActivity extends AppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener {
     private final static String TAG = MainActivity.class.getName();
     public final static int REQUEST_IMAGE_CAPTURE = 1;
-    public final static int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 2;
     public final static String IMAGE_TYPE = "image/*";
 
     private ViewPager vpViewPager;
@@ -70,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements
     private WebFragment webFragment;
 
     private int mOffset, mOneDis, mCurrentIndex;
-    private MenuItem miSearch, miPick, miBusinessCard, miTutorial, miAbout;
+    private MenuItem miSearch;
     private Toolbar toolbar;
     private DrawerLayout drawer;
     private ActionBarDrawerToggle toggle;
@@ -216,10 +215,6 @@ public class MainActivity extends AppCompatActivity implements
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         miSearch = menu.findItem(R.id.search);
-        /*miPick = menu.findItem(R.id.pick);
-        miBusinessCard = menu.findItem(R.id.business_card);
-        miTutorial = menu.findItem(R.id.tutorial);
-        miAbout = menu.findItem(R.id.about);*/
 
         return true;
     }
@@ -228,24 +223,6 @@ public class MainActivity extends AppCompatActivity implements
     public boolean onOptionsItemSelected(MenuItem item) {
         Intent intent;
         switch (item.getItemId()){
-            /*case R.id.about:
-                intent = new Intent(MainActivity.this, AboutActivity.class);
-                startActivity(intent);
-                break;
-            case R.id.pick:
-                intent = new Intent(Intent.ACTION_GET_CONTENT);
-                intent.addCategory(Intent.CATEGORY_OPENABLE);
-                intent.setType(IMAGE_TYPE);
-                startActivityForResult(intent,REQUEST_IMAGE_CAPTURE);
-                break;
-            case R.id.business_card:
-                intent = new Intent(MainActivity.this, BusinessCardActivity.class);
-                startActivity(intent);
-                break;
-            case R.id.tutorial:
-                intent = new Intent(MainActivity.this, TutorialActivity.class);
-                startActivity(intent);
-                break;*/
             case R.id.search:
                 intent = new Intent(MainActivity.this, SearchActivity.class);
                 startActivity(intent);
@@ -309,10 +286,6 @@ public class MainActivity extends AppCompatActivity implements
                 //ActionBar关闭显示搜索图标
                 if(null != miSearch){
                     miSearch.setVisible(false);
-                    /*miPick.setVisible(true);
-                    miBusinessCard.setVisible(true);
-                    miTutorial.setVisible(true);
-                    miAbout.setVisible(true);*/
                 }
                 break;
             case 1:
@@ -322,10 +295,6 @@ public class MainActivity extends AppCompatActivity implements
                 //ActionBar显示搜索图标
                 if(null != miSearch){
                     miSearch.setVisible(true);
-                    /*miPick.setVisible(false);
-                    miBusinessCard.setVisible(false);
-                    miTutorial.setVisible(false);
-                    miAbout.setVisible(false);*/
                 }
                 break;
             default:
