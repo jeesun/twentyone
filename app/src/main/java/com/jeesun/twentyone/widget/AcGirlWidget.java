@@ -148,6 +148,13 @@ public class AcGirlWidget extends AppWidgetProvider {
 
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
         ComponentName cn =new ComponentName(context,c);
+
+        //防止进程被kill后，点击无响应
+        Intent intentClick = new Intent(context, AcGirlWidget.class);
+        intentClick.setAction(CLICK_ACTION);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intentClick, 0);
+        rv.setOnClickPendingIntent(R.id.background, pendingIntent);
+
         appWidgetManager.updateAppWidget(cn, rv);
     }
 
