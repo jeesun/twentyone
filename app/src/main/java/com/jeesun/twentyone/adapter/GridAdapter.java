@@ -12,8 +12,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.jeesun.twentyone.MainActivity;
-import com.jeesun.twentyone.PicActivity;
+import com.jeesun.twentyone.activity.MainActivity;
+import com.jeesun.twentyone.activity.PicActivity;
 import com.jeesun.twentyone.R;
 import com.jeesun.twentyone.model.PictureInfo;
 import com.jeesun.twentyone.util.ContextUtil;

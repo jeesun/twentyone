@@ -1,4 +1,4 @@
-package com.jeesun.twentyone;
+package com.jeesun.twentyone.activity;
 
 import android.Manifest;
 import android.content.Intent;
@@ -13,6 +13,7 @@ import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.jeesun.twentyone.R;
 import com.jeesun.twentyone.util.ContextUtil;
 
 import java.io.File;

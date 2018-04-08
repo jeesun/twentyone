@@ -1,4 +1,4 @@
-package com.jeesun.twentyone;
+package com.jeesun.twentyone.activity;
 
 import android.app.DownloadManager;
 import android.content.BroadcastReceiver;
@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.jeesun.twentyone.R;
 import com.jeesun.twentyone.util.ContextUtil;
 
 public class FontsActivity extends AppCompatActivity {

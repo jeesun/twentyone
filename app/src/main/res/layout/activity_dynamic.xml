@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.jeesun.twentyone.DynamicActivity">
+    tools:context="com.jeesun.twentyone.activity.DynamicActivity">
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

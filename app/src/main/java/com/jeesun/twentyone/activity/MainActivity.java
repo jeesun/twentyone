@@ -1,4 +1,4 @@
-package com.jeesun.twentyone;
+package com.jeesun.twentyone.activity;
 
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -30,7 +30,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.jeesun.twentyone.R;
 import com.jeesun.twentyone.adapter.ViewPagerAdapter;
+import com.jeesun.twentyone.fragment.LocalFragment;
+import com.jeesun.twentyone.fragment.WebFragment;
 import com.jeesun.twentyone.model.PictureInfo;
 import com.jeesun.twentyone.util.ContextUtil;
 import com.liulishuo.filedownloader.FileDownloader;

@@ -1,4 +1,4 @@
-package com.jeesun.twentyone;
+package com.jeesun.twentyone.activity;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;

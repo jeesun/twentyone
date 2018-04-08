@@ -5,8 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-import com.jeesun.twentyone.WidgetActivity;
-
 /**
  * Created by simon on 2017/12/30.
  */

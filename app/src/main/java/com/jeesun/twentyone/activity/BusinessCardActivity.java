@@ -1,4 +1,4 @@
-package com.jeesun.twentyone;
+package com.jeesun.twentyone.activity;
 
 import android.content.Context;
 import android.content.Intent;
@@ -29,6 +29,7 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.Toast;
 
+import com.jeesun.twentyone.R;
 import com.jeesun.twentyone.util.ColorUtil;
 import com.jeesun.twentyone.util.ContextUtil;
 import com.jeesun.twentyone.util.ImageUtil;

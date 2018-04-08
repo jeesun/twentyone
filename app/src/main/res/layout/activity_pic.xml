@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.jeesun.twentyone.PicActivity">
+    tools:context="com.jeesun.twentyone.activity.PicActivity">
 
     <!--android:scaleType="fitXY"：把原图按照指定的大小在View中显示，
         拉伸显示图片，不保持原比例，填满ImageView.-->

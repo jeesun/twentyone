@@ -1,4 +1,4 @@
-package com.jeesun.twentyone;
+package com.jeesun.twentyone.activity;
 
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -6,6 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.widget.TextView;
+
+import com.jeesun.twentyone.R;
 
 public class AboutActivity extends AppCompatActivity {
 

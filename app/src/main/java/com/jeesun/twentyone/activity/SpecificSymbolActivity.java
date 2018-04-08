@@ -1,10 +1,12 @@
-package com.jeesun.twentyone;
+package com.jeesun.twentyone.activity;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+
+import com.jeesun.twentyone.R;
 
 public class SpecificSymbolActivity extends AppCompatActivity {
     private WebView wvContent;

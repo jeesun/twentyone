@@ -1,6 +1,5 @@
-package com.jeesun.twentyone;
+package com.jeesun.twentyone.activity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -11,15 +10,14 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
+import com.jeesun.twentyone.R;
 import com.jeesun.twentyone.util.AndroidFileUtils;
 import com.jeesun.twentyone.util.ContextUtil;
 import com.jeesun.twentyone.util.PickUtil;
 import com.jeesun.twentyone.widget.ChangeBgReceiver;
 import com.jeesun.twentyone.widget.ChangeClockColorReceiver;
-import com.jeesun.twentyone.widget.WidgetProvider;
 
 import java.io.File;
 import java.io.IOException;

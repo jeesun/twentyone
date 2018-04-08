@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.jeesun.twentyone.SearchActivity">
+    tools:context="com.jeesun.twentyone.activity.SearchActivity">
     <include layout="@layout/component_toolbar" />
     <!--本文主角-->
     <android.support.v7.widget.RecyclerView

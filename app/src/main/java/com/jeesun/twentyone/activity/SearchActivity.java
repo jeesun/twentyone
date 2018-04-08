@@ -1,4 +1,4 @@
-package com.jeesun.twentyone;
+package com.jeesun.twentyone.activity;
 
 import android.graphics.Color;
 import android.os.Bundle;
@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.SearchView;
 
+import com.jeesun.twentyone.R;
 import com.jeesun.twentyone.adapter.SoGridAdapter;
 import com.jeesun.twentyone.interfaces.RequestServes;
 import com.jeesun.twentyone.model.SoPicInfo;

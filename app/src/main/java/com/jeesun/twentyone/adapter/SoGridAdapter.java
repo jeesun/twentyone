@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.jeesun.twentyone.PicActivity;
+import com.jeesun.twentyone.activity.PicActivity;
 import com.jeesun.twentyone.R;
 import com.jeesun.twentyone.customui.SavePicDialog;
 import com.jeesun.twentyone.model.SoPicInfo;

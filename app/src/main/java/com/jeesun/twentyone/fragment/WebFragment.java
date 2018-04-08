@@ -1,4 +1,4 @@
-package com.jeesun.twentyone;
+package com.jeesun.twentyone.fragment;
 
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
+import com.jeesun.twentyone.R;
 import com.jeesun.twentyone.adapter.MyGridAdapter;
 import com.jeesun.twentyone.customui.FlowLayout;
 import com.jeesun.twentyone.interfaces.RequestServes;

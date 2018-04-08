@@ -1,9 +1,11 @@
-package com.jeesun.twentyone;
+package com.jeesun.twentyone.activity;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.MenuItem;
+
+import com.jeesun.twentyone.R;
 
 public class TutorialActivity extends AppCompatActivity {
     //private ImageView ivSample, ivTutorial;
