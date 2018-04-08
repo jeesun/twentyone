@@ -4,6 +4,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.KeyEvent;
 
+import com.jeesun.twentyone.R;
+
 public class DynamicActivity extends AppCompatActivity {
 
     @Override
