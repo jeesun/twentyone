@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -71,15 +72,17 @@ public class MainActivity extends AppCompatActivity implements
     private LocalFragment localFragment;
     private WebFragment webFragment;
 
-    private int mOffset, mOneDis, mCurrentIndex;
+    private int mOffset, mOneDis, mCurrentIndex = 0;
     private MenuItem miSearch, miSelect;
     private Toolbar toolbar;
     private DrawerLayout drawer;
     private ActionBarDrawerToggle toggle;
     private NavigationView navigationView;
     private boolean isMulti = false;
+    private boolean isPortraitScreen = true;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.i(TAG, "onCreate");
         super.onCreate(savedInstanceState);
         FileDownloader.setup(this);
 
@@ -88,7 +91,7 @@ public class MainActivity extends AppCompatActivity implements
         findView();
 
         //初始化指示器位置
-        initCursorPosition();
+        initCursorPosition(isPortraitScreen);
         mHandler = new Handler(new Handler.Callback() {
             @Override
             public boolean handleMessage(Message message) {
@@ -115,7 +118,10 @@ public class MainActivity extends AppCompatActivity implements
         //页面改变监听器
         vpViewPager.addOnPageChangeListener(this);
         //初始默认第一页
-        vpViewPager.setCurrentItem(0);
+        if (null != savedInstanceState){
+            mCurrentIndex = savedInstanceState.getInt("mCurrentIndex");
+        }
+        vpViewPager.setCurrentItem(mCurrentIndex);
     }
 
     private void findView() {
@@ -138,14 +144,17 @@ public class MainActivity extends AppCompatActivity implements
         navigationView.setNavigationItemSelectedListener(this);
     }
 
-    private void initCursorPosition() {
+    private void initCursorPosition(boolean isPortraitScreen) {
         //获取指示器图片宽度
         int cursorWidth = BitmapFactory.decodeResource(getResources(), R.drawable.line).getWidth();
 
         //获取分辨率宽度
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
-        int screenWidth = dm.widthPixels;
+
+        int screenWidth;
+        screenWidth = dm.widthPixels;
+        Log.i(TAG, "screenWidth=" + screenWidth);
 
         //计算偏移量
         mOffset = (screenWidth / 2 - cursorWidth) /2;
@@ -291,9 +300,10 @@ public class MainActivity extends AppCompatActivity implements
         Animation anim = null;
         switch (position){
             case 0:
-                if(1 == mCurrentIndex){
-                    anim = new TranslateAnimation(mOneDis, 0, 0, 0);
-                }
+                anim = new TranslateAnimation(mOneDis, 0, 0, 0);
+                anim.setFillAfter(true); //true:图片停在动画结束位置
+                anim.setDuration(300);
+                ivCursor.startAnimation(anim);
                 //ActionBar关闭显示搜索图标
                 if(null != miSearch){
                     miSearch.setVisible(false);
@@ -303,9 +313,10 @@ public class MainActivity extends AppCompatActivity implements
                 }
                 break;
             case 1:
-                if(0 == mCurrentIndex){
-                    anim = new TranslateAnimation(mOffset, mOneDis, 0, 0);
-                }
+                anim = new TranslateAnimation(mOffset, mOneDis, 0, 0);
+                anim.setFillAfter(true); //true:图片停在动画结束位置
+                anim.setDuration(300);
+                ivCursor.startAnimation(anim);
                 //ActionBar显示搜索图标
                 if(null != miSearch){
                     miSearch.setVisible(true);
@@ -318,9 +329,6 @@ public class MainActivity extends AppCompatActivity implements
                 break;
         }
         mCurrentIndex = position;
-        anim.setFillAfter(true); //true:图片停在动画结束位置
-        anim.setDuration(300);
-        ivCursor.startAnimation(anim);
     }
 
     @Override
@@ -335,7 +343,19 @@ public class MainActivity extends AppCompatActivity implements
         //横向
         if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE){
             Log.i(TAG, "屏幕当前是横屏");
+            isPortraitScreen = false;
+        }else{
+            Log.i(TAG, "屏幕当前是竖屏");
+            isPortraitScreen = true;
         }
+        initCursorPosition(isPortraitScreen);
+        onPageSelected(mCurrentIndex);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt("mCurrentIndex", mCurrentIndex);
     }
 
     @Override
