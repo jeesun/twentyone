@@ -5,6 +5,7 @@
     <string name="about">关于</string>
     <string name="exit_app">退出</string>
     <string name="pick">裁剪</string>
+    <string name="multi">多选</string>
     <string name="business_card">名片</string>
     <string name="desktop_widget">桌面部件</string>
     <string name="dynamic_desktop_widget">动态桌面部件</string>

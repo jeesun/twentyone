@@ -72,11 +72,12 @@ public class MainActivity extends AppCompatActivity implements
     private WebFragment webFragment;
 
     private int mOffset, mOneDis, mCurrentIndex;
-    private MenuItem miSearch;
+    private MenuItem miSearch, miSelect;
     private Toolbar toolbar;
     private DrawerLayout drawer;
     private ActionBarDrawerToggle toggle;
     private NavigationView navigationView;
+    private boolean isMulti = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -218,7 +219,7 @@ public class MainActivity extends AppCompatActivity implements
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         miSearch = menu.findItem(R.id.search);
-
+        miSelect = menu.findItem(R.id.select);
         return true;
     }
 
@@ -231,6 +232,13 @@ public class MainActivity extends AppCompatActivity implements
                 startActivity(intent);
                 break;
             default:
+            case R.id.select:
+                if (isMulti){
+                    isMulti = false;
+                }else{
+                    isMulti = true;
+                }
+                localFragment.changeLayout(isMulti);
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -290,6 +298,9 @@ public class MainActivity extends AppCompatActivity implements
                 if(null != miSearch){
                     miSearch.setVisible(false);
                 }
+                if (null != miSelect){
+                    miSelect.setVisible(true);
+                }
                 break;
             case 1:
                 if(0 == mCurrentIndex){
@@ -298,6 +309,9 @@ public class MainActivity extends AppCompatActivity implements
                 //ActionBar显示搜索图标
                 if(null != miSearch){
                     miSearch.setVisible(true);
+                }
+                if (null != miSelect){
+                    miSelect.setVisible(false);
                 }
                 break;
             default:
@@ -314,9 +328,6 @@ public class MainActivity extends AppCompatActivity implements
 
     }
 
-    public void updateLocalData(PictureInfo pictureInfo){
-        localFragment.updateData(pictureInfo);
-    }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {

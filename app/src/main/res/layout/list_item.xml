@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="2dp"
-    android:orientation="vertical">
+    android:descendantFocusability="blocksDescendants"
+    android:padding="2dp">
     <!--android:scaleType="fitXY"：把原图按照指定的大小在View中显示，
     拉伸显示图片，不保持原比例，填满ImageView.-->
     <!--android:adjustViewBounds="true"：是否保持原图的长宽比-->
@@ -20,4 +20,14 @@
         android:textSize="20sp"
         android:textStyle="bold"
         android:visibility="gone"/>
-</LinearLayout>
+    <CheckBox
+        android:id="@+id/item_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:clickable="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false"/>
+</RelativeLayout>

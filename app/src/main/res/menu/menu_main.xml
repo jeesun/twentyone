@@ -10,27 +10,9 @@
         android:icon="@drawable/ic_action_search"
         android:visible="false"/>
 
-    <!--<item
-        android:id="@+id/pick"
+    <item
+        android:id="@+id/select"
         android:orderInCategory="100"
         app:showAsAction="always"
-        android:title="@string/pick"/>
-
-    <item
-        android:id="@+id/business_card"
-        android:orderInCategory="100"
-        app:showAsAction="ifRoom"
-        android:title="@string/business_card"/>
-
-    <item
-        android:id="@+id/tutorial"
-        android:orderInCategory="100"
-        app:showAsAction="ifRoom"
-        android:title="@string/tutorial"/>
-
-    <item
-        android:id="@+id/about"
-        android:orderInCategory="100"
-        app:showAsAction="ifRoom"
-        android:title="@string/about"/>-->
+        android:title="@string/multi"/>
 </menu>
