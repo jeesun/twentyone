@@ -20,7 +20,8 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".activity.LaunchActivity"
-            android:theme="@style/WelcomeStyle">
+            android:theme="@style/WelcomeStyle"
+            android:configChanges="orientation|keyboardHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
