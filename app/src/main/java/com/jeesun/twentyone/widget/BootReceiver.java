@@ -3,11 +3,10 @@ package com.jeesun.twentyone.widget;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Build;
 import android.util.Log;
 
-import static android.content.Context.MODE_PRIVATE;
+import com.jeesun.twentyone.service.TimerService;
 
 /**
  * Created by simon on 2017/12/27.

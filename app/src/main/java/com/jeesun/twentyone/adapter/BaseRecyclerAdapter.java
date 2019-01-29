@@ -4,16 +4,21 @@ import android.content.Context;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.List;
 
+import lombok.extern.slf4j.Slf4j;
+
 //http://blog.csdn.net/qibin0506/article/details/49716795
+
 /**
  * Created by simon on 2017/12/16.
  */
 public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    private static final String TAG = BaseRecyclerAdapter.class.getName();
 
     public static final int TYPE_HEADER = 0;
     public static final int TYPE_NORMAL = 1;
@@ -29,6 +34,7 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<Recycl
     public BaseRecyclerAdapter(List<T> mDatas, Context context) {
         this.mDatas = mDatas;
         this.context = context;
+        setHasStableIds(true);
     }
 
     public void setOnItemClickListener(OnItemClickListener li) {
@@ -51,27 +57,40 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<Recycl
 
     @Override
     public int getItemViewType(int position) {
-        if(mHeaderView == null) return TYPE_NORMAL;
-        if(position == 0) return TYPE_HEADER;
+        if (mHeaderView == null) {
+            return TYPE_NORMAL;
+        }
+        if (position == 0) {
+            return TYPE_HEADER;
+        }
         return TYPE_NORMAL;
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, final int viewType) {
-        if(mHeaderView != null && viewType == TYPE_HEADER) return new Holder(mHeaderView);
+        if (mHeaderView != null && viewType == TYPE_HEADER){
+            return new Holder(mHeaderView);
+        }
         return onCreate(parent, viewType);
     }
 
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
-        if(getItemViewType(position) == TYPE_HEADER) return;
+        if (position == 0) {
+            Log.e(TAG, "position:" + position + " tv:" + viewHolder.itemView.toString());
+        } else {
+            Log.i(TAG, "position:" + position + " tv:" + viewHolder.itemView.toString());
+        }
+        if (getItemViewType(position) == TYPE_HEADER) {
+            return;
+        }
 
         final int pos = getRealPosition(viewHolder);
         final T data = mDatas.get(pos);
         onBind(viewHolder, pos, data);
 
-        if(mListener != null) {
+        if (mListener != null) {
             viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -86,7 +105,7 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<Recycl
         super.onAttachedToRecyclerView(recyclerView);
 
         RecyclerView.LayoutManager manager = recyclerView.getLayoutManager();
-        if(manager instanceof GridLayoutManager) {
+        if (manager instanceof GridLayoutManager) {
             final GridLayoutManager gridManager = ((GridLayoutManager) manager);
             gridManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
                 @Override
@@ -102,7 +121,7 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<Recycl
     public void onViewAttachedToWindow(RecyclerView.ViewHolder holder) {
         super.onViewAttachedToWindow(holder);
         ViewGroup.LayoutParams lp = holder.itemView.getLayoutParams();
-        if(lp != null
+        if (lp != null
                 && lp instanceof StaggeredGridLayoutManager.LayoutParams) {
             StaggeredGridLayoutManager.LayoutParams p = (StaggeredGridLayoutManager.LayoutParams) lp;
             p.setFullSpan(holder.getLayoutPosition() == 0);
@@ -119,7 +138,13 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<Recycl
         return mHeaderView == null ? mDatas.size() : mDatas.size() + 1;
     }
 
+    @Override
+    public long getItemId(int position) {
+        return mHeaderView == null ? position : position - 1;
+    }
+
     public abstract RecyclerView.ViewHolder onCreate(ViewGroup parent, final int viewType);
+
     public abstract void onBind(RecyclerView.ViewHolder viewHolder, int RealPosition, T data);
 
     public class Holder extends RecyclerView.ViewHolder {

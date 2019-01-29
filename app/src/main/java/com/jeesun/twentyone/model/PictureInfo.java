@@ -1,69 +1,30 @@
 package com.jeesun.twentyone.model;
 
+import java.io.Serializable;
+import java.util.Date;
+
+import lombok.Data;
+
 /**
  * Created by simon on 2017/12/9.
  */
-
-public class PictureInfo {
-    private String id;
-    private String name;
-    private Long createTime;
-    private String uri;
-    private String authorId;
-    private String desc;
+@Data
+public class PictureInfo implements Serializable {
+    private static final long serialVersionUID = 3894593466238158063L;
+    private Integer pid;
+    private Integer cid;
+    private Integer dl_cnt;
+    private Date c_t;
+    private Integer imgcut;
+    private String url;
+    private String tempdata;
+    private Integer fav_total;
 
     public PictureInfo() {
     }
 
-    public PictureInfo(String uri) {
-        this.uri = uri;
+    public PictureInfo(String url) {
+        this.url = url;
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Long getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Long createTime) {
-        this.createTime = createTime;
-    }
-
-    public String getUri() {
-        return uri;
-    }
-
-    public void setUri(String uri) {
-        this.uri = uri;
-    }
-
-    public String getAuthorId() {
-        return authorId;
-    }
-
-    public void setAuthorId(String authorId) {
-        this.authorId = authorId;
-    }
-
-    public String getDesc() {
-        return desc;
-    }
-
-    public void setDesc(String desc) {
-        this.desc = desc;
-    }
 }

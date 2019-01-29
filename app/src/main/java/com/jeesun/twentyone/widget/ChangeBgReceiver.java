@@ -13,6 +13,7 @@ import android.widget.RemoteViews;
 import android.widget.Toast;
 
 import com.jeesun.twentyone.R;
+import com.jeesun.twentyone.service.TimerService;
 import com.jeesun.twentyone.util.ContextUtil;
 
 import java.io.File;

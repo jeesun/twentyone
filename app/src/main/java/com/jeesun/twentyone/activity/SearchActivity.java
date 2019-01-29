@@ -144,7 +144,7 @@ public class SearchActivity extends AppCompatActivity {
                     if(soPicInfoList.size() <= 0){
                         return;
                     }
-                    Picasso.with(SearchActivity.this).resumeTag(ContextUtil.PICASSO_TAG_WEB);
+                    Picasso.get().resumeTag(ContextUtil.PICASSO_TAG_WEB);
                     //RecyclerView.canScrollVertically(1)的值表示是否能向上滚动，false表示已经滚动到底部
                     //RecyclerView.canScrollVertically(-1)的值表示是否能向下滚动，false表示已经滚动到顶部
                     if(!recyclerView.canScrollVertically(1)){
@@ -170,7 +170,7 @@ public class SearchActivity extends AppCompatActivity {
                         });
                     }
                 }else{
-                    Picasso.with(SearchActivity.this).pauseTag(ContextUtil.PICASSO_TAG_WEB);
+                    Picasso.get().pauseTag(ContextUtil.PICASSO_TAG_WEB);
                 }
             }
 

@@ -1,38 +1,35 @@
-package com.jeesun.twentyone.widget;
+package com.jeesun.twentyone.service;
 
 import android.app.AlarmManager;
-import android.app.AlertDialog;
 import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
-import android.appwidget.AppWidgetManager;
-import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.os.Build;
 import android.os.IBinder;
-import android.os.SystemClock;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.RemoteViews;
-import android.widget.Toast;
 
 import com.jeesun.twentyone.R;
-import com.jeesun.twentyone.util.Lauar;
-import com.jeesun.twentyone.util.Lunar;
+import com.jeesun.twentyone.widget.AlarmReceiver;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.Timer;
-import java.util.TimerTask;
 
 /**
  * Created by simon on 2017/12/25.
@@ -53,6 +50,7 @@ public class TimerService extends Service {
      * 在这之后一定会执行Service的onStartCommand回调方法。
      * 也就是说，如果多次执行了Context的startService方法，那么Service的onStartCommand方法也会相应的多次调用。
      * onStartCommand方法很重要，我们在该方法中根据传入的Intent参数进行实际的操作，比如会在此处创建一个线程用于下载数据或播放音乐等。
+     *
      * @param intent
      * @param flags
      * @param startId
@@ -61,7 +59,7 @@ public class TimerService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.i(TAG, "执行onStartCommand");
-        startForeground(1,new Notification());
+        //startForeground(1, new Notification());
         /*new Thread(new Runnable() {
             @Override
             public void run() {
@@ -81,7 +79,7 @@ public class TimerService extends Service {
         //测试
         //calendar.add(Calendar.MINUTE, 1);
 
-        SimpleDateFormat df=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Log.i(TAG, "闹钟" + df.format(calendar.getTime()));
 
         Intent i = new Intent(this, AlarmReceiver.class);
@@ -90,7 +88,7 @@ public class TimerService extends Service {
         PendingIntent pi = PendingIntent.getBroadcast(this, 0, i, 0);
         //1000*60*60*24 一天
         //发布
-        manager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 1000*60*60*24, pi);
+        manager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 1000 * 60 * 60 * 24, pi);
 
         //测试
         //manager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 1000*60*5, pi);
@@ -102,6 +100,33 @@ public class TimerService extends Service {
         Log.i(TAG, "执行onCreate");
         super.onCreate();
         //initTimer();
+        //创建前台Notification
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            startMyOwnForeground();
+        } else {
+            startForeground(1, new Notification());
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private void startMyOwnForeground() {
+        String NOTIFICATION_CHANNEL_ID = "com.jeesun.twentyone";
+        String channelName = "My Background Service";
+        NotificationChannel chan = new NotificationChannel(NOTIFICATION_CHANNEL_ID, channelName, NotificationManager.IMPORTANCE_NONE);
+        chan.setLightColor(Color.BLUE);
+        chan.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
+        NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        assert manager != null;
+        manager.createNotificationChannel(chan);
+
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID);
+        Notification notification = notificationBuilder.setOngoing(true)
+                .setSmallIcon(R.drawable.app_icon)
+                .setContentTitle("App is running in background")
+                .setPriority(NotificationManager.IMPORTANCE_MIN)
+                .setCategory(Notification.CATEGORY_SERVICE)
+                .build();
+        startForeground(2, notification);
     }
 
     @Override
@@ -114,7 +139,7 @@ public class TimerService extends Service {
         }*/
     }
 
-    public static Bitmap getRoundedCornerBitmap(Bitmap bitmap, float roundPx){
+    public static Bitmap getRoundedCornerBitmap(Bitmap bitmap, float roundPx) {
 
         Bitmap output = Bitmap.createBitmap(bitmap.getWidth(), bitmap
                 .getHeight(), Bitmap.Config.ARGB_8888);
@@ -136,7 +161,7 @@ public class TimerService extends Service {
         return output;
     }
 
-    private void setBitmap(RemoteViews views, int resId, Bitmap bitmap){
+    private void setBitmap(RemoteViews views, int resId, Bitmap bitmap) {
         Bitmap proxy = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
         Canvas c = new Canvas(proxy);
         c.drawBitmap(bitmap, new Matrix(), null);

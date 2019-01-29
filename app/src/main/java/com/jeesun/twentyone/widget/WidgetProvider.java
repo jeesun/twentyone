@@ -1,6 +1,5 @@
 package com.jeesun.twentyone.widget;
 
-import android.app.Application;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
@@ -9,29 +8,20 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Matrix;
-import android.net.Uri;
 import android.os.Build;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.RemoteViews;
-import android.widget.Toast;
 
 import com.jeesun.twentyone.R;
-import com.jeesun.twentyone.util.AppContext;
+import com.jeesun.twentyone.service.TimerService;
 import com.jeesun.twentyone.util.ContextUtil;
 import com.jeesun.twentyone.util.Lauar;
 import com.jeesun.twentyone.util.Lunar;
-import com.jeesun.twentyone.util.PickUtil;
 
 import java.io.File;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import static android.content.Context.MODE_PRIVATE;
 

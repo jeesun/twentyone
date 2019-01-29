@@ -76,7 +76,7 @@ public class SoGridAdapter extends BaseRecyclerAdapter<SoPicInfo> {
                 picPath = soPicInfo.getImg();
             }
 
-            Picasso.with(context)
+            Picasso.get()
                     .load(picPath)
                     .resize(ImageUtil.dp2px(context, 540), ImageUtil.dp2px(context, 270))
                     .placeholder(R.drawable.bg_default)

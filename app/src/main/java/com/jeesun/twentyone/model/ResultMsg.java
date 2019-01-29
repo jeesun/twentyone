@@ -1,44 +1,23 @@
 package com.jeesun.twentyone.model;
 
+import java.io.Serializable;
+
+import lombok.Data;
+
 /**
  * Created by simon on 2017/12/13.
  */
+@Data
+public class ResultMsg implements Serializable {
+    private static final long serialVersionUID = -7101095796586538775L;
 
-public class ResultMsg {
     private Integer errno;
+
     private String errmsg;
+
+    private Integer consume;
+
     private Integer total;
+
     private Object data;
-
-    public Integer getErrno() {
-        return errno;
-    }
-
-    public void setErrno(Integer errno) {
-        this.errno = errno;
-    }
-
-    public String getErrmsg() {
-        return errmsg;
-    }
-
-    public void setErrmsg(String errmsg) {
-        this.errmsg = errmsg;
-    }
-
-    public Integer getTotal() {
-        return total;
-    }
-
-    public void setTotal(Integer total) {
-        this.total = total;
-    }
-
-    public Object getData() {
-        return data;
-    }
-
-    public void setData(Object data) {
-        this.data = data;
-    }
 }

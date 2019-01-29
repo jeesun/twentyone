@@ -13,10 +13,10 @@ import retrofit2.http.Query;
  */
 
 public interface RequestServes {
-    @GET("/index.php?c=WallPaper&a=getAllCategoriesV2&from=360chrome")
+    @GET("/index.php?c=WallPaperAndroid&a=getAllCategories")
     Call<ResultMsg> getCategory();
 
-    @GET("/index.php?c=WallPaper&a=getAppsByCategory&from=360chrome")
+    @GET("/index.php?c=WallPaperAndroid&a=getAppsByCategory")
     Call<ResultMsg> getPicsByCategory(@Query(value = "cid")Integer categoryId,
                                       @Query("start")Integer start,
                                       @Query("count")Integer count);

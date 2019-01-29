@@ -24,7 +24,7 @@ import java.util.List;
  */
 
 public class WebGridAdapter extends RecyclerView.Adapter<WebGridAdapter.ViewHolder>{
-    private static final String TAG = GridAdapter.class.getName();
+    private static final String TAG = WebGridAdapter.class.getName();
     private List<WebPicInfo> webPicInfoList;
     private static Context context;
 
@@ -69,24 +69,26 @@ public class WebGridAdapter extends RecyclerView.Adapter<WebGridAdapter.ViewHold
         }
 
         public void setData(final WebPicInfo webPicInfo){
-            if(webPicInfo.getId() == imageView.getTag()){
+            if(webPicInfo.getCid() == imageView.getTag()){
                 return;
             }
 
             //Log.i(TAG, webPicInfo.getImg_1366_768());
 
-            Picasso.with(context)
-                    .load(webPicInfo.getImg_1366_768())
+            Picasso.get()
+                    .load(webPicInfo.getUrl())
                     .resize(ImageUtil.dp2px(context, 540), ImageUtil.dp2px(context, 270))
                     .placeholder(R.drawable.bg_default)
+                    .error(R.drawable.bg_default)
                     .tag(ContextUtil.PICASSO_TAG_WEB)
+                    .onlyScaleDown()
                     .into(imageView);
 
             imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(context, PicActivity.class);
-                    intent.putExtra("picPath", webPicInfo.getImg_1366_768());
+                    intent.putExtra("picPath", webPicInfo.getUrl());
                     intent.putExtra("picType", ContextUtil.PIC_WEB);
                     context.startActivity(intent);
                 }
@@ -96,7 +98,7 @@ public class WebGridAdapter extends RecyclerView.Adapter<WebGridAdapter.ViewHold
                 @Override
                 public boolean onLongClick(View view) {
                     SavePicDialog dialog = new SavePicDialog(context, R.style.dialogStyle, webPicInfo);
-                    dialog.setIvPicture(webPicInfo.getImg_1366_768());
+                    dialog.setIvPicture(webPicInfo.getUrl());
                     dialog.show();
 
                     return true;

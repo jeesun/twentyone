@@ -91,9 +91,9 @@ public class LocalFragment extends Fragment implements SwipeRefreshLayout.OnRefr
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
                 if(newState == RecyclerView.SCROLL_STATE_IDLE){
-                    Picasso.with(getActivity()).resumeTag(ContextUtil.PICASSO_TAG_LOCAL);
+                    Picasso.get().resumeTag(ContextUtil.PICASSO_TAG_LOCAL);
                 }else{
-                    Picasso.with(getActivity()).pauseTag(ContextUtil.PICASSO_TAG_LOCAL);
+                    Picasso.get().pauseTag(ContextUtil.PICASSO_TAG_LOCAL);
                 }
             }
         });
@@ -122,7 +122,7 @@ public class LocalFragment extends Fragment implements SwipeRefreshLayout.OnRefr
             @Override
             public void onItemClick(View view, int position) {
                 Intent intent = new Intent(getActivity(), PicActivity.class);
-                intent.putExtra("picPath", pictureInfoList.get(position).getUri());
+                intent.putExtra("picPath", pictureInfoList.get(position).getUrl());
                 intent.putExtra("picType", ContextUtil.PIC_LOCAL);
                 startActivity(intent);
             }
@@ -138,7 +138,7 @@ public class LocalFragment extends Fragment implements SwipeRefreshLayout.OnRefr
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 //...To-do
-                                File picFile = new File(pictureInfoList.get(position).getUri());
+                                File picFile = new File(pictureInfoList.get(position).getUrl());
                                 if(picFile.exists() && picFile.isFile()){
                                     if(picFile.delete()){
                                         updateData(pictureInfoList.get(position), position);
@@ -185,7 +185,7 @@ public class LocalFragment extends Fragment implements SwipeRefreshLayout.OnRefr
                 while (lit.hasPrevious()){
                     int key = lit.previous();
                     Log.i(TAG, "key=" + key);
-                    File picFile = new File(pictureInfoList.get(key).getUri());
+                    File picFile = new File(pictureInfoList.get(key).getUrl());
                     if(picFile.exists() && picFile.isFile()){
                         if(picFile.delete()){
                             Log.i(TAG, "删除成功");

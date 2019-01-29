@@ -108,19 +108,20 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ViewHolder>{
             if(null == pictureInfo){
                 return;
             }
-            if(null == pictureInfo.getUri() || "".equals(pictureInfo.getUri())){
+            if(null == pictureInfo.getUrl() || "".equals(pictureInfo.getUrl())){
                 return;
             }
             /*if(pictureInfo.getUri().equals(imageView.getTag())){
                 return;
             }*/
 
-            imageView.setTag(pictureInfo.getUri());
+            imageView.setTag(pictureInfo.getUrl());
 
-            Picasso.with(context).load(new File(pictureInfo.getUri()))
+            Picasso.get().load(new File(pictureInfo.getUrl()))
                     .config(Bitmap.Config.RGB_565)
                     .resize(ImageUtil.dp2px(context, 540), ImageUtil.dp2px(context, 270))
                     .placeholder(R.drawable.bg_default)
+                    .error(R.drawable.bg_default)
                     .tag(ContextUtil.PICASSO_TAG_LOCAL)
                     .into(imageView);
 

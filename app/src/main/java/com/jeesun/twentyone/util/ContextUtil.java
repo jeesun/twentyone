@@ -32,4 +32,6 @@ public class ContextUtil {
     public static final int TIME_INTERVAL = 45;
 
     public static final String TIMER_TASK = "com.simon.widget.TIMER_TASK";
+
+    public static final String WALLPAPER_BASE_URL = "http://wallpaper.apc.360.cn";
 }

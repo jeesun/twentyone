@@ -27,6 +27,9 @@ import com.squareup.picasso.Picasso;
 import java.io.File;
 import java.util.Calendar;
 
+import static com.squareup.picasso.MemoryPolicy.NO_CACHE;
+import static com.squareup.picasso.MemoryPolicy.NO_STORE;
+
 public class PicActivity extends AppCompatActivity {
     private static final String TAG = PicActivity.class.getName();
     private ImageView ivPicture;
@@ -59,18 +62,21 @@ public class PicActivity extends AppCompatActivity {
 
         if(-1 != picType){
             if(ContextUtil.PIC_WEB == picType){
-                Picasso.with(this)
+                Picasso.get()
                         .load(picPath)
                         .resize(ImageUtil.dp2px(PicActivity.this, 540), ImageUtil.dp2px(PicActivity.this, 270))
                         .tag(ContextUtil.PICASSO_TAG_WEB)
                         .placeholder(R.drawable.bg_default)
+                        .memoryPolicy(NO_CACHE, NO_STORE)
                         .into(ivPicture);
             }else if(ContextUtil.PIC_LOCAL == picType){
-                Picasso.with(PicActivity.this)
+                Picasso.get()
                         .load(new File(picPath))
                         .resize(ImageUtil.dp2px(PicActivity.this, 540), ImageUtil.dp2px(PicActivity.this, 270))
                         .tag(ContextUtil.PICASSO_TAG_LOCAL)
                         .placeholder(R.drawable.bg_default)
+                        .error(R.drawable.bg_default)
+                        .memoryPolicy(NO_CACHE, NO_STORE)
                         .into(ivPicture);
             }
         }else{

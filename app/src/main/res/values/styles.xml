@@ -6,6 +6,11 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+
+        <!-- 解决Activity切换时出现白屏问题 start -->
+        <!--<item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>-->
+        <!-- 解决Activity切换时出现白屏问题 end -->
     </style>
 
     <style name="NoTitleStyle" parent="Theme.AppCompat.Light.NoActionBar">
@@ -17,6 +22,11 @@
         <item name="actionMenuTextColor">@android:color/white</item>
         <!-- 溢出菜单图标颜色-->
         <item name="colorControlNormal">@android:color/white</item>
+
+        <!-- 解决Activity切换时出现白屏问题 start -->
+        <!--<item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>-->
+        <!-- 解决Activity切换时出现白屏问题 end -->
     </style>
 
     <style name="WelcomeStyle" parent="Theme.AppCompat.Light.NoActionBar">

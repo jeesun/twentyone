@@ -99,7 +99,7 @@ public class SavePicDialog extends Dialog {
                 tvProgressHint.setText(context.getText(R.string.download_success));*/
                 String picPath;
                 if(null != webPicInfo){
-                    picPath = webPicInfo.getImg_1366_768();
+                    picPath = webPicInfo.getUrl();
                 }else if(null != soPicInfo){
                     if(null != soPicInfo.getImg()){
                         picPath = soPicInfo.getImg();
@@ -186,10 +186,11 @@ public class SavePicDialog extends Dialog {
 
     public void setIvPicture(String picPath){
         Log.i(TAG, "picPath=" + picPath);
-        Picasso.with(context)
+        Picasso.get()
                 .load(picPath)
                 .resize(ImageUtil.dp2px(context, 540), ImageUtil.dp2px(context, 270))
                 .placeholder(R.drawable.bg_default)
+                .error(R.drawable.bg_default)
                 .into(ivPicture);
     }
 
