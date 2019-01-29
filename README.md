@@ -11,5 +11,4 @@ MIUI负一屏壁纸制作工具，支持壁纸下载、壁纸裁剪、名片制�
 ![侧边栏](screenshots/screenshot03.png)
 
 ## 扫码体验
-扫码下载
 ![二维码](screenshots/twentyone.png)
