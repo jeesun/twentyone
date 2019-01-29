@@ -6,7 +6,7 @@ android {
         applicationId "com.jeesun.twentyone"
         minSdkVersion 16
         targetSdkVersion 28
-        versionCode 20180417
+        versionCode 20190129
         versionName "8.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
