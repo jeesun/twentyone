@@ -38,6 +38,8 @@ public class AboutActivity extends AppCompatActivity {
         StringBuilder sb = new StringBuilder();
         sb.append("version: " + versionName + "\n");
         sb.append("author: jeesun\n");
+        sb.append("github: https://github.com/jeesun/twentyone\n");
+        sb.append("gitee: https://gitee.com/jeesun/twentyone");
         tvGithub.setText(sb);
     }
 
